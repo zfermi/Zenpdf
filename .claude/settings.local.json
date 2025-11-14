@@ -11,7 +11,14 @@
       "Bash(\"$LOCALAPPDATA/Android/Sdk/emulator/emulator.exe\" -avd Television_1080p)",
       "Bash(adb:*)",
       "Bash(ipconfig:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(python -c:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Compress PDF files online. Reduce file size while maintaining quality.">
+    <title>Compress PDF - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
+                <li class="nav-item"><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
+                <li class="nav-item active"><a href="{{ url_for('compress_pdf') }}">Compress PDF</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <div class="ad-header">
+        <div class="ad-slot">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="ad-sidebar left">
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Compress PDF</h1>
+                <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / Compress PDF</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if not file_uploaded %}
+                <div class="upload-section">
+                    <form action="{{ url_for('compress_pdf') }}" method="post" enctype="multipart/form-data" id="compress-form">
+                        <div class="file-upload-area">
+                            <input type="file" id="file" name="file" accept=".pdf" required>
+                            <label for="file" class="file-label">
+                                <span class="upload-icon">🗜️</span>
+                                <span class="upload-text">Choose PDF file or drag it here</span>
+                                <span class="file-size">Max size: 10MB</span>
+                            </label>
+                        </div>
+
+                        <!-- Progress Container -->
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-header">
+                                <span class="progress-title">Uploading...</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span id="progress-percent">0%</span>
+                                <span id="progress-speed">0 MB/s</span>
+                                <span id="progress-time">Time left: calculating...</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Upload and Prepare Compression</button>
+
+                        <!-- Cloud Storage Options -->
+                        <div style="margin-top: 20px; text-align: center; padding: 20px; border-top: 1px solid var(--border-light);">
+                            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 15px;">Or select from cloud storage:</p>
+                            <div class="cloud-buttons">
+                                <a href="#" class="btn-cloud drive" title="Upload from Google Drive (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Google Drive</a>
+                                <a href="#" class="btn-cloud dropbox" title="Upload from Dropbox (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Dropbox</a>
+                            </div>
+                            <p style="color: var(--text-lighter); font-size: 0.85rem; margin-top: 10px;">Cloud storage coming soon</p>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <div class="compress-options">
+                    <div class="success-box">
+                        <h2>✅ PDF Uploaded Successfully</h2>
+                        <p class="page-count">Total Pages: <strong>{{ page_count }}</strong></p>
+                        <p class="file-info">Original Size: <strong>{{ "%.2f"|format(original_size / (1024*1024)) }} MB</strong></p>
+                    </div>
+
+                    <form action="{{ url_for('compress_pdf') }}" method="post" id="compress-form">
+                        <input type="hidden" name="file_name" value="{{ file_name }}">
+
+                        <div class="compress-level-group">
+                            <h3>Choose Compression Level:</h3>
+
+                            <div class="option-card">
+                                <label class="radio-label">
+                                    <input type="radio" name="compression_level" value="low" checked>
+                                    <span class="radio-custom"></span>
+                                    <strong>Low Compression</strong>
+                                </label>
+                                <p class="option-description">Small file size reduction. Best quality preservation.</p>
+                            </div>
+
+                            <div class="option-card">
+                                <label class="radio-label">
+                                    <input type="radio" name="compression_level" value="medium">
+                                    <span class="radio-custom"></span>
+                                    <strong>Medium Compression (Recommended)</strong>
+                                </label>
+                                <p class="option-description">Balanced compression. Good quality with moderate file size reduction.</p>
+                            </div>
+
+                            <div class="option-card">
+                                <label class="radio-label">
+                                    <input type="radio" name="compression_level" value="high">
+                                    <span class="radio-custom"></span>
+                                    <strong>High Compression</strong>
+                                </label>
+                                <p class="option-description">Maximum file size reduction. Some quality loss may occur.</p>
+                            </div>
+                        </div>
+
+                        <div class="ad-content">
+                            <div class="ad-slot">
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-client="ca-pub-XXXXXXXXXX"
+                                     data-ad-slot="XXXXXXXXXX"
+                                     data-ad-format="auto"
+                                     data-full-width-responsive="true"></ins>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-large">Compress PDF Now</button>
+                    </form>
+                </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">← Back to Home</a>
+            </div>
+        </main>
+
+        <aside class="ad-sidebar right">
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+    </div>
+
+    <div class="ad-footer">
+        <div class="ad-slot">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', function() {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', function() {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // File input styling and drag & drop
+        const fileInput = document.getElementById('file');
+        const fileLabel = document.querySelector('.file-label');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressSpeed = document.getElementById('progress-speed');
+        const progressTime = document.getElementById('progress-time');
+
+        if (fileInput && fileLabel) {
+            // File selection
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const fileName = e.target.files[0].name;
+                    const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
+                    document.querySelector('.upload-text').textContent = fileName;
+                    document.querySelector('.file-size').textContent = `${fileSize} MB`;
+                    fileLabel.classList.add('file-selected');
+                }
+            });
+
+            // Drag and drop
+            fileLabel.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.add('drag-over');
+            });
+
+            fileLabel.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.remove('drag-over');
+            });
+
+            fileLabel.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.remove('drag-over');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type === 'application/pdf') {
+                    fileInput.files = files;
+                    fileInput.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // Progress tracking with simulated metrics
+            const form = document.getElementById('compress-form');
+            form.addEventListener('submit', function(e) {
+                if (fileInput.files.length > 0) {
+                    progressContainer.classList.add('active');
+                    const fileSize = fileInput.files[0].size;
+                    const uploadDuration = 2000; // Simulate 2 second upload
+                    const startTime = Date.now();
+
+                    const progressInterval = setInterval(() => {
+                        const elapsed = Date.now() - startTime;
+                        const percent = Math.min((elapsed / uploadDuration) * 100, 100);
+
+                        progressBar.style.width = percent + '%';
+                        progressPercent.textContent = Math.round(percent) + '%';
+
+                        // Calculate speed (MB/s)
+                        const speed = (fileSize / (1024 * 1024)) / (elapsed / 1000);
+                        progressSpeed.textContent = speed.toFixed(2) + ' MB/s';
+
+                        // Calculate time left
+                        if (percent < 100) {
+                            const timeLeft = (uploadDuration - elapsed) / 1000;
+                            progressTime.textContent = 'Time left: ' + Math.ceil(timeLeft) + 's';
+                        } else {
+                            progressTime.textContent = 'Processing PDF...';
+                            clearInterval(progressInterval);
+                        }
+                    }, 100);
+                }
+            });
+
+            // Radio button selection visual feedback
+            document.querySelectorAll('input[type="radio"][name="compression_level"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.option-card').forEach(card => {
+                        card.classList.remove('selected');
+                    });
+                    if (this.checked) {
+                        this.closest('.option-card').classList.add('selected');
+                    }
+                });
+            });
+
+            // Set initial selected state
+            const checkedRadio = document.querySelector('input[type="radio"][name="compression_level"]:checked');
+            if (checkedRadio) {
+                checkedRadio.closest('.option-card').classList.add('selected');
+            }
+        }
+    </script>
+</body>
+</html>

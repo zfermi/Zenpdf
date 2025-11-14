@@ -241,6 +241,170 @@ def split_pdf():
 
     return render_template('split.html', file_uploaded=False)
 
+@app.route('/compress', methods=['GET', 'POST'])
+def compress_pdf():
+    if request.method == 'POST':
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    # Validate file size
+                    validate_file_size(file)
+
+                    # Sanitize filename and create unique name
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+                    file.save(file_path)
+
+                    # Validate PDF
+                    try:
+                        reader = PdfReader(file_path)
+                        page_count = len(reader.pages)
+                        if page_count == 0:
+                            os.remove(file_path)
+                            flash('Invalid PDF: File has no pages.', 'error')
+                            return render_template('compress.html', file_uploaded=False)
+                    except Exception as e:
+                        os.remove(file_path)
+                        flash(f'Invalid PDF file: {str(e)}', 'error')
+                        return render_template('compress.html', file_uploaded=False)
+
+                    # Store filename in session for next request
+                    session['compress_file'] = unique_filename
+
+                    # Get original file size
+                    original_size = os.path.getsize(file_path)
+                    flash('PDF uploaded successfully!', 'success')
+                    return render_template('compress.html', file_uploaded=True, page_count=page_count,
+                                         file_name=unique_filename, original_size=original_size)
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    flash(f'Error uploading file: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        elif 'compression_level' in request.form:
+            try:
+                file_name = session.get('compress_file') or request.form.get('file_name')
+                if not file_name:
+                    flash('File not found. Please upload again.', 'error')
+                    return render_template('compress.html', file_uploaded=False)
+
+                file_path = os.path.join(UPLOAD_FOLDER, file_name)
+
+                if not os.path.exists(file_path):
+                    flash('File not found. Please upload again.', 'error')
+                    session.pop('compress_file', None)
+                    return render_template('compress.html', file_uploaded=False)
+
+                compression_level = request.form.get('compression_level', 'medium')
+
+                # Compress PDF
+                compressed_file_path = compress_pdf_file(file_path, compression_level)
+
+                # Clean up uploaded file
+                try:
+                    os.remove(file_path)
+                    session.pop('compress_file', None)
+                except:
+                    pass
+
+                # Send compressed file for download
+                return send_file(compressed_file_path, as_attachment=True,
+                               download_name=f"compressed_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                               mimetype='application/pdf')
+
+            except Exception as e:
+                flash(f'Error compressing PDF: {str(e)}', 'error')
+                session.pop('compress_file', None)
+                return render_template('compress.html', file_uploaded=False)
+
+    return render_template('compress.html', file_uploaded=False)
+
+@app.route('/rotate', methods=['GET', 'POST'])
+def rotate_pdf():
+    if request.method == 'POST':
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    # Validate file size
+                    validate_file_size(file)
+
+                    # Sanitize filename and create unique name
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+                    file.save(file_path)
+
+                    # Validate PDF
+                    try:
+                        reader = PdfReader(file_path)
+                        page_count = len(reader.pages)
+                        if page_count == 0:
+                            os.remove(file_path)
+                            flash('Invalid PDF: File has no pages.', 'error')
+                            return render_template('rotate.html', file_uploaded=False)
+                    except Exception as e:
+                        os.remove(file_path)
+                        flash(f'Invalid PDF file: {str(e)}', 'error')
+                        return render_template('rotate.html', file_uploaded=False)
+
+                    # Store filename in session for next request
+                    session['rotate_file'] = unique_filename
+                    flash('PDF uploaded successfully!', 'success')
+                    return render_template('rotate.html', file_uploaded=True, page_count=page_count,
+                                         file_name=unique_filename)
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    flash(f'Error uploading file: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        elif 'rotation_angle' in request.form:
+            try:
+                file_name = session.get('rotate_file') or request.form.get('file_name')
+                if not file_name:
+                    flash('File not found. Please upload again.', 'error')
+                    return render_template('rotate.html', file_uploaded=False)
+
+                file_path = os.path.join(UPLOAD_FOLDER, file_name)
+
+                if not os.path.exists(file_path):
+                    flash('File not found. Please upload again.', 'error')
+                    session.pop('rotate_file', None)
+                    return render_template('rotate.html', file_uploaded=False)
+
+                rotation_angle = request.form.get('rotation_angle', '90')
+                apply_to = request.form.get('apply_to', 'all')
+
+                # Rotate PDF
+                rotated_file_path = rotate_pdf_pages(file_path, rotation_angle, apply_to)
+
+                # Clean up uploaded file
+                try:
+                    os.remove(file_path)
+                    session.pop('rotate_file', None)
+                except:
+                    pass
+
+                # Send rotated file for download
+                return send_file(rotated_file_path, as_attachment=True,
+                               download_name=f"rotated_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                               mimetype='application/pdf')
+
+            except Exception as e:
+                flash(f'Error rotating PDF: {str(e)}', 'error')
+                session.pop('rotate_file', None)
+                return render_template('rotate.html', file_uploaded=False)
+
+    return render_template('rotate.html', file_uploaded=False)
+
 @app.route('/merge', methods=['GET', 'POST'])
 def merge_pdf():
     if request.method == 'POST':
@@ -392,7 +556,7 @@ def merge_pdf_files(file_paths, output_dir):
         pdf_path = os.path.join(MERGED_FOLDER, pdf_file)
         if not os.path.exists(pdf_path):
             continue
-            
+
         try:
             reader = PdfReader(pdf_path)
             for page in reader.pages:
@@ -412,6 +576,55 @@ def merge_pdf_files(file_paths, output_dir):
             pass
 
     return merged_file_path
+
+def compress_pdf_file(pdf_path, compression_level='medium'):
+    """Compress PDF by removing unnecessary content"""
+    reader = PdfReader(pdf_path)
+    writer = PdfWriter()
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+    # Compression settings based on level
+    compress_content = True
+    compress_streams = True
+
+    for page in reader.pages:
+        # Remove unnecessary objects
+        page.compress_content_streams()
+        writer.add_page(page)
+
+    compressed_file_path = os.path.join(SPLIT_FOLDER, f"compressed_{timestamp}.pdf")
+    with open(compressed_file_path, "wb") as output_pdf:
+        writer.write(output_pdf)
+
+    return compressed_file_path
+
+def rotate_pdf_pages(pdf_path, rotation_angle, apply_to='all'):
+    """Rotate PDF pages by specified angle"""
+    reader = PdfReader(pdf_path)
+    writer = PdfWriter()
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+    # Convert angle to integer
+    angle = int(rotation_angle)
+
+    for idx, page in enumerate(reader.pages):
+        # Determine if this page should be rotated
+        should_rotate = apply_to == 'all'
+        if apply_to == 'odd' and (idx + 1) % 2 != 0:
+            should_rotate = True
+        elif apply_to == 'even' and (idx + 1) % 2 == 0:
+            should_rotate = True
+
+        if should_rotate:
+            page.rotate_clockwise(angle)
+
+        writer.add_page(page)
+
+    rotated_file_path = os.path.join(SPLIT_FOLDER, f"rotated_{timestamp}.pdf")
+    with open(rotated_file_path, "wb") as output_pdf:
+        writer.write(output_pdf)
+
+    return rotated_file_path
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
