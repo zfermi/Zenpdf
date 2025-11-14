@@ -7,6 +7,8 @@ from PyPDF2 import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
+__version__ = "1.0.0"
+
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(16))
 
@@ -89,7 +91,16 @@ def internal_error(e):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', version=__version__)
+
+@app.route('/version')
+def version():
+    """API endpoint to check version"""
+    return jsonify({
+        'version': __version__,
+        'name': 'ZenPDF',
+        'status': 'production'
+    })
 
 @app.route('/split', methods=['GET', 'POST'])
 def split_pdf():
@@ -403,5 +414,8 @@ def merge_pdf_files(file_paths, output_dir):
     return merged_file_path
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '0.0.0.0')
+    debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host=host, port=port, debug=debug)
 
