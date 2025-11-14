@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free PDF tools to split and merge PDFs online. No registration required.">
+    <title>ZenPDF - Free PDF Split & Merge Tools</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ad-header">
+        <!-- Google AdSense - Header Ad -->
+        <div class="ad-slot">
+            <!-- AdSense code goes here -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="ad-sidebar left">
+            <!-- Google AdSense - Left Sidebar Ad -->
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="header-content">
+                <h1>Welcome to ZenPDF</h1>
+                <p class="subtitle">Free PDF tools to split and merge your documents. Fast, secure, and easy to use.</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">📄</div>
+                    <h2>Split PDF</h2>
+                    <p>Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
+                    <a href="{{ url_for('split_pdf') }}" class="btn btn-primary">Split PDF</a>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">📚</div>
+                    <h2>Merge PDF</h2>
+                    <p>Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
+                    <a href="{{ url_for('merge_pdf') }}" class="btn btn-primary">Merge PDF</a>
+                </div>
+            </div>
+
+            <div class="features">
+                <h3>Why Choose ZenPDF?</h3>
+                <ul class="feature-list">
+                    <li>✅ 100% Free - No registration required</li>
+                    <li>🔒 Secure - Files are automatically deleted after processing</li>
+                    <li>⚡ Fast - Process your PDFs in seconds</li>
+                    <li>📱 Responsive - Works on all devices</li>
+                    <li>🌐 No upload limits - Up to 10MB per file</li>
+                </ul>
+            </div>
+
+            <div class="ad-content">
+                <!-- Google AdSense - Content Ad -->
+                <div class="ad-slot">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-XXXXXXXXXX"
+                         data-ad-slot="XXXXXXXXXX"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
+            </div>
+        </main>
+
+        <aside class="ad-sidebar right">
+            <!-- Google AdSense - Right Sidebar Ad -->
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+    </div>
+
+    <div class="ad-footer">
+        <!-- Google AdSense - Footer Ad -->
+        <div class="ad-slot">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2024 ZenPDF. Free PDF tools for everyone.</p>
+    </footer>
+
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</body>
+</html>
+

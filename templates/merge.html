@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merge multiple PDF files into one document. Drag and drop to reorder pages.">
+    <title>Merge PDFs - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="ad-header">
+        <div class="ad-slot">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="ad-sidebar left">
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Merge PDFs</h1>
+                <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / Merge PDF</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if not files_uploaded %}
+                <div class="upload-section">
+                    <form action="{{ url_for('merge_pdf') }}" method="post" enctype="multipart/form-data" id="merge-form">
+                        <div class="file-upload-area">
+                            <input type="file" id="files" name="files" accept=".pdf" multiple required>
+                            <label for="files" class="file-label">
+                                <span class="upload-icon">📁</span>
+                                <span class="upload-text">Choose PDF files (up to 5 files)</span>
+                                <span class="file-size">Max size: 10MB per file</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Upload Files</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="merge-section">
+                    <div class="success-box">
+                        <h2>✅ Files Uploaded Successfully</h2>
+                        <p>Drag and drop files to reorder them before merging.</p>
+                    </div>
+                    
+                    <form action="{{ url_for('merge_files') }}" method="post" id="merge-form">
+                        <h3>File Order (drag to reorder):</h3>
+                        <ul class="file-list sortable" id="file-list">
+                            {% for file in file_paths %}
+                                <li class="file-item" id="file-{{ loop.index0 }}" data-file="{{ file }}">
+                                    <span class="drag-handle">☰</span>
+                                    <span class="file-name">{{ file.split('_', 2)[-1] if '_' in file else file }}</span>
+                                    <input type="hidden" name="file_paths[]" value="{{ file }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="ad-content">
+                            <div class="ad-slot">
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-client="ca-pub-XXXXXXXXXX"
+                                     data-ad-slot="XXXXXXXXXX"
+                                     data-ad-format="auto"
+                                     data-full-width-responsive="true"></ins>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-large">Merge PDFs Now</button>
+                    </form>
+                </div>
+            {% endif %}
+            
+            <div class="action-buttons">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">← Back to Home</a>
+            </div>
+        </main>
+
+        <aside class="ad-sidebar right">
+            <div class="ad-slot">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="rectangle"></ins>
+            </div>
+        </aside>
+    </div>
+
+    <div class="ad-footer">
+        <div class="ad-slot">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        
+        // Initialize drag and drop for file list
+        {% if files_uploaded %}
+        const fileList = document.getElementById('file-list');
+        if (fileList) {
+            new Sortable(fileList, {
+                animation: 150,
+                handle: '.drag-handle',
+                onEnd: function(evt) {
+                    // Update hidden inputs order
+                    const items = fileList.querySelectorAll('li');
+                    items.forEach((item, index) => {
+                        item.setAttribute('id', `file-${index}`);
+                    });
+                }
+            });
+        }
+        {% endif %}
+        
+        // File input styling
+        const fileInput = document.getElementById('files');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const count = e.target.files.length;
+                    const fileNames = Array.from(e.target.files).map(f => f.name).join(', ');
+                    document.querySelector('.upload-text').textContent = `${count} file(s) selected`;
+                    if (count <= 3) {
+                        document.querySelector('.file-size').textContent = fileNames;
+                    } else {
+                        document.querySelector('.file-size').textContent = `${count} files selected`;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

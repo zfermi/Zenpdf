@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(adb devices:*)",
+      "Bash(emulator -list-avds:*)",
+      "Bash(where emulator:*)",
+      "Bash(nul)",
+      "Bash(\"C:\\Program Files\\Android\\Android Studio\\emulator\\emulator.exe\" -list-avds)",
+      "Bash(test:*)",
+      "Bash(\"$LOCALAPPDATA/Android/Sdk/emulator/emulator.exe\" -list-avds)",
+      "Bash(\"$LOCALAPPDATA/Android/Sdk/emulator/emulator.exe\" -avd Television_1080p)",
+      "Bash(adb:*)",
+      "Bash(ipconfig:*)",
+      "Bash(findstr:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
