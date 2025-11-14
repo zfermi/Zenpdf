@@ -271,6 +271,18 @@ main.content {
     transform: translateY(-4px);
 }
 
+.tool-card-disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+}
+
+.tool-card-disabled:hover {
+    border-color: var(--border-color);
+    box-shadow: var(--shadow);
+    transform: none;
+}
+
 .tool-icon {
     font-size: 5rem;
     margin-bottom: 20px;

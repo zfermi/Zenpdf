@@ -53,7 +53,7 @@
         <main class="content">
             <div class="header-content">
                 <h1>ZenPDF</h1>
-                <p class="subtitle">Free PDF tools to split and merge your documents. Fast, secure, and easy to use.</p>
+                <p class="subtitle">Free PDF tools to split, merge, compress, and more. Fast, secure, and easy to use.</p>
             </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -78,6 +78,34 @@
                     <p>Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
                     <span class="btn btn-primary">Merge PDF</span>
                 </a>
+
+                <div class="tool-card tool-card-disabled">
+                    <div class="tool-icon">🗜️</div>
+                    <h2>Compress PDF</h2>
+                    <p>Reduce file size while maintaining quality. Perfect for sharing and storage.</p>
+                    <span class="premium-badge">Coming Soon</span>
+                </div>
+
+                <div class="tool-card tool-card-disabled">
+                    <div class="tool-icon">🔄</div>
+                    <h2>Rotate PDF</h2>
+                    <p>Rotate pages 90°, 180°, or 270°. Fix orientation issues easily.</p>
+                    <span class="premium-badge">Coming Soon</span>
+                </div>
+
+                <div class="tool-card tool-card-disabled">
+                    <div class="tool-icon">🖼️</div>
+                    <h2>PDF to Image</h2>
+                    <p>Convert PDF pages to JPG, PNG, or other image formats.</p>
+                    <span class="premium-badge">Coming Soon</span>
+                </div>
+
+                <div class="tool-card tool-card-disabled">
+                    <div class="tool-icon">🔒</div>
+                    <h2>Watermark PDF</h2>
+                    <p>Add text or image watermarks to protect your documents.</p>
+                    <span class="premium-badge">Coming Soon</span>
+                </div>
             </div>
 
             <div class="features">
