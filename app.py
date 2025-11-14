@@ -616,7 +616,7 @@ def rotate_pdf_pages(pdf_path, rotation_angle, apply_to='all'):
             should_rotate = True
 
         if should_rotate:
-            page.rotate_clockwise(angle)
+            page.rotate(angle)
 
         writer.add_page(page)
 
