@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
+                <li class="nav-item active"><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
     <div class="ad-header">
         <div class="ad-slot">
             <ins class="adsbygoogle"
@@ -178,6 +194,23 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
+
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', function() {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', function() {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
 
         // Initialize drag and drop for file list
         {% if files_uploaded %}
