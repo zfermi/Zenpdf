@@ -55,7 +55,33 @@
                                 <span class="file-size">Max size: 10MB</span>
                             </label>
                         </div>
+
+                        <!-- Progress Container -->
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-header">
+                                <span class="progress-title">Uploading...</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span id="progress-percent">0%</span>
+                                <span id="progress-speed">0 MB/s</span>
+                                <span id="progress-time">Time left: calculating...</span>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-success">Upload and Show Page Count</button>
+
+                        <!-- Cloud Storage Options -->
+                        <div style="margin-top: 20px; text-align: center; padding: 20px; border-top: 1px solid var(--border-light);">
+                            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 15px;">Or select from cloud storage:</p>
+                            <div class="cloud-buttons">
+                                <a href="#" class="btn-cloud drive" title="Upload from Google Drive (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Google Drive</a>
+                                <a href="#" class="btn-cloud dropbox" title="Upload from Dropbox (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Dropbox</a>
+                            </div>
+                            <p style="color: var(--text-lighter); font-size: 0.85rem; margin-top: 10px;">Cloud storage coming soon</p>
+                        </div>
                     </form>
                 </div>
             {% else %}
@@ -159,11 +185,16 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
-        
+
         // File input styling and drag & drop
         const fileInput = document.getElementById('file');
         const fileLabel = document.querySelector('.file-label');
-        
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressSpeed = document.getElementById('progress-speed');
+        const progressTime = document.getElementById('progress-time');
+
         if (fileInput && fileLabel) {
             // File selection
             fileInput.addEventListener('change', function(e) {
@@ -175,32 +206,64 @@
                     fileLabel.classList.add('file-selected');
                 }
             });
-            
+
             // Drag and drop
             fileLabel.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.add('drag-over');
             });
-            
+
             fileLabel.addEventListener('dragleave', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.remove('drag-over');
             });
-            
+
             fileLabel.addEventListener('drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.remove('drag-over');
-                
+
                 const files = e.dataTransfer.files;
                 if (files.length > 0 && files[0].type === 'application/pdf') {
                     fileInput.files = files;
                     fileInput.dispatchEvent(new Event('change'));
                 }
             });
-            
+
+            // Progress tracking with simulated metrics
+            const form = document.getElementById('split-form');
+            form.addEventListener('submit', function(e) {
+                if (fileInput.files.length > 0) {
+                    progressContainer.classList.add('active');
+                    const fileSize = fileInput.files[0].size;
+                    const uploadDuration = 2000; // Simulate 2 second upload
+                    const startTime = Date.now();
+
+                    const progressInterval = setInterval(() => {
+                        const elapsed = Date.now() - startTime;
+                        const percent = Math.min((elapsed / uploadDuration) * 100, 100);
+
+                        progressBar.style.width = percent + '%';
+                        progressPercent.textContent = Math.round(percent) + '%';
+
+                        // Calculate speed (MB/s)
+                        const speed = (fileSize / (1024 * 1024)) / (elapsed / 1000);
+                        progressSpeed.textContent = speed.toFixed(2) + ' MB/s';
+
+                        // Calculate time left
+                        if (percent < 100) {
+                            const timeLeft = (uploadDuration - elapsed) / 1000;
+                            progressTime.textContent = 'Time left: ' + Math.ceil(timeLeft) + 's';
+                        } else {
+                            progressTime.textContent = 'Processing PDF...';
+                            clearInterval(progressInterval);
+                        }
+                    }, 100);
+                }
+            });
+
             // Radio button selection visual feedback
             document.querySelectorAll('input[type="radio"][name="split_type"]').forEach(radio => {
                 radio.addEventListener('change', function() {
@@ -212,7 +275,7 @@
                     }
                 });
             });
-            
+
             // Set initial selected state
             const checkedRadio = document.querySelector('input[type="radio"][name="split_type"]:checked');
             if (checkedRadio) {

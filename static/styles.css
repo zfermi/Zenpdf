@@ -734,3 +734,343 @@ main.content {
 .file-item {
     animation: fadeIn 0.3s ease;
 }
+
+/* Upload Progress Bar */
+.progress-container {
+    display: none;
+    margin: 20px 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+    border-radius: 12px;
+    border: 2px solid var(--secondary-color);
+}
+
+.progress-container.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.progress-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2E7D32;
+}
+
+.progress-info {
+    display: flex;
+    gap: 20px;
+    font-size: 0.95rem;
+    color: #388E3C;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(76, 175, 80, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-color) 0%, #45A049 100%);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #388E3C;
+    margin-top: 10px;
+}
+
+/* File Preview Thumbnails */
+.file-item-preview {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.file-preview {
+    width: 60px;
+    height: 80px;
+    background: linear-gradient(135deg, #F5F5F5 0%, #EBEBEB 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-preview-pages {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.file-preview:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name-text {
+    display: block;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.file-size-text {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* Premium Badge */
+.premium-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #FFC233 0%, #FFB800 100%);
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(255, 194, 51, 0.3);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.premium-badge::before {
+    content: '👑';
+    font-size: 0.9rem;
+}
+
+.premium-badge-outline {
+    background: transparent;
+    border: 2px solid #FFC233;
+    color: #FFC233;
+    box-shadow: none;
+    padding: 4px 10px;
+}
+
+/* Refined Toggle Switches */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    background-color: #EBEBF4;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 12px;
+    transition: left 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch:checked {
+    background-color: var(--secondary-color);
+}
+
+.toggle-switch:checked::after {
+    left: 22px;
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Processing State Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.processing-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--primary-light);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.processing-state {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    animation: fadeIn 0.3s ease;
+}
+
+.processing-state.active {
+    display: block;
+}
+
+.processing-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-top: 15px;
+}
+
+.processing-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-top: 8px;
+}
+
+/* Success State Enhancement */
+.success-animation {
+    animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Cloud Integration Buttons */
+.cloud-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-cloud {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    background: white;
+    color: var(--text-color);
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-cloud:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.btn-cloud::before {
+    font-size: 1.2rem;
+}
+
+.btn-cloud.drive::before {
+    content: '🔵';
+}
+
+.btn-cloud.dropbox::before {
+    content: '🔷';
+}
+
+/* Responsive adjustments for progress */
+@media (max-width: 768px) {
+    .progress-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .file-preview {
+        width: 50px;
+        height: 65px;
+        font-size: 2rem;
+    }
+
+    .progress-container {
+        margin: 15px 20px;
+        padding: 20px;
+    }
+
+    .cloud-buttons {
+        flex-direction: column;
+    }
+
+    .btn-cloud {
+        width: 100%;
+        justify-content: center;
+    }
+}

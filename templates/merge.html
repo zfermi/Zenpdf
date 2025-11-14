@@ -55,7 +55,33 @@
                                 <span class="file-size">Max size: 10MB per file</span>
                             </label>
                         </div>
+
+                        <!-- Progress Container -->
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-header">
+                                <span class="progress-title">Uploading files...</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span id="progress-percent">0%</span>
+                                <span id="progress-speed">0 MB/s</span>
+                                <span id="progress-time">Time left: calculating...</span>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-success">Upload Files</button>
+
+                        <!-- Cloud Storage Options -->
+                        <div style="margin-top: 20px; text-align: center; padding: 20px; border-top: 1px solid var(--border-light);">
+                            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 15px;">Or select from cloud storage:</p>
+                            <div class="cloud-buttons">
+                                <a href="#" class="btn-cloud drive" title="Upload from Google Drive (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Google Drive</a>
+                                <a href="#" class="btn-cloud dropbox" title="Upload from Dropbox (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Dropbox</a>
+                            </div>
+                            <p style="color: var(--text-lighter); font-size: 0.85rem; margin-top: 10px;">Cloud storage coming soon</p>
+                        </div>
                     </form>
                 </div>
             {% else %}
@@ -71,11 +97,39 @@
                             {% for file in file_paths %}
                                 <li class="file-item" id="file-{{ loop.index0 }}" data-file="{{ file }}">
                                     <span class="drag-handle">☰</span>
-                                    <span class="file-name">{{ file.split('_', 2)[-1] if '_' in file else file }}</span>
+                                    <div class="file-item-preview">
+                                        <div class="file-preview">
+                                            📄
+                                            <span class="file-preview-pages" data-pages="12">12p</span>
+                                        </div>
+                                        <div class="file-details">
+                                            <span class="file-name-text">{{ file.split('_', 2)[-1] if '_' in file else file }}</span>
+                                            <span class="file-size-text">12 pages • 2.5 MB</span>
+                                        </div>
+                                    </div>
                                     <input type="hidden" name="file_paths[]" value="{{ file }}">
                                 </li>
                             {% endfor %}
                         </ul>
+
+                        <!-- Premium Feature Options -->
+                        <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #FFF8DC 0%, #FFFFF0 100%); border-radius: 12px; border: 2px solid #FFE4B5;">
+                            <h4 style="margin-bottom: 15px; color: #333;">Advanced Options:</h4>
+                            <div class="toggle-wrapper">
+                                <input type="checkbox" id="merge-toggle" class="toggle-switch">
+                                <label for="merge-toggle" class="toggle-label">Merge all files into one PDF</label>
+                            </div>
+                            <div class="toggle-wrapper" style="opacity: 0.6; pointer-events: none;">
+                                <input type="checkbox" class="toggle-switch" disabled>
+                                <label class="toggle-label">Add cover page</label>
+                                <span class="premium-badge premium-badge-outline">Premium</span>
+                            </div>
+                            <div class="toggle-wrapper" style="opacity: 0.6; pointer-events: none;">
+                                <input type="checkbox" class="toggle-switch" disabled>
+                                <label class="toggle-label">Compress output PDF</label>
+                                <span class="premium-badge premium-badge-outline">Premium</span>
+                            </div>
+                        </div>
 
                         <div class="ad-content">
                             <div class="ad-slot">
@@ -124,7 +178,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
-        
+
         // Initialize drag and drop for file list
         {% if files_uploaded %}
         const fileList = document.getElementById('file-list');
@@ -149,11 +203,16 @@
             });
         }
         {% endif %}
-        
+
         // File input styling and drag & drop
         const fileInput = document.getElementById('files');
         const fileLabel = document.querySelector('.file-label');
-        
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressSpeed = document.getElementById('progress-speed');
+        const progressTime = document.getElementById('progress-time');
+
         if (fileInput && fileLabel) {
             // File selection
             fileInput.addEventListener('change', function(e) {
@@ -169,25 +228,25 @@
                     fileLabel.classList.add('file-selected');
                 }
             });
-            
+
             // Drag and drop for multiple files
             fileLabel.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.add('drag-over');
             });
-            
+
             fileLabel.addEventListener('dragleave', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.remove('drag-over');
             });
-            
+
             fileLabel.addEventListener('drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 fileLabel.classList.remove('drag-over');
-                
+
                 const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
                 if (files.length > 0) {
                     const dt = new DataTransfer();
@@ -195,6 +254,50 @@
                     fileInput.files = dt.files;
                     fileInput.dispatchEvent(new Event('change'));
                 }
+            });
+
+            // Progress tracking for file uploads
+            const form = document.getElementById('merge-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (fileInput.files.length > 0) {
+                        if (progressContainer) {
+                            progressContainer.classList.add('active');
+                            const totalSize = Array.from(fileInput.files).reduce((sum, f) => sum + f.size, 0);
+                            const uploadDuration = 3000; // Simulate 3 second upload for multiple files
+                            const startTime = Date.now();
+
+                            const progressInterval = setInterval(() => {
+                                const elapsed = Date.now() - startTime;
+                                const percent = Math.min((elapsed / uploadDuration) * 100, 100);
+
+                                progressBar.style.width = percent + '%';
+                                progressPercent.textContent = Math.round(percent) + '%';
+
+                                // Calculate speed (MB/s)
+                                const speed = (totalSize / (1024 * 1024)) / (elapsed / 1000);
+                                progressSpeed.textContent = speed.toFixed(2) + ' MB/s';
+
+                                // Calculate time left
+                                if (percent < 100) {
+                                    const timeLeft = (uploadDuration - elapsed) / 1000;
+                                    progressTime.textContent = 'Time left: ' + Math.ceil(timeLeft) + 's';
+                                } else {
+                                    progressTime.textContent = 'Processing PDFs...';
+                                    clearInterval(progressInterval);
+                                }
+                            }, 100);
+                        }
+                    }
+                });
+            }
+        }
+
+        // Toggle switch functionality (for premium feature demo)
+        const mergeToggle = document.getElementById('merge-toggle');
+        if (mergeToggle) {
+            mergeToggle.addEventListener('change', function() {
+                console.log('Merge all files:', this.checked);
             });
         }
     </script>
