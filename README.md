@@ -1,5 +1,7 @@
 # ZenPDF - Free PDF Split & Merge Tool
 
+**Version:** 1.0.0
+
 A modern, secure web application for splitting and merging PDF files. Built with Flask and designed for ease of use.
 
 ## Features

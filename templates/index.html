@@ -35,7 +35,7 @@
 
         <main class="content">
             <div class="header-content">
-                <h1>Welcome to ZenPDF</h1>
+                <h1>ZenPDF</h1>
                 <p class="subtitle">Free PDF tools to split and merge your documents. Fast, secure, and easy to use.</p>
             </div>
             
@@ -48,19 +48,19 @@
             {% endwith %}
 
             <div class="tool-grid">
-                <div class="tool-card">
+                <a href="{{ url_for('split_pdf') }}" class="tool-card">
                     <div class="tool-icon">📄</div>
                     <h2>Split PDF</h2>
                     <p>Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
-                    <a href="{{ url_for('split_pdf') }}" class="btn btn-primary">Split PDF</a>
-                </div>
+                    <span class="btn btn-primary">Split PDF</span>
+                </a>
 
-                <div class="tool-card">
+                <a href="{{ url_for('merge_pdf') }}" class="tool-card">
                     <div class="tool-icon">📚</div>
                     <h2>Merge PDF</h2>
                     <p>Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
-                    <a href="{{ url_for('merge_pdf') }}" class="btn btn-primary">Merge PDF</a>
-                </div>
+                    <span class="btn btn-primary">Merge PDF</span>
+                </a>
             </div>
 
             <div class="features">

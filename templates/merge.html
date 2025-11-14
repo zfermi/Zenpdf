@@ -50,8 +50,8 @@
                         <div class="file-upload-area">
                             <input type="file" id="files" name="files" accept=".pdf" multiple required>
                             <label for="files" class="file-label">
-                                <span class="upload-icon">📁</span>
-                                <span class="upload-text">Choose PDF files (up to 5 files)</span>
+                                <span class="upload-icon">📚</span>
+                                <span class="upload-text">Choose PDF files or drag them here (up to 5 files)</span>
                                 <span class="file-size">Max size: 10MB per file</span>
                             </label>
                         </div>
@@ -130,9 +130,16 @@
         const fileList = document.getElementById('file-list');
         if (fileList) {
             new Sortable(fileList, {
-                animation: 150,
+                animation: 200,
                 handle: '.drag-handle',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                onStart: function(evt) {
+                    evt.item.style.opacity = '0.5';
+                },
                 onEnd: function(evt) {
+                    evt.item.style.opacity = '1';
                     // Update hidden inputs order
                     const items = fileList.querySelectorAll('li');
                     items.forEach((item, index) => {
@@ -143,19 +150,50 @@
         }
         {% endif %}
         
-        // File input styling
+        // File input styling and drag & drop
         const fileInput = document.getElementById('files');
-        if (fileInput) {
+        const fileLabel = document.querySelector('.file-label');
+        
+        if (fileInput && fileLabel) {
+            // File selection
             fileInput.addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     const count = e.target.files.length;
-                    const fileNames = Array.from(e.target.files).map(f => f.name).join(', ');
+                    const fileNames = Array.from(e.target.files).map(f => f.name);
                     document.querySelector('.upload-text').textContent = `${count} file(s) selected`;
                     if (count <= 3) {
-                        document.querySelector('.file-size').textContent = fileNames;
+                        document.querySelector('.file-size').textContent = fileNames.join(', ');
                     } else {
-                        document.querySelector('.file-size').textContent = `${count} files selected`;
+                        document.querySelector('.file-size').textContent = `${count} PDF files selected`;
                     }
+                    fileLabel.classList.add('file-selected');
+                }
+            });
+            
+            // Drag and drop for multiple files
+            fileLabel.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.add('drag-over');
+            });
+            
+            fileLabel.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.remove('drag-over');
+            });
+            
+            fileLabel.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileLabel.classList.remove('drag-over');
+                
+                const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+                if (files.length > 0) {
+                    const dt = new DataTransfer();
+                    files.forEach(file => dt.items.add(file));
+                    fileInput.files = dt.files;
+                    fileInput.dispatchEvent(new Event('change'));
                 }
             });
         }
