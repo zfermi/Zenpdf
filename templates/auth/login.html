@@ -13,11 +13,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
-                <ul class="hidden md:flex space-x-1">
+                <ul class="hidden md:flex space-x-1 items-center">
                     <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
-                    <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Sign Up</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
+                    <li><span class="text-gray-300 px-2">|</span></li>
                     <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Login</a></li>
+                    <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a></li>
                 </ul>
                 <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
                     <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
@@ -28,9 +32,13 @@
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
-                <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Sign Up</a>
-                <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Login</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
+                <div class="border-t border-gray-200 my-2"></div>
+                <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a>
             </div>
         </div>
     </nav>
