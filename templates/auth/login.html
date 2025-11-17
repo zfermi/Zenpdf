@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to ZenPDF to access premium PDF tools">
+    <title>Login - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                <li class="nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+                <li class="nav-item active"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 500px; margin-top: 50px;">
+        <main class="content">
+            <div class="header-content" style="text-align: center;">
+                <h1>Welcome Back</h1>
+                <p class="subtitle">Login to access your PDF tools</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="upload-section" style="padding: 40px;">
+                <form method="POST" action="{{ url_for('auth.login') }}" style="max-width: 400px; margin: 0 auto;">
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        {{ form.email.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.email(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        {% if form.email.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        {{ form.password.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.password(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        {% if form.password.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            {{ form.remember_me(style="margin-right: 8px; width: 18px; height: 18px;") }}
+                            <span>{{ form.remember_me.label.text }}</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-primary", style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer;") }}
+                    </div>
+                </form>
+
+                <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee;">
+                    <p style="color: #666; margin-bottom: 10px;">Don't have an account?</p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="display: inline-block; padding: 10px 30px;">Sign Up</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        document.getElementById('nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

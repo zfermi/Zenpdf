@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ZenPDF pricing plans - free and premium options">
+    <title>Pricing - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item active"><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+                    <li class="nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                {% endif %}
+            </ul>
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main class="content" style="max-width: 1200px; margin: 0 auto;">
+            <div class="header-content" style="text-align: center; margin-bottom: 50px;">
+                <h1>Simple, Transparent Pricing</h1>
+                <p class="subtitle">Choose the plan that works best for you</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px;">
+                <!-- Free Tier -->
+                <div class="upload-section" style="padding: 40px; text-align: center; position: relative;">
+                    <h2 style="margin: 0 0 10px 0; font-size: 28px;">Free</h2>
+                    <div style="margin: 20px 0;">
+                        <span style="font-size: 48px; font-weight: 700; color: #6c5ce7;">$0</span>
+                        <span style="color: #666;">/month</span>
+                    </div>
+
+                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            <strong>5 operations/day</strong>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            10MB file size limit
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            All basic PDF tools
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Secure file processing
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Ad-supported
+                        </li>
+                    </ul>
+
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600;">
+                        Get Started Free
+                    </a>
+                    {% elif not current_user.is_premium %}
+                    <button class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600;" disabled>
+                        Current Plan
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Premium Tier -->
+                <div class="upload-section" style="padding: 40px; text-align: center; position: relative; border: 3px solid #6c5ce7; box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #6c5ce7; color: white; padding: 5px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                        POPULAR
+                    </div>
+
+                    <h2 style="margin: 0 0 10px 0; font-size: 28px; color: #6c5ce7;">Premium</h2>
+                    <div style="margin: 20px 0;">
+                        <span style="font-size: 48px; font-weight: 700; color: #6c5ce7;">$9.99</span>
+                        <span style="color: #666;">/month</span>
+                    </div>
+
+                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            <strong>Unlimited operations</strong>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            <strong>100MB file size limit</strong>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            All PDF tools
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Priority processing
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            <strong>Ad-free experience</strong>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Email support
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            API access
+                        </li>
+                    </ul>
+
+                    {% if current_user.is_authenticated and current_user.is_premium %}
+                    <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; background: #00b894; border: none;" disabled>
+                        Active Subscription
+                    </button>
+                    {% else %}
+                    <a href="#" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; display: block; text-decoration: none; text-align: center;" onclick="alert('Stripe integration coming soon!'); return false;">
+                        Upgrade to Premium
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Enterprise Tier -->
+                <div class="upload-section" style="padding: 40px; text-align: center;">
+                    <h2 style="margin: 0 0 10px 0; font-size: 28px;">Enterprise</h2>
+                    <div style="margin: 20px 0;">
+                        <span style="font-size: 36px; font-weight: 700; color: #2d3436;">Custom</span>
+                    </div>
+
+                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Everything in Premium
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Custom file size limits
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Dedicated support
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            SLA guarantee
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Team management
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <span style="color: #00b894; margin-right: 10px;">✓</span>
+                            Custom integrations
+                        </li>
+                    </ul>
+
+                    <a href="mailto:sales@zenpdf.com" class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; display: block; text-decoration: none; text-align: center;">
+                        Contact Sales
+                    </a>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="upload-section" style="padding: 40px; margin-top: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px;">Frequently Asked Questions</h2>
+
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #333; margin-bottom: 10px;">Can I upgrade or downgrade anytime?</h3>
+                        <p style="color: #666; line-height: 1.6;">Yes! You can upgrade to Premium or downgrade to Free at any time. Changes take effect immediately.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #333; margin-bottom: 10px;">Is my data secure?</h3>
+                        <p style="color: #666; line-height: 1.6;">Absolutely. All files are processed securely and automatically deleted after 1 hour. We never store your documents.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #333; margin-bottom: 10px;">What payment methods do you accept?</h3>
+                        <p style="color: #666; line-height: 1.6;">We accept all major credit cards through Stripe. Your payment information is secure and encrypted.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #333; margin-bottom: 10px;">Do you offer refunds?</h3>
+                        <p style="color: #666; line-height: 1.6;">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        document.getElementById('nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
