@@ -26,3 +26,6 @@ Flask-Talisman==1.1.0
 # Environment Variables
 python-dotenv==1.0.0
 
+# Production Server
+gunicorn==21.2.0
+
