@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign up for ZenPDF to access premium PDF tools">
+    <title>Sign Up - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                <li class="nav-item active"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+                <li class="nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 500px; margin-top: 50px;">
+        <main class="content">
+            <div class="header-content" style="text-align: center;">
+                <h1>Create Your Account</h1>
+                <p class="subtitle">Start using ZenPDF for free today</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="upload-section" style="padding: 40px;">
+                <form method="POST" action="{{ url_for('auth.register') }}" style="max-width: 400px; margin: 0 auto;">
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        {{ form.username.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.username(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        {% if form.username.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        {{ form.email.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.email(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        {% if form.email.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        {{ form.password.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.password(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">At least 8 characters</small>
+                        {% if form.password.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        {{ form.password_confirm.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
+                        {{ form.password_confirm(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                        {% if form.password_confirm.errors %}
+                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                                {% for error in form.password_confirm.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-primary", style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer;") }}
+                    </div>
+                </form>
+
+                <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee;">
+                    <p style="color: #666; margin-bottom: 10px;">Already have an account?</p>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="display: inline-block; padding: 10px 30px;">Login</a>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: center;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px; color: #333;">🎁 Free Tier Includes:</h3>
+                    <ul style="list-style: none; padding: 0; color: #666; font-size: 14px;">
+                        <li>✓ 5 operations per day</li>
+                        <li>✓ 10MB file size limit</li>
+                        <li>✓ All basic PDF tools</li>
+                        <li>✓ No credit card required</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        document.getElementById('nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
