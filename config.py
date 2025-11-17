@@ -110,23 +110,9 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
 
-    # Warn if DATABASE_URL not set but don't fail
-    # App will fall back to SQLite if DATABASE_URL not provided
-    def __init__(self):
-        if not os.environ.get('DATABASE_URL'):
-            import warnings
-            warnings.warn(
-                "DATABASE_URL not set - using SQLite. "
-                "For production, add PostgreSQL database in Railway dashboard.",
-                RuntimeWarning
-            )
-        if not os.environ.get('SECRET_KEY'):
-            import warnings
-            warnings.warn(
-                "SECRET_KEY not set - using default (INSECURE!). "
-                "Set SECRET_KEY environment variable in Railway.",
-                RuntimeWarning
-            )
+    # Check for required environment variables
+    # Logging is done at app startup, not during config init
+    # to avoid reentrant logging issues with Gunicorn
 
 
 class TestingConfig(Config):

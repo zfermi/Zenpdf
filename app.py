@@ -34,6 +34,19 @@ def create_app(config_name=None):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
+    # Log configuration warnings (avoid reentrant logging issues)
+    if config_name == 'production':
+        if not os.environ.get('DATABASE_URL'):
+            app.logger.warning(
+                "DATABASE_URL not set - using SQLite. "
+                "For production, add PostgreSQL database in Railway dashboard."
+            )
+        if not os.environ.get('SECRET_KEY'):
+            app.logger.warning(
+                "SECRET_KEY not set - using default (INSECURE!). "
+                "Set SECRET_KEY environment variable in Railway."
+            )
+
     # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
