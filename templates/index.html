@@ -5,31 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free PDF tools to split and merge PDFs online. No registration required.">
     <title>ZenPDF - Free PDF Split & Merge Tools</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
-            <ul class="nav-menu">
-                <li class="nav-item active"><a href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item"><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('compress_pdf') }}">Compress PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('rotate_pdf') }}">Rotate PDF</a></li>
-            </ul>
-            <button class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <ul class="hidden md:flex space-x-1">
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Home</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
+                </ul>
+                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Home</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a>
+            </div>
         </div>
     </nav>
 
-    <div class="ad-header">
+    <div class="bg-gray-100 py-4">
         <!-- Google AdSense - Header Ad -->
-        <div class="ad-slot">
+        <div class="max-w-7xl mx-auto px-4">
             <!-- AdSense code goes here -->
             <ins class="adsbygoogle"
                  style="display:block"
@@ -40,23 +50,24 @@
         </div>
     </div>
 
-    <div class="container">
-        <aside class="ad-sidebar left">
-            <!-- Google AdSense - Left Sidebar Ad -->
-            <div class="ad-slot">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="rectangle"></ins>
-            </div>
-        </aside>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <aside class="hidden lg:block lg:col-span-2">
+                <!-- Google AdSense - Left Sidebar Ad -->
+                <div class="sticky top-24">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-XXXXXXXXXX"
+                         data-ad-slot="XXXXXXXXXX"
+                         data-ad-format="rectangle"></ins>
+                </div>
+            </aside>
 
-        <main class="content">
-            <div class="header-content">
-                <h1>ZenPDF</h1>
-                <p class="subtitle">Free PDF tools to split, merge, compress, and more. Fast, secure, and easy to use.</p>
-            </div>
+            <main class="lg:col-span-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">ZenPDF</h1>
+                    <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Free PDF tools to split, merge, compress, and more. Fast, secure, and easy to use.</p>
+                </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -66,77 +77,90 @@
                 {% endif %}
             {% endwith %}
 
-            <div class="tool-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                 <a href="{{ url_for('split_pdf') }}" class="tool-card">
-                    <div class="tool-icon">📄</div>
-                    <h2>Split PDF</h2>
-                    <p>Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
-                    <span class="btn btn-primary">Split PDF</span>
+                    <div class="text-4xl mb-4">📄</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Split PDF</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
+                    <span class="btn-primary inline-block">Split PDF</span>
                 </a>
 
                 <a href="{{ url_for('merge_pdf') }}" class="tool-card">
-                    <div class="tool-icon">📚</div>
-                    <h2>Merge PDF</h2>
-                    <p>Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
-                    <span class="btn btn-primary">Merge PDF</span>
+                    <div class="text-4xl mb-4">📚</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Merge PDF</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
+                    <span class="btn-primary inline-block">Merge PDF</span>
                 </a>
 
                 <a href="{{ url_for('compress_pdf') }}" class="tool-card">
-                    <div class="tool-icon">🗜️</div>
-                    <h2>Compress PDF</h2>
-                    <p>Reduce file size while maintaining quality. Perfect for sharing and storage.</p>
-                    <span class="btn btn-primary">Compress PDF</span>
+                    <div class="text-4xl mb-4">🗜️</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Compress PDF</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Reduce file size while maintaining quality. Perfect for sharing and storage.</p>
+                    <span class="btn-primary inline-block">Compress PDF</span>
                 </a>
 
                 <a href="{{ url_for('rotate_pdf') }}" class="tool-card">
-                    <div class="tool-icon">🔄</div>
-                    <h2>Rotate PDF</h2>
-                    <p>Rotate pages 90°, 180°, or 270°. Fix orientation issues easily.</p>
-                    <span class="btn btn-primary">Rotate PDF</span>
+                    <div class="text-4xl mb-4">🔄</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Rotate PDF</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Rotate pages 90°, 180°, or 270°. Fix orientation issues easily.</p>
+                    <span class="btn-primary inline-block">Rotate PDF</span>
                 </a>
 
                 <div class="tool-card tool-card-disabled">
-                    <div class="tool-icon">🖼️</div>
-                    <h2>PDF to Image</h2>
-                    <p>Convert PDF pages to JPG, PNG, or other image formats.</p>
-                    <span class="premium-badge">Coming Soon</span>
+                    <div class="text-4xl mb-4">🖼️</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">PDF to Image</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Convert PDF pages to JPG, PNG, or other image formats.</p>
+                    <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-medium">Coming Soon</span>
                 </div>
 
                 <div class="tool-card tool-card-disabled">
-                    <div class="tool-icon">🔒</div>
-                    <h2>Watermark PDF</h2>
-                    <p>Add text or image watermarks to protect your documents.</p>
-                    <span class="premium-badge">Coming Soon</span>
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Watermark PDF</h2>
+                    <p class="text-gray-600 mb-4 flex-grow">Add text or image watermarks to protect your documents.</p>
+                    <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-medium">Coming Soon</span>
                 </div>
             </div>
 
-            <div class="features">
-                <h3>Why Choose ZenPDF?</h3>
-                <ul class="feature-list">
-                    <li>✅ 100% Free - No registration required</li>
-                    <li>🔒 Secure - Files are automatically deleted after processing</li>
-                    <li>⚡ Fast - Process your PDFs in seconds</li>
-                    <li>📱 Responsive - Works on all devices</li>
-                    <li>🌐 No upload limits - Up to 10MB per file</li>
+            <div class="bg-white rounded-lg p-8 shadow-custom mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Why Choose ZenPDF?</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-xl">✅</span>
+                        <span><strong>100% Free</strong> - No registration required</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-xl">🔒</span>
+                        <span><strong>Secure</strong> - Files are automatically deleted after processing</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-xl">⚡</span>
+                        <span><strong>Fast</strong> - Process your PDFs in seconds</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-xl">📱</span>
+                        <span><strong>Responsive</strong> - Works on all devices</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-xl">🌐</span>
+                        <span><strong>No upload limits</strong> - Up to 10MB per file</span>
+                    </li>
                 </ul>
             </div>
 
-            <div class="ad-content">
+            <div class="bg-gray-100 rounded-lg p-4 mb-8">
                 <!-- Google AdSense - Content Ad -->
-                <div class="ad-slot">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
             </div>
         </main>
 
-        <aside class="ad-sidebar right">
+        <aside class="hidden lg:block lg:col-span-2">
             <!-- Google AdSense - Right Sidebar Ad -->
-            <div class="ad-slot">
+            <div class="sticky top-24">
                 <ins class="adsbygoogle"
                      style="display:block"
                      data-ad-client="ca-pub-XXXXXXXXXX"
@@ -144,11 +168,12 @@
                      data-ad-format="rectangle"></ins>
             </div>
         </aside>
+        </div>
     </div>
 
-    <div class="ad-footer">
+    <div class="bg-gray-100 py-4 mt-8">
         <!-- Google AdSense - Footer Ad -->
-        <div class="ad-slot">
+        <div class="max-w-7xl mx-auto px-4">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-XXXXXXXXXX"
@@ -158,8 +183,8 @@
         </div>
     </div>
 
-    <footer class="main-footer">
-        <p>&copy; 2024 ZenPDF. Free PDF tools for everyone.</p>
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. Free PDF tools for everyone.</p>
     </footer>
 
     <!-- AdSense Script -->
@@ -169,19 +194,10 @@
 
         // Mobile Navigation Toggle
         const navToggle = document.getElementById('nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
 
         navToggle.addEventListener('click', function() {
-            navToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when a link is clicked
-        document.querySelectorAll('.nav-item a').forEach(link => {
-            link.addEventListener('click', function() {
-                navToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>

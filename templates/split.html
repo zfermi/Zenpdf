@@ -5,29 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Split PDF files online. Extract specific pages or ranges from your PDF documents.">
     <title>Split PDF - ZenPDF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item active"><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('compress_pdf') }}">Compress PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('rotate_pdf') }}">Rotate PDF</a></li>
-            </ul>
-            <button class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <ul class="hidden md:flex space-x-1">
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
+                </ul>
+                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a>
+            </div>
         </div>
     </nav>
-    <div class="ad-header">
-        <div class="ad-slot">
+
+    <div class="bg-gray-100 py-4">
+        <div class="max-w-7xl mx-auto px-4">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-XXXXXXXXXX"
@@ -37,128 +48,132 @@
         </div>
     </div>
 
-    <div class="container">
-        <aside class="ad-sidebar left">
-            <div class="ad-slot">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="rectangle"></ins>
-            </div>
-        </aside>
-
-        <main class="content">
-            <div class="page-header">
-                <h1>Split a PDF</h1>
-                <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / Split PDF</p>
-            </div>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            {% if not file_uploaded %}
-                <div class="upload-section">
-                    <form action="{{ url_for('split_pdf') }}" method="post" enctype="multipart/form-data" id="split-form">
-                        <div class="file-upload-area">
-                            <input type="file" id="file" name="file" accept=".pdf" required>
-                            <label for="file" class="file-label">
-                                <span class="upload-icon">📄</span>
-                                <span class="upload-text">Choose PDF file or drag it here</span>
-                                <span class="file-size">Max size: 10MB</span>
-                            </label>
-                        </div>
-
-                        <!-- Progress Container -->
-                        <div class="progress-container" id="progress-container">
-                            <div class="progress-header">
-                                <span class="progress-title">Uploading...</span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="progress-bar"></div>
-                            </div>
-                            <div class="progress-stats">
-                                <span id="progress-percent">0%</span>
-                                <span id="progress-speed">0 MB/s</span>
-                                <span id="progress-time">Time left: calculating...</span>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success">Upload and Show Page Count</button>
-
-                        <!-- Cloud Storage Options -->
-                        <div style="margin-top: 20px; text-align: center; padding: 20px; border-top: 1px solid var(--border-light);">
-                            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 15px;">Or select from cloud storage:</p>
-                            <div class="cloud-buttons">
-                                <a href="#" class="btn-cloud drive" title="Upload from Google Drive (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Google Drive</a>
-                                <a href="#" class="btn-cloud dropbox" title="Upload from Dropbox (coming soon)" style="opacity: 0.6; cursor: not-allowed;">Dropbox</a>
-                            </div>
-                            <p style="color: var(--text-lighter); font-size: 0.85rem; margin-top: 10px;">Cloud storage coming soon</p>
-                        </div>
-                    </form>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <aside class="hidden lg:block lg:col-span-2">
+                <div class="sticky top-24">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-XXXXXXXXXX"
+                         data-ad-slot="XXXXXXXXXX"
+                         data-ad-format="rectangle"></ins>
                 </div>
-            {% else %}
-                <div class="split-options">
-                    <div class="success-box">
-                        <h2>✅ PDF Uploaded Successfully</h2>
-                        <p class="page-count">Total Pages: <strong>{{ page_count }}</strong></p>
+            </aside>
+
+            <main class="lg:col-span-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Split a PDF</h1>
+                    <p class="text-gray-600">
+                        <a href="{{ url_for('home') }}" class="text-primary hover:text-primary-dark">Home</a> / Split PDF
+                    </p>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% if not file_uploaded %}
+                    <div class="bg-white rounded-lg shadow-custom p-8">
+                        <form action="{{ url_for('split_pdf') }}" method="post" enctype="multipart/form-data" id="split-form">
+                            <div class="mb-6">
+                                <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
+                                <label for="file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-gray-50 hover:bg-gray-100">
+                                    <span class="text-6xl mb-4">📄</span>
+                                    <span class="upload-text text-lg font-medium text-gray-700 mb-2">Choose PDF file or drag it here</span>
+                                    <span class="file-size text-sm text-gray-500">Max size: 10MB</span>
+                                </label>
+                            </div>
+
+                            <!-- Progress Container -->
+                            <div id="progress-container" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
+                                <div class="mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Uploading...</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                                    <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-600">
+                                    <span id="progress-percent">0%</span>
+                                    <span id="progress-speed">0 MB/s</span>
+                                    <span id="progress-time">Time left: calculating...</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary w-full mb-6">Upload and Show Page Count</button>
+
+                            <!-- Cloud Storage Options -->
+                            <div class="pt-6 border-t border-gray-200 text-center">
+                                <p class="text-gray-600 text-sm mb-4">Or select from cloud storage:</p>
+                                <div class="flex gap-4 justify-center">
+                                    <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Google Drive (coming soon)">Google Drive</a>
+                                    <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Dropbox (coming soon)">Dropbox</a>
+                                </div>
+                                <p class="text-gray-400 text-xs mt-3">Cloud storage coming soon</p>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <form action="{{ url_for('split_pdf') }}" method="post" id="split-form">
-                        <input type="hidden" name="file_name" value="{{ file_name }}">
-                        
-                        <div class="split-type-group">
-                            <h3>Choose Split Method:</h3>
-                            
-                            <div class="option-card">
-                                <label class="radio-label">
-                                    <input type="radio" name="split_type" value="range" checked>
-                                    <span class="radio-custom"></span>
-                                    <strong>Range (From - To)</strong>
-                                </label>
-                                <div class="option-inputs">
-                                    <input type="number" name="start_page" min="1" max="{{ page_count }}" placeholder="Start page" class="page-input">
-                                    <span>to</span>
-                                    <input type="number" name="end_page" min="1" max="{{ page_count }}" placeholder="End page" class="page-input">
-                                </div>
-                            </div>
-
-                            <div class="option-card">
-                                <label class="radio-label">
-                                    <input type="radio" name="split_type" value="specific">
-                                    <span class="radio-custom"></span>
-                                    <strong>Specific Pages</strong>
-                                </label>
-                                <div class="option-inputs">
-                                    <input type="text" name="specific_pages" placeholder="e.g., 1,3,5-7" class="text-input">
-                                    <small>Enter page numbers separated by commas or use ranges (e.g., 1-5,7,9-12)</small>
-                                </div>
-                            </div>
-
-                            <div class="option-card">
-                                <label class="radio-label">
-                                    <input type="radio" name="split_type" value="even">
-                                    <span class="radio-custom"></span>
-                                    <strong>Even Pages Only</strong>
-                                </label>
-                            </div>
-
-                            <div class="option-card">
-                                <label class="radio-label">
-                                    <input type="radio" name="split_type" value="odd">
-                                    <span class="radio-custom"></span>
-                                    <strong>Odd Pages Only</strong>
-                                </label>
-                            </div>
+                {% else %}
+                    <div class="space-y-6">
+                        <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6 text-center">
+                            <h2 class="text-2xl font-bold text-green-800 mb-2">✅ PDF Uploaded Successfully</h2>
+                            <p class="text-lg text-green-700">Total Pages: <strong class="text-2xl">{{ page_count }}</strong></p>
                         </div>
 
-                        <div class="ad-content">
-                            <div class="ad-slot">
+                        <form action="{{ url_for('split_pdf') }}" method="post" id="split-form" class="bg-white rounded-lg shadow-custom p-8">
+                            <input type="hidden" name="file_name" value="{{ file_name }}">
+
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Choose Split Method:</h3>
+
+                                <div class="space-y-4">
+                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                                        <label class="flex items-start cursor-pointer">
+                                            <input type="radio" name="split_type" value="range" checked class="mt-1 mr-3">
+                                            <div class="flex-grow">
+                                                <strong class="text-gray-900">Range (From - To)</strong>
+                                                <div class="mt-3 flex items-center gap-2">
+                                                    <input type="number" name="start_page" min="1" max="{{ page_count }}" placeholder="Start page" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                                    <span class="text-gray-600">to</span>
+                                                    <input type="number" name="end_page" min="1" max="{{ page_count }}" placeholder="End page" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                                        <label class="flex items-start cursor-pointer">
+                                            <input type="radio" name="split_type" value="specific" class="mt-1 mr-3">
+                                            <div class="flex-grow">
+                                                <strong class="text-gray-900">Specific Pages</strong>
+                                                <div class="mt-3">
+                                                    <input type="text" name="specific_pages" placeholder="e.g., 1,3,5-7" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                                    <small class="text-gray-500 text-xs mt-1 block">Enter page numbers separated by commas or use ranges (e.g., 1-5,7,9-12)</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="split_type" value="even" class="mr-3">
+                                            <strong class="text-gray-900">Even Pages Only</strong>
+                                        </label>
+                                    </div>
+
+                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="split_type" value="odd" class="mr-3">
+                                            <strong class="text-gray-900">Odd Pages Only</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-100 rounded-lg p-4 mb-6">
                                 <ins class="adsbygoogle"
                                      style="display:block"
                                      data-ad-client="ca-pub-XXXXXXXXXX"
@@ -166,31 +181,31 @@
                                      data-ad-format="auto"
                                      data-full-width-responsive="true"></ins>
                             </div>
-                        </div>
 
-                        <button type="submit" class="btn btn-success btn-large">Split PDF Now</button>
-                    </form>
+                            <button type="submit" class="btn-primary w-full text-lg py-4">Split PDF Now</button>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <div class="mt-8">
+                    <a href="{{ url_for('home') }}" class="inline-block px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">← Back to Home</a>
                 </div>
-            {% endif %}
-            
-            <div class="action-buttons">
-                <a href="{{ url_for('home') }}" class="btn btn-secondary">← Back to Home</a>
-            </div>
-        </main>
+            </main>
 
-        <aside class="ad-sidebar right">
-            <div class="ad-slot">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="rectangle"></ins>
-            </div>
-        </aside>
+            <aside class="hidden lg:block lg:col-span-2">
+                <div class="sticky top-24">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-XXXXXXXXXX"
+                         data-ad-slot="XXXXXXXXXX"
+                         data-ad-format="rectangle"></ins>
+                </div>
+            </aside>
+        </div>
     </div>
 
-    <div class="ad-footer">
-        <div class="ad-slot">
+    <div class="bg-gray-100 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-XXXXXXXXXX"
@@ -206,24 +221,15 @@
 
         // Mobile Navigation Toggle
         const navToggle = document.getElementById('nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
 
         navToggle.addEventListener('click', function() {
-            navToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when a link is clicked
-        document.querySelectorAll('.nav-item a').forEach(link => {
-            link.addEventListener('click', function() {
-                navToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
+            mobileMenu.classList.toggle('hidden');
         });
 
         // File input styling and drag & drop
         const fileInput = document.getElementById('file');
-        const fileLabel = document.querySelector('.file-label');
+        const fileLabel = document.querySelector('label[for="file"]');
         const progressContainer = document.getElementById('progress-container');
         const progressBar = document.getElementById('progress-bar');
         const progressPercent = document.getElementById('progress-percent');
@@ -238,7 +244,6 @@
                     const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
                     document.querySelector('.upload-text').textContent = fileName;
                     document.querySelector('.file-size').textContent = `${fileSize} MB`;
-                    fileLabel.classList.add('file-selected');
                 }
             });
 
@@ -246,19 +251,19 @@
             fileLabel.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                fileLabel.classList.add('drag-over');
+                fileLabel.classList.add('border-primary', 'bg-primary-light');
             });
 
             fileLabel.addEventListener('dragleave', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                fileLabel.classList.remove('drag-over');
+                fileLabel.classList.remove('border-primary', 'bg-primary-light');
             });
 
             fileLabel.addEventListener('drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                fileLabel.classList.remove('drag-over');
+                fileLabel.classList.remove('border-primary', 'bg-primary-light');
 
                 const files = e.dataTransfer.files;
                 if (files.length > 0 && files[0].type === 'application/pdf') {
@@ -271,7 +276,7 @@
             const form = document.getElementById('split-form');
             form.addEventListener('submit', function(e) {
                 if (fileInput.files.length > 0) {
-                    progressContainer.classList.add('active');
+                    progressContainer.classList.remove('hidden');
                     const fileSize = fileInput.files[0].size;
                     const uploadDuration = 2000; // Simulate 2 second upload
                     const startTime = Date.now();
@@ -303,10 +308,10 @@
             document.querySelectorAll('input[type="radio"][name="split_type"]').forEach(radio => {
                 radio.addEventListener('change', function() {
                     document.querySelectorAll('.option-card').forEach(card => {
-                        card.classList.remove('selected');
+                        card.classList.remove('border-primary', 'bg-primary-light');
                     });
                     if (this.checked) {
-                        this.closest('.option-card').classList.add('selected');
+                        this.closest('.option-card').classList.add('border-primary', 'bg-primary-light');
                     }
                 });
             });
@@ -314,10 +319,9 @@
             // Set initial selected state
             const checkedRadio = document.querySelector('input[type="radio"][name="split_type"]:checked');
             if (checkedRadio) {
-                checkedRadio.closest('.option-card').classList.add('selected');
+                checkedRadio.closest('.option-card').classList.add('border-primary', 'bg-primary-light');
             }
         }
     </script>
 </body>
 </html>
-
