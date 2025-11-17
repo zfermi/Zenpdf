@@ -5,59 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Your ZenPDF Dashboard">
     <title>Dashboard - ZenPDF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
-            <ul class="nav-menu">
-                <li class="nav-item active"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                <li class="nav-item"><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('compress_pdf') }}">Compress PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('rotate_pdf') }}">Rotate PDF</a></li>
-                <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-            </ul>
-            <button class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <ul class="hidden md:flex space-x-1">
+                    <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Dashboard</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
+                </ul>
+                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Dashboard</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
+                <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <main class="content" style="max-width: 1000px; margin: 0 auto;">
-            <div class="header-content">
-                <h1>Welcome, {{ current_user.username }}!</h1>
-                <p class="subtitle">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <main>
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Welcome, {{ current_user.username }}!</h1>
+                <div>
                     {% if current_user.is_premium %}
-                        <span style="background: #00b894; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                        <span class="inline-block bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
                             PREMIUM USER
                         </span>
                     {% else %}
-                        <span style="background: #6c5ce7; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                        <span class="inline-block bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                             FREE TIER
                         </span>
                     {% endif %}
-                </p>
+                </div>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        <div class="alert alert-{{ category }} mb-6">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
             <!-- Usage Stats -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
-                <div class="upload-section" style="padding: 30px; text-align: center;">
-                    <h3 style="font-size: 40px; margin: 0; color: #6c5ce7;">{{ daily_usage }}</h3>
-                    <p style="color: #666; margin-top: 10px;">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                    <h3 class="text-5xl font-bold text-purple-600 mb-3">{{ daily_usage }}</h3>
+                    <p class="text-gray-600">
                         {% if current_user.is_premium %}
                             Operations Today (Unlimited)
                         {% else %}
@@ -66,68 +78,68 @@
                     </p>
                 </div>
 
-                <div class="upload-section" style="padding: 30px; text-align: center;">
-                    <h3 style="font-size: 40px; margin: 0; color: #00b894;">{{ monthly_usage }}</h3>
-                    <p style="color: #666; margin-top: 10px;">Operations This Month</p>
+                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                    <h3 class="text-5xl font-bold text-green-500 mb-3">{{ monthly_usage }}</h3>
+                    <p class="text-gray-600">Operations This Month</p>
                 </div>
 
-                <div class="upload-section" style="padding: 30px; text-align: center;">
-                    <h3 style="font-size: 40px; margin: 0; color: #fdcb6e;">
+                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                    <h3 class="text-5xl font-bold text-yellow-500 mb-3">
                         {% if current_user.is_premium %}
                             ∞
                         {% else %}
                             {{ 5 - daily_usage }}
                         {% endif %}
                     </h3>
-                    <p style="color: #666; margin-top: 10px;">Remaining Today</p>
+                    <p class="text-gray-600">Remaining Today</p>
                 </div>
             </div>
 
             <!-- Upgrade Banner for Free Users -->
             {% if not current_user.is_premium %}
-            <div class="upload-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; margin-bottom: 40px; text-align: center; border-radius: 12px;">
-                <h2 style="margin: 0 0 15px 0; font-size: 28px;">Upgrade to Premium</h2>
-                <p style="margin: 0 0 25px 0; font-size: 18px; opacity: 0.9;">
+            <div class="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 rounded-xl p-10 mb-8 text-center text-white shadow-custom">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Upgrade to Premium</h2>
+                <p class="text-lg md:text-xl mb-6 opacity-90">
                     Unlimited operations • 100MB file size • Priority support
                 </p>
-                <a href="{{ url_for('pricing') }}" class="btn" style="background: white; color: #667eea; padding: 14px 40px; font-weight: 600; font-size: 16px; display: inline-block; text-decoration: none; border-radius: 8px;">
+                <a href="{{ url_for('pricing') }}" class="inline-block bg-white text-purple-700 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors no-underline">
                     View Pricing
                 </a>
             </div>
             {% endif %}
 
             <!-- Recent Activity -->
-            <div class="upload-section" style="padding: 30px;">
-                <h2 style="margin-top: 0;">Recent Activity</h2>
+            <div class="bg-white rounded-lg p-8 shadow-custom mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
 
                 {% if recent_operations %}
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
                         <thead>
-                            <tr style="border-bottom: 2px solid #eee;">
-                                <th style="padding: 12px; text-align: left; color: #666; font-weight: 600;">Operation</th>
-                                <th style="padding: 12px; text-align: left; color: #666; font-weight: 600;">Date</th>
-                                <th style="padding: 12px; text-align: left; color: #666; font-weight: 600;">Pages</th>
-                                <th style="padding: 12px; text-align: left; color: #666; font-weight: 600;">Status</th>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Operation</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Date</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Pages</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for operation in recent_operations %}
-                            <tr style="border-bottom: 1px solid #f1f1f1;">
-                                <td style="padding: 12px;">
-                                    <span style="text-transform: capitalize; font-weight: 600;">{{ operation.operation_type }}</span>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3">
+                                    <span class="capitalize font-semibold text-gray-900">{{ operation.operation_type }}</span>
                                 </td>
-                                <td style="padding: 12px; color: #666;">
+                                <td class="px-4 py-3 text-gray-600">
                                     {{ operation.created_at.strftime('%b %d, %Y %I:%M %p') }}
                                 </td>
-                                <td style="padding: 12px; color: #666;">
+                                <td class="px-4 py-3 text-gray-600">
                                     {{ operation.pages_processed or 'N/A' }}
                                 </td>
-                                <td style="padding: 12px;">
+                                <td class="px-4 py-3">
                                     {% if operation.success %}
-                                        <span style="color: #00b894; font-weight: 600;">✓ Success</span>
+                                        <span class="text-green-500 font-semibold">✓ Success</span>
                                     {% else %}
-                                        <span style="color: #d63031; font-weight: 600;">✗ Failed</span>
+                                        <span class="text-red-500 font-semibold">✗ Failed</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -136,40 +148,43 @@
                     </table>
                 </div>
                 {% else %}
-                <p style="text-align: center; color: #999; padding: 40px 20px;">
+                <p class="text-center text-gray-400 py-12">
                     No operations yet. Start by using our PDF tools!
                 </p>
                 {% endif %}
             </div>
 
             <!-- Account Info -->
-            <div class="upload-section" style="padding: 30px; margin-top: 20px;">
-                <h2 style="margin-top: 0;">Account Information</h2>
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
-                    <div style="font-weight: 600; color: #666;">Email:</div>
-                    <div>{{ current_user.email }}</div>
+            <div class="bg-white rounded-lg p-8 shadow-custom">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-4 max-w-2xl">
+                    <div class="font-semibold text-gray-600">Email:</div>
+                    <div class="text-gray-900">{{ current_user.email }}</div>
 
-                    <div style="font-weight: 600; color: #666;">Username:</div>
-                    <div>{{ current_user.username }}</div>
+                    <div class="font-semibold text-gray-600">Username:</div>
+                    <div class="text-gray-900">{{ current_user.username }}</div>
 
-                    <div style="font-weight: 600; color: #666;">Member Since:</div>
-                    <div>{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
+                    <div class="font-semibold text-gray-600">Member Since:</div>
+                    <div class="text-gray-900">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
 
-                    <div style="font-weight: 600; color: #666;">Subscription:</div>
-                    <div style="text-transform: capitalize;">{{ current_user.subscription_tier }}</div>
+                    <div class="font-semibold text-gray-600">Subscription:</div>
+                    <div class="text-gray-900 capitalize">{{ current_user.subscription_tier }}</div>
                 </div>
             </div>
         </main>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile navigation toggle
-        document.getElementById('nav-toggle').addEventListener('click', function() {
-            document.querySelector('.nav-menu').classList.toggle('active');
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        navToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>

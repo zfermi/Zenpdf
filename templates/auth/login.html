@@ -5,98 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Login to ZenPDF to access premium PDF tools">
     <title>Login - ZenPDF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item"><a href="{{ url_for('pricing') }}">Pricing</a></li>
-                <li class="nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
-                <li class="nav-item active"><a href="{{ url_for('auth.login') }}">Login</a></li>
-            </ul>
-            <button class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <ul class="hidden md:flex space-x-1">
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
+                    <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Sign Up</a></li>
+                    <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Login</a></li>
+                </ul>
+                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
+                <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Sign Up</a>
+                <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Login</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container" style="max-width: 500px; margin-top: 50px;">
-        <main class="content">
-            <div class="header-content" style="text-align: center;">
-                <h1>Welcome Back</h1>
-                <p class="subtitle">Login to access your PDF tools</p>
+    <div class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+                <p class="text-lg text-gray-600">Login to access your PDF tools</p>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-50 text-red-800 border border-red-200{% elif category == 'success' %}bg-green-50 text-green-800 border border-green-200{% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+                            {{ message }}
+                        </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <div class="upload-section" style="padding: 40px;">
-                <form method="POST" action="{{ url_for('auth.login') }}" style="max-width: 400px; margin: 0 auto;">
+            <div class="bg-white rounded-lg shadow-custom p-8">
+                <form method="POST" action="{{ url_for('auth.login') }}">
                     {{ form.hidden_tag() }}
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        {{ form.email.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
-                        {{ form.email(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                    <div class="mb-6">
+                        <label for="{{ form.email.id }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                            {{ form.email.label.text }}
+                        </label>
+                        {{ form.email(class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:outline-none transition-all text-base") }}
                         {% if form.email.errors %}
-                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                            <div class="mt-2 text-sm text-red-600">
                                 {% for error in form.email.errors %}
-                                    <span>{{ error }}</span>
+                                    <p>{{ error }}</p>
                                 {% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        {{ form.password.label(style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;") }}
-                        {{ form.password(class="form-control", style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;") }}
+                    <div class="mb-6">
+                        <label for="{{ form.password.id }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                            {{ form.password.label.text }}
+                        </label>
+                        {{ form.password(class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:outline-none transition-all text-base") }}
                         {% if form.password.errors %}
-                            <div style="color: #d63031; font-size: 14px; margin-top: 5px;">
+                            <div class="mt-2 text-sm text-red-600">
                                 {% for error in form.password.errors %}
-                                    <span>{{ error }}</span>
+                                    <p>{{ error }}</p>
                                 {% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 25px;">
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            {{ form.remember_me(style="margin-right: 8px; width: 18px; height: 18px;") }}
-                            <span>{{ form.remember_me.label.text }}</span>
+                    <div class="mb-6">
+                        <label class="flex items-center cursor-pointer">
+                            {{ form.remember_me(class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2") }}
+                            <span class="ml-2 text-sm text-gray-700">{{ form.remember_me.label.text }}</span>
                         </label>
                     </div>
 
-                    <div class="form-group">
-                        {{ form.submit(class="btn btn-primary", style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer;") }}
+                    <div class="mb-6">
+                        {{ form.submit(class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md") }}
                     </div>
                 </form>
 
-                <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee;">
-                    <p style="color: #666; margin-bottom: 10px;">Don't have an account?</p>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="display: inline-block; padding: 10px 30px;">Sign Up</a>
+                <div class="pt-6 border-t border-gray-200 text-center">
+                    <p class="text-gray-600 mb-3">Don't have an account?</p>
+                    <a href="{{ url_for('auth.register') }}" class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded-lg transition-colors no-underline">Sign Up</a>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile navigation toggle
-        document.getElementById('nav-toggle').addEventListener('click', function() {
-            document.querySelector('.nav-menu').classList.toggle('active');
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        navToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>

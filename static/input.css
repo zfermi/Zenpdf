@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom components */
+@layer components {
+  .tool-card {
+    @apply bg-white rounded-lg p-6 shadow-custom hover:shadow-custom-hover transition-all duration-300 no-underline block;
+  }
+
+  .tool-card-disabled {
+    @apply opacity-60 cursor-not-allowed hover:shadow-custom;
+  }
+
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+
+  .alert {
+    @apply p-4 rounded-lg mb-4;
+  }
+
+  .alert-success {
+    @apply bg-green-100 border border-green-400 text-green-700;
+  }
+
+  .alert-error {
+    @apply bg-red-100 border border-red-400 text-red-700;
+  }
+
+  .alert-info {
+    @apply bg-blue-100 border border-blue-400 text-blue-700;
+  }
+
+  .alert-warning {
+    @apply bg-yellow-100 border border-yellow-400 text-yellow-700;
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
