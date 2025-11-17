@@ -31,4 +31,4 @@ python init_db.py || echo "⚠️  Database initialization had warnings (this ma
 # Start gunicorn with production settings
 echo ""
 echo "🌐 Starting Gunicorn on port $PORT..."
-exec gunicorn -w 4 -b 0.0.0.0:$PORT --timeout 120 --access-logfile - --error-logfile - "app:create_app('production')"
+exec gunicorn -c gunicorn.conf.py "app:create_app('production')"
