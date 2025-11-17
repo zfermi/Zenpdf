@@ -16,8 +16,12 @@ class Config:
     VERSION = '1.0.0'
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        f'sqlite:///{os.path.join(basedir, "zenpdf.db")}'
+    # Fix for Railway PostgreSQL URL (postgres:// -> postgresql://)
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url and database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+    SQLALCHEMY_DATABASE_URI = database_url or f'sqlite:///{os.path.join(basedir, "zenpdf.db")}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_size': 10,
@@ -96,8 +100,9 @@ class DevelopmentConfig(Config):
     REMEMBER_COOKIE_SECURE = False
     TALISMAN_FORCE_HTTPS = False
 
-    # Use SQLite for development
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(basedir, "zenpdf_dev.db")}'
+    # Use SQLite for development only if DATABASE_URL not set
+    if not os.environ.get('DATABASE_URL'):
+        SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(basedir, "zenpdf_dev.db")}'
 
 
 class ProductionConfig(Config):
@@ -105,16 +110,23 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
 
-    # Force environment variables in production
-    @classmethod
-    def init_app(cls, app):
-        Config.init_app(app)
-
-        # Ensure critical env vars are set
-        required_vars = ['SECRET_KEY', 'DATABASE_URL']
-        for var in required_vars:
-            if not os.environ.get(var):
-                raise ValueError(f'Required environment variable {var} not set')
+    # Warn if DATABASE_URL not set but don't fail
+    # App will fall back to SQLite if DATABASE_URL not provided
+    def __init__(self):
+        if not os.environ.get('DATABASE_URL'):
+            import warnings
+            warnings.warn(
+                "DATABASE_URL not set - using SQLite. "
+                "For production, add PostgreSQL database in Railway dashboard.",
+                RuntimeWarning
+            )
+        if not os.environ.get('SECRET_KEY'):
+            import warnings
+            warnings.warn(
+                "SECRET_KEY not set - using default (INSECURE!). "
+                "Set SECRET_KEY environment variable in Railway.",
+                RuntimeWarning
+            )
 
 
 class TestingConfig(Config):
