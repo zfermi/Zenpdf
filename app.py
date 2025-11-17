@@ -82,15 +82,6 @@ def create_app(config_name=None):
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    # Ensure upload folders exist
-    for folder in [app.config['UPLOAD_FOLDER'], app.config['SPLIT_FOLDER'], app.config['MERGED_FOLDER']]:
-        os.makedirs(folder, exist_ok=True)
-
-    # Clean up old files on startup
-    cleanup_old_files(app.config['SPLIT_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
-    cleanup_old_files(app.config['MERGED_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
-    cleanup_old_files(app.config['UPLOAD_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
-
     # ========== HELPER FUNCTIONS ==========
 
     def cleanup_old_files(folder, max_age_hours=1):
@@ -162,6 +153,15 @@ def create_app(config_name=None):
         else:
             daily_count = current_user.get_daily_usage_count()
             return False, f"Daily limit reached ({daily_count}/5 operations). Upgrade to Premium for unlimited access!"
+
+    # Ensure upload folders exist
+    for folder in [app.config['UPLOAD_FOLDER'], app.config['SPLIT_FOLDER'], app.config['MERGED_FOLDER']]:
+        os.makedirs(folder, exist_ok=True)
+
+    # Clean up old files on startup
+    cleanup_old_files(app.config['SPLIT_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
+    cleanup_old_files(app.config['MERGED_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
+    cleanup_old_files(app.config['UPLOAD_FOLDER'], app.config['FILE_CLEANUP_HOURS'])
 
     # ========== ERROR HANDLERS ==========
 
