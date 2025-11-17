@@ -5,213 +5,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="ZenPDF pricing plans - free and premium options">
     <title>Pricing - ZenPDF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="nav-brand">📄 ZenPDF</a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="{{ url_for('home') }}">Home</a></li>
-                <li class="nav-item active"><a href="{{ url_for('pricing') }}">Pricing</a></li>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <ul class="hidden md:flex space-x-1">
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Pricing</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Sign Up</a></li>
+                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
+                    {% endif %}
+                </ul>
+                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Pricing</a>
                 {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                    <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
                 {% else %}
-                    <li class="nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
-                    <li class="nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Sign Up</a>
+                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a>
                 {% endif %}
-            </ul>
-            <button class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <main class="content" style="max-width: 1200px; margin: 0 auto;">
-            <div class="header-content" style="text-align: center; margin-bottom: 50px;">
-                <h1>Simple, Transparent Pricing</h1>
-                <p class="subtitle">Choose the plan that works best for you</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
+        <main>
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
+                <p class="text-lg md:text-xl text-gray-600">Choose the plan that works best for you</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px;">
+            <!-- Pricing Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 <!-- Free Tier -->
-                <div class="upload-section" style="padding: 40px; text-align: center; position: relative;">
-                    <h2 style="margin: 0 0 10px 0; font-size: 28px;">Free</h2>
-                    <div style="margin: 20px 0;">
-                        <span style="font-size: 48px; font-weight: 700; color: #6c5ce7;">$0</span>
-                        <span style="color: #666;">/month</span>
+                <div class="bg-white rounded-xl shadow-custom p-8 flex flex-col hover:shadow-hover transition-shadow">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Free</h2>
+                    <div class="text-center mb-8">
+                        <span class="text-5xl font-bold text-primary">$0</span>
+                        <span class="text-gray-600">/month</span>
                     </div>
 
-                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            <strong>5 operations/day</strong>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span><strong class="font-semibold">5 operations/day</strong></span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            10MB file size limit
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>10MB file size limit</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            All basic PDF tools
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>All basic PDF tools</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Secure file processing
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Secure file processing</span>
                         </li>
-                        <li style="padding: 10px 0;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Ad-supported
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Ad-supported</span>
                         </li>
                     </ul>
 
                     {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600;">
+                    <a href="{{ url_for('auth.register') }}" class="block w-full text-center bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors no-underline">
                         Get Started Free
                     </a>
                     {% elif not current_user.is_premium %}
-                    <button class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600;" disabled>
+                    <button class="w-full bg-gray-100 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed" disabled>
                         Current Plan
                     </button>
                     {% endif %}
                 </div>
 
                 <!-- Premium Tier -->
-                <div class="upload-section" style="padding: 40px; text-align: center; position: relative; border: 3px solid #6c5ce7; box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);">
-                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #6c5ce7; color: white; padding: 5px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                <div class="bg-white rounded-xl shadow-hover p-8 flex flex-col relative border-4 border-primary transform lg:scale-105 hover:shadow-2xl transition-all">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-1.5 rounded-full text-sm font-semibold">
                         POPULAR
                     </div>
 
-                    <h2 style="margin: 0 0 10px 0; font-size: 28px; color: #6c5ce7;">Premium</h2>
-                    <div style="margin: 20px 0;">
-                        <span style="font-size: 48px; font-weight: 700; color: #6c5ce7;">$9.99</span>
-                        <span style="color: #666;">/month</span>
+                    <h2 class="text-3xl font-bold text-primary mb-2 text-center">Premium</h2>
+                    <div class="text-center mb-8">
+                        <span class="text-5xl font-bold text-primary">$9.99</span>
+                        <span class="text-gray-600">/month</span>
                     </div>
 
-                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            <strong>Unlimited operations</strong>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span><strong class="font-semibold">Unlimited operations</strong></span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            <strong>100MB file size limit</strong>
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span><strong class="font-semibold">100MB file size limit</strong></span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            All PDF tools
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>All PDF tools</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Priority processing
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Priority processing</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            <strong>Ad-free experience</strong>
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span><strong class="font-semibold">Ad-free experience</strong></span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Email support
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Email support</span>
                         </li>
-                        <li style="padding: 10px 0;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            API access
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>API access</span>
                         </li>
                     </ul>
 
                     {% if current_user.is_authenticated and current_user.is_premium %}
-                    <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; background: #00b894; border: none;" disabled>
+                    <button class="w-full bg-green-500 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed" disabled>
                         Active Subscription
                     </button>
                     {% else %}
-                    <a href="#" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; display: block; text-decoration: none; text-align: center;" onclick="alert('Stripe integration coming soon!'); return false;">
+                    <a href="#" class="block w-full text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors no-underline" onclick="alert('Stripe integration coming soon!'); return false;">
                         Upgrade to Premium
                     </a>
                     {% endif %}
                 </div>
 
                 <!-- Enterprise Tier -->
-                <div class="upload-section" style="padding: 40px; text-align: center;">
-                    <h2 style="margin: 0 0 10px 0; font-size: 28px;">Enterprise</h2>
-                    <div style="margin: 20px 0;">
-                        <span style="font-size: 36px; font-weight: 700; color: #2d3436;">Custom</span>
+                <div class="bg-white rounded-xl shadow-custom p-8 flex flex-col hover:shadow-hover transition-shadow">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Enterprise</h2>
+                    <div class="text-center mb-8">
+                        <span class="text-4xl font-bold text-gray-900">Custom</span>
                     </div>
 
-                    <ul style="list-style: none; padding: 0; margin: 30px 0; text-align: left;">
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Everything in Premium
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Everything in Premium</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Custom file size limits
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Custom file size limits</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Dedicated support
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Dedicated support</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            SLA guarantee
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>SLA guarantee</span>
                         </li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid #f1f1f1;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Team management
+                        <li class="flex items-start border-b border-gray-100 pb-4">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Team management</span>
                         </li>
-                        <li style="padding: 10px 0;">
-                            <span style="color: #00b894; margin-right: 10px;">✓</span>
-                            Custom integrations
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
+                            <span>Custom integrations</span>
                         </li>
                     </ul>
 
-                    <a href="mailto:sales@zenpdf.com" class="btn btn-secondary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; display: block; text-decoration: none; text-align: center;">
+                    <a href="mailto:sales@zenpdf.com" class="block w-full text-center bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors no-underline">
                         Contact Sales
                     </a>
                 </div>
             </div>
 
             <!-- FAQ Section -->
-            <div class="upload-section" style="padding: 40px; margin-top: 40px;">
-                <h2 style="text-align: center; margin-bottom: 30px;">Frequently Asked Questions</h2>
+            <div class="bg-white rounded-xl shadow-custom p-8 md:p-12">
+                <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
 
-                <div style="max-width: 800px; margin: 0 auto;">
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #333; margin-bottom: 10px;">Can I upgrade or downgrade anytime?</h3>
-                        <p style="color: #666; line-height: 1.6;">Yes! You can upgrade to Premium or downgrade to Free at any time. Changes take effect immediately.</p>
+                <div class="max-w-3xl mx-auto space-y-8">
+                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I upgrade or downgrade anytime?</h3>
+                        <p class="text-gray-600 leading-relaxed">Yes! You can upgrade to Premium or downgrade to Free at any time. Changes take effect immediately.</p>
                     </div>
 
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #333; margin-bottom: 10px;">Is my data secure?</h3>
-                        <p style="color: #666; line-height: 1.6;">Absolutely. All files are processed securely and automatically deleted after 1 hour. We never store your documents.</p>
+                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Is my data secure?</h3>
+                        <p class="text-gray-600 leading-relaxed">Absolutely. All files are processed securely and automatically deleted after 1 hour. We never store your documents.</p>
                     </div>
 
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #333; margin-bottom: 10px;">What payment methods do you accept?</h3>
-                        <p style="color: #666; line-height: 1.6;">We accept all major credit cards through Stripe. Your payment information is secure and encrypted.</p>
+                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">What payment methods do you accept?</h3>
+                        <p class="text-gray-600 leading-relaxed">We accept all major credit cards through Stripe. Your payment information is secure and encrypted.</p>
                     </div>
 
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #333; margin-bottom: 10px;">Do you offer refunds?</h3>
-                        <p style="color: #666; line-height: 1.6;">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
+                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Do you offer refunds?</h3>
+                        <p class="text-gray-600 leading-relaxed">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2024 ZenPDF. All rights reserved.</p>
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile navigation toggle
-        document.getElementById('nav-toggle').addEventListener('click', function() {
-            document.querySelector('.nav-menu').classList.toggle('active');
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        navToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>
