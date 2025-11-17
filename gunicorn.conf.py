@@ -10,11 +10,15 @@ bind = f"0.0.0.0:{os.environ.get('PORT', '5000')}"
 backlog = 2048
 
 # Worker processes
-workers = multiprocessing.cpu_count() * 2 + 1
+# Reduced for Railway's memory limits (512MB free tier)
+# Use environment variable to override, default to 2 workers for low memory environments
+workers = int(os.environ.get('WEB_CONCURRENCY', '2'))
 worker_class = 'sync'
 worker_connections = 1000
 timeout = 120
 keepalive = 2
+max_requests = 1000  # Recycle workers after 1000 requests to prevent memory leaks
+max_requests_jitter = 50  # Add randomness to prevent all workers restarting at once
 
 # Logging
 accesslog = '-'  # Log to stdout
@@ -68,12 +72,12 @@ def post_worker_init(worker):
 
 def worker_int(worker):
     """Called when a worker receives the INT or QUIT signal."""
-    # Suppress logging during shutdown to avoid reentrant calls
-    worker.log.info(f"Worker {worker.pid} received INT/QUIT signal")
+    # Completely suppress logging during shutdown to avoid reentrant calls
+    pass
 
 def worker_abort(worker):
     """Called when a worker times out and receives SIGABRT."""
-    # Suppress logging during shutdown to avoid reentrant calls
+    # Completely suppress logging during shutdown to avoid reentrant calls
     pass
 
 def pre_exec(server):
