@@ -23,6 +23,9 @@
                     <li><span class="text-gray-300 px-2">|</span></li>
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
+                        {% if current_user.is_admin %}
+                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
+                        {% endif %}
                         <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
                     {% else %}
                         <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
@@ -46,6 +49,9 @@
                 <div class="border-t border-gray-200 my-2"></div>
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
+                    {% if current_user.is_admin %}
+                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline mb-1">Admin</a>
+                    {% endif %}
                     <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Your ZenPDF Dashboard">
-    <title>Dashboard - ZenPDF</title>
+    <meta name="description" content="ZenPDF Admin Panel">
+    <title>Admin Panel - ZenPDF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
@@ -22,7 +22,7 @@
                     <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
                     <li><span class="text-gray-300 px-2">|</span></li>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Dashboard</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
                         {% if current_user.is_admin %}
                             <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
                         {% endif %}
@@ -48,7 +48,7 @@
                 <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
                 <div class="border-t border-gray-200 my-2"></div>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Dashboard</a>
+                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
                     {% if current_user.is_admin %}
                         <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline mb-1">Admin</a>
                     {% endif %}
@@ -64,81 +64,123 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
         <main>
             <!-- Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Welcome, {{ current_user.username }}!</h1>
-                <div>
-                    {% if current_user.is_premium %}
-                        <span class="inline-block bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                            PREMIUM USER
-                        </span>
-                    {% else %}
-                        <span class="inline-block bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                            FREE TIER
-                        </span>
-                    {% endif %}
-                </div>
+            <div class="mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Admin Panel</h1>
+                <p class="text-gray-600">Manage users, view statistics, and monitor system activity</p>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} mb-6">{{ message }}</div>
+                        <div class="mb-6 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                            {{ message }}
+                        </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <!-- Usage Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
-                    <h3 class="text-5xl font-bold text-purple-600 mb-3">{{ daily_usage }}</h3>
-                    <p class="text-gray-600">
-                        {% if current_user.is_premium %}
-                            Operations Today (Unlimited)
-                        {% else %}
-                            Operations Today (5/day limit)
-                        {% endif %}
-                    </p>
+            <!-- System Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg p-6 shadow-custom text-center">
+                    <h3 class="text-4xl font-bold text-blue-600 mb-2">{{ total_users }}</h3>
+                    <p class="text-gray-600">Total Users</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
-                    <h3 class="text-5xl font-bold text-green-500 mb-3">{{ monthly_usage }}</h3>
-                    <p class="text-gray-600">Operations This Month</p>
+                <div class="bg-white rounded-lg p-6 shadow-custom text-center">
+                    <h3 class="text-4xl font-bold text-green-500 mb-2">{{ active_users }}</h3>
+                    <p class="text-gray-600">Active Users</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
-                    <h3 class="text-5xl font-bold text-yellow-500 mb-3">
-                        {% if current_user.is_premium %}
-                            ∞
-                        {% else %}
-                            {{ 5 - daily_usage }}
-                        {% endif %}
-                    </h3>
-                    <p class="text-gray-600">Remaining Today</p>
+                <div class="bg-white rounded-lg p-6 shadow-custom text-center">
+                    <h3 class="text-4xl font-bold text-purple-600 mb-2">{{ premium_users }}</h3>
+                    <p class="text-gray-600">Premium Users</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-custom text-center">
+                    <h3 class="text-4xl font-bold text-yellow-500 mb-2">{{ today_operations }}</h3>
+                    <p class="text-gray-600">Operations Today</p>
                 </div>
             </div>
 
-            <!-- Upgrade Banner for Free Users -->
-            {% if not current_user.is_premium %}
-            <div class="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 rounded-xl p-10 mb-8 text-center text-white shadow-custom">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Upgrade to Premium</h2>
-                <p class="text-lg md:text-xl mb-6 opacity-90">
-                    Unlimited operations • 100MB file size • Priority support
-                </p>
-                <a href="{{ url_for('pricing') }}" class="inline-block bg-white text-purple-700 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors no-underline">
-                    View Pricing
-                </a>
-            </div>
-            {% endif %}
-
-            <!-- Recent Activity -->
+            <!-- User Management -->
             <div class="bg-white rounded-lg p-8 shadow-custom mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">User Management</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Email</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Username</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Tier</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Status</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Admin</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Joined</th>
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 text-gray-900">{{ user.email }}</td>
+                                <td class="px-4 py-3 text-gray-900">{{ user.username }}</td>
+                                <td class="px-4 py-3">
+                                    <form method="POST" action="{{ url_for('admin_update_user_tier', user_id=user.id) }}" class="inline">
+                                        <select name="tier" onchange="this.form.submit()" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                                            <option value="free" {% if user.subscription_tier == 'free' %}selected{% endif %}>Free</option>
+                                            <option value="premium" {% if user.subscription_tier == 'premium' %}selected{% endif %}>Premium</option>
+                                            <option value="enterprise" {% if user.subscription_tier == 'enterprise' %}selected{% endif %}>Enterprise</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td class="px-4 py-3">
+                                    {% if user.is_active %}
+                                        <span class="text-green-500 font-semibold">Active</span>
+                                    {% else %}
+                                        <span class="text-red-500 font-semibold">Inactive</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3">
+                                    {% if user.is_admin %}
+                                        <span class="text-red-600 font-semibold">Yes</span>
+                                    {% else %}
+                                        <span class="text-gray-400">No</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3 text-gray-600 text-sm">
+                                    {{ user.created_at.strftime('%b %d, %Y') }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex gap-2">
+                                        <form method="POST" action="{{ url_for('admin_toggle_user_active', user_id=user.id) }}" class="inline">
+                                            <button type="submit" class="text-sm px-3 py-1 rounded {% if user.is_active %}bg-red-100 text-red-700 hover:bg-red-200{% else %}bg-green-100 text-green-700 hover:bg-green-200{% endif %} transition-colors">
+                                                {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('admin_toggle_user_admin', user_id=user.id) }}" class="inline">
+                                            <button type="submit" class="text-sm px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors" {% if user.id == current_user.id %}disabled title="Cannot modify your own admin status"{% endif %}>
+                                                {% if user.is_admin %}Remove Admin{% else %}Make Admin{% endif %}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Activity Across All Users -->
+            <div class="bg-white rounded-lg p-8 shadow-custom">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Activity (All Users)</h2>
 
                 {% if recent_operations %}
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
                             <tr class="border-b-2 border-gray-200">
+                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">User</th>
                                 <th class="px-4 py-3 text-left text-gray-600 font-semibold">Operation</th>
                                 <th class="px-4 py-3 text-left text-gray-600 font-semibold">Date</th>
                                 <th class="px-4 py-3 text-left text-gray-600 font-semibold">Pages</th>
@@ -148,6 +190,7 @@
                         <tbody>
                             {% for operation in recent_operations %}
                             <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 text-gray-900">{{ operation.user.email }}</td>
                                 <td class="px-4 py-3">
                                     <span class="capitalize font-semibold text-gray-900">{{ operation.operation_type }}</span>
                                 </td>
@@ -159,9 +202,9 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     {% if operation.success %}
-                                        <span class="text-green-500 font-semibold">✓ Success</span>
+                                        <span class="text-green-500 font-semibold">Success</span>
                                     {% else %}
-                                        <span class="text-red-500 font-semibold">✗ Failed</span>
+                                        <span class="text-red-500 font-semibold">Failed</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -171,27 +214,9 @@
                 </div>
                 {% else %}
                 <p class="text-center text-gray-400 py-12">
-                    No operations yet. Start by using our PDF tools!
+                    No operations recorded yet.
                 </p>
                 {% endif %}
-            </div>
-
-            <!-- Account Info -->
-            <div class="bg-white rounded-lg p-8 shadow-custom">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-4 max-w-2xl">
-                    <div class="font-semibold text-gray-600">Email:</div>
-                    <div class="text-gray-900">{{ current_user.email }}</div>
-
-                    <div class="font-semibold text-gray-600">Username:</div>
-                    <div class="text-gray-900">{{ current_user.username }}</div>
-
-                    <div class="font-semibold text-gray-600">Member Since:</div>
-                    <div class="text-gray-900">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
-
-                    <div class="font-semibold text-gray-600">Subscription:</div>
-                    <div class="text-gray-900 capitalize">{{ current_user.subscription_tier }}</div>
-                </div>
             </div>
         </main>
     </div>

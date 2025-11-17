@@ -217,6 +217,110 @@ def create_app(config_name=None):
                              monthly_usage=monthly_usage,
                              recent_operations=recent_operations)
 
+    # ========== ADMIN PANEL ==========
+
+    @app.route('/admin')
+    @login_required
+    def admin_panel():
+        """Admin panel - only accessible to admin users"""
+        # Check if user is admin
+        if not current_user.is_admin:
+            flash('Access denied. Admin privileges required.', 'error')
+            return redirect(url_for('dashboard'))
+
+        # Get all users
+        users = User.query.order_by(User.created_at.desc()).all()
+
+        # Get system statistics
+        total_users = User.query.count()
+        active_users = User.query.filter_by(is_active=True).count()
+        premium_users = User.query.filter(User.subscription_tier != 'free').count()
+
+        # Get all operations
+        total_operations = UsageRecord.query.count()
+        today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_operations = UsageRecord.query.filter(UsageRecord.created_at >= today_start).count()
+
+        # Get recent operations across all users
+        recent_operations = UsageRecord.query.order_by(
+            UsageRecord.created_at.desc()
+        ).limit(20).all()
+
+        return render_template('admin_panel.html',
+                             users=users,
+                             total_users=total_users,
+                             active_users=active_users,
+                             premium_users=premium_users,
+                             total_operations=total_operations,
+                             today_operations=today_operations,
+                             recent_operations=recent_operations)
+
+    @app.route('/admin/user/<int:user_id>/toggle-active', methods=['POST'])
+    @login_required
+    def admin_toggle_user_active(user_id):
+        """Toggle user active status"""
+        if not current_user.is_admin:
+            return jsonify({'error': 'Access denied'}), 403
+
+        user = User.query.get_or_404(user_id)
+        user.is_active = not user.is_active
+        db.session.commit()
+
+        status = 'activated' if user.is_active else 'deactivated'
+        flash(f'User {user.email} has been {status}.', 'success')
+        return redirect(url_for('admin_panel'))
+
+    @app.route('/admin/user/<int:user_id>/update-tier', methods=['POST'])
+    @login_required
+    def admin_update_user_tier(user_id):
+        """Update user subscription tier"""
+        if not current_user.is_admin:
+            return jsonify({'error': 'Access denied'}), 403
+
+        user = User.query.get_or_404(user_id)
+        new_tier = request.form.get('tier')
+
+        if new_tier not in ['free', 'premium', 'enterprise']:
+            flash('Invalid subscription tier.', 'error')
+            return redirect(url_for('admin_panel'))
+
+        user.subscription_tier = new_tier
+
+        # If upgrading to premium/enterprise, set subscription dates
+        if new_tier != 'free':
+            user.subscription_start = datetime.utcnow()
+            # Set to 1 year from now
+            from datetime import timedelta
+            user.subscription_end = datetime.utcnow() + timedelta(days=365)
+        else:
+            user.subscription_start = None
+            user.subscription_end = None
+
+        db.session.commit()
+        flash(f'User {user.email} subscription updated to {new_tier}.', 'success')
+        return redirect(url_for('admin_panel'))
+
+    @app.route('/admin/user/<int:user_id>/toggle-admin', methods=['POST'])
+    @login_required
+    def admin_toggle_user_admin(user_id):
+        """Toggle user admin status"""
+        if not current_user.is_admin:
+            return jsonify({'error': 'Access denied'}), 403
+
+        user = User.query.get_or_404(user_id)
+
+        # Prevent removing admin from yourself
+        if user.id == current_user.id:
+            flash('You cannot remove admin privileges from yourself.', 'error')
+            return redirect(url_for('admin_panel'))
+
+        user.is_admin = not user.is_admin
+        db.session.commit()
+
+        status = 'granted' if user.is_admin else 'revoked'
+        flash(f'Admin privileges {status} for {user.email}.', 'success')
+        return redirect(url_for('admin_panel'))
+
     # ========== PDF OPERATIONS ==========
 
     @app.route('/split', methods=['GET', 'POST'])

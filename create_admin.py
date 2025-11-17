@@ -22,9 +22,12 @@ def create_admin():
         admin = User.query.filter_by(email='admin@zenpdf.com').first()
 
         if admin:
-            print("Admin user already exists. Resetting password...")
+            print("Admin user already exists. Resetting password and ensuring admin privileges...")
             admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
             admin.set_password(admin_password)
+            # Ensure admin privileges are set
+            admin.is_admin = True
+            admin.is_active = True
             db.session.commit()
             print("Admin password reset successfully!")
         else:
