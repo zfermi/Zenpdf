@@ -5,12 +5,13 @@
 /* Custom components */
 @layer components {
   .tool-card {
-    @apply bg-white rounded-2xl p-8 shadow-custom hover:shadow-custom-hover transition-all duration-300 no-underline block flex flex-col items-center text-center;
+    @apply bg-zen-cream rounded-xl p-10 shadow-custom hover:shadow-zen transition-all duration-300 no-underline block flex flex-col items-center text-center border border-sand;
     transform: translateY(0);
   }
 
   .tool-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
+    border-color: #6C9A8B;
   }
 
   .tool-card-disabled {
@@ -22,11 +23,11 @@
   }
 
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-200;
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-300;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-primary border-2 border-primary font-medium py-3 px-6 rounded-lg transition-all duration-200;
+    @apply bg-zen-cream hover:bg-sand-light text-secondary border-2 border-secondary font-medium py-3 px-8 rounded-lg transition-all duration-300;
   }
 
   .alert {
@@ -50,11 +51,33 @@
   }
 
   .hero-gradient {
-    background: linear-gradient(135deg, #FF5656 0%, #FF3333 100%);
+    background: linear-gradient(135deg, #2D3436 0%, #3A4447 50%, #4A5254 100%);
+    position: relative;
+  }
+
+  .hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(108, 154, 139, 0.1) 100%);
+    pointer-events: none;
   }
 
   .feature-icon {
     @apply w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-4 mx-auto;
+    border: 2px solid currentColor;
+  }
+
+  .zen-divider {
+    @apply w-16 h-1 bg-primary mx-auto my-8;
+    border-radius: 2px;
+  }
+
+  .zen-section {
+    @apply bg-zen-cream border border-sand-dark rounded-2xl;
   }
 }
 
@@ -97,5 +120,12 @@
 .tool-icon {
   font-size: 4rem;
   margin-bottom: 1.5rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgba(108, 154, 139, 0.2));
+  opacity: 0.85;
+  transition: all 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+  opacity: 1;
+  filter: drop-shadow(0 4px 8px rgba(108, 154, 139, 0.3));
 }
