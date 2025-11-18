@@ -5,15 +5,28 @@
 /* Custom components */
 @layer components {
   .tool-card {
-    @apply bg-white rounded-lg p-6 shadow-custom hover:shadow-custom-hover transition-all duration-300 no-underline block;
+    @apply bg-white rounded-2xl p-8 shadow-custom hover:shadow-custom-hover transition-all duration-300 no-underline block flex flex-col items-center text-center;
+    transform: translateY(0);
+  }
+
+  .tool-card:hover {
+    transform: translateY(-4px);
   }
 
   .tool-card-disabled {
     @apply opacity-60 cursor-not-allowed hover:shadow-custom;
   }
 
+  .tool-card-disabled:hover {
+    transform: translateY(0);
+  }
+
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-primary border-2 border-primary font-medium py-3 px-6 rounded-lg transition-all duration-200;
   }
 
   .alert {
@@ -35,6 +48,14 @@
   .alert-warning {
     @apply bg-yellow-100 border border-yellow-400 text-yellow-700;
   }
+
+  .hero-gradient {
+    background: linear-gradient(135deg, #FF5656 0%, #FF3333 100%);
+  }
+
+  .feature-icon {
+    @apply w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-4 mx-auto;
+  }
 }
 
 /* Custom utilities */
@@ -42,4 +63,39 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.tool-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }

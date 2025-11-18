@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free PDF tools to split and merge PDFs online. No registration required.">
-    <title>ZenPDF - Free PDF Split & Merge Tools</title>
+    <meta name="description" content="Free online PDF tools - Split, merge, compress, rotate, and convert PDFs with ease. No registration required.">
+    <title>ZenPDF - Every tool you need to work with PDFs in one place</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
@@ -12,25 +12,22 @@
     <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-primary no-underline flex items-center gap-2">
+                    <span class="text-3xl">📄</span>
+                    <span>ZenPDF</span>
+                </a>
                 <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Home</a></li>
-                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
-                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
-                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
-                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
-                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">PDF to Word</a></li>
                     <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
                     <li><span class="text-gray-300 px-2">|</span></li>
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
                         {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
+                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline hover:bg-red-600">Admin</a></li>
                         {% endif %}
                         <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
                     {% else %}
                         <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a></li>
+                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline font-medium">Sign Up</a></li>
                     {% endif %}
                 </ul>
                 <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
@@ -41,12 +38,6 @@
             </div>
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Home</a>
-                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
-                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
-                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
-                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
-                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">PDF to Word</a>
                 <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
                 <div class="border-t border-gray-200 my-2"></div>
                 {% if current_user.is_authenticated %}
@@ -57,167 +48,222 @@
                     <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a>
+                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="bg-gray-100 py-4">
-        <!-- Google AdSense - Header Ad -->
-        <div class="max-w-7xl mx-auto px-4">
-            <!-- AdSense code goes here -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXX"
-                 data-ad-slot="XXXXXXXXXX"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-        </div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <aside class="hidden lg:block lg:col-span-2">
-                <!-- Google AdSense - Left Sidebar Ad -->
-                <div class="sticky top-24">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="rectangle"></ins>
-                </div>
-            </aside>
-
-            <main class="lg:col-span-8">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">ZenPDF</h1>
-                    <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Free PDF tools to split, merge, compress, and more. Fast, secure, and easy to use.</p>
-                </div>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 px-4 animate-fade-in">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in-up">Every tool you need to work with PDFs in one place</h1>
+            <p class="text-xl md:text-2xl mb-8 text-white/90 animate-fade-in-up" style="animation-delay: 0.1s;">Free online PDF tools - Split, merge, compress, rotate, and convert your PDFs with ease. No registration required.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up" style="animation-delay: 0.2s;">
+                <a href="#tools" class="btn-secondary inline-block">Explore Tools</a>
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn-primary inline-block">Get Started Free</a>
                 {% endif %}
-            {% endwith %}
+            </div>
+        </div>
+    </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                <a href="{{ url_for('split_pdf') }}" class="tool-card">
-                    <div class="text-4xl mb-4">📄</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Split PDF</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
-                    <span class="btn-primary inline-block">Split PDF</span>
-                </a>
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
-                <a href="{{ url_for('merge_pdf') }}" class="tool-card">
-                    <div class="text-4xl mb-4">📚</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Merge PDF</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Combine multiple PDF files into one document. Drag and drop to reorder pages.</p>
-                    <span class="btn-primary inline-block">Merge PDF</span>
-                </a>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow" id="tools">
+        <!-- Tools Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">All the tools you'll ever need</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Choose from our suite of professional PDF tools. Fast, secure, and easy to use.</p>
+        </div>
 
-                <a href="{{ url_for('compress_pdf') }}" class="tool-card">
-                    <div class="text-4xl mb-4">🗜️</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Compress PDF</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Reduce file size while maintaining quality. Perfect for sharing and storage.</p>
-                    <span class="btn-primary inline-block">Compress PDF</span>
-                </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <!-- Split PDF -->
+            <a href="{{ url_for('split_pdf') }}" class="tool-card group">
+                <div class="tool-icon">📄</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Split PDF</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Extract pages from your PDF. Split by range, specific pages, or odd/even pages.</p>
+                <span class="text-primary font-semibold group-hover:underline">Split PDF →</span>
+            </a>
 
-                <a href="{{ url_for('rotate_pdf') }}" class="tool-card">
-                    <div class="text-4xl mb-4">🔄</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Rotate PDF</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Rotate pages 90°, 180°, or 270°. Fix orientation issues easily.</p>
-                    <span class="btn-primary inline-block">Rotate PDF</span>
-                </a>
+            <!-- Merge PDF -->
+            <a href="{{ url_for('merge_pdf') }}" class="tool-card group">
+                <div class="tool-icon">📚</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Merge PDF</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Combine multiple PDF files into one document. Drag and drop to reorder.</p>
+                <span class="text-primary font-semibold group-hover:underline">Merge PDF →</span>
+            </a>
 
-                <a href="{{ url_for('pdf2word') }}" class="tool-card">
-                    <div class="text-4xl mb-4">📝</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">PDF to Word</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Convert PDF files to editable Word documents (.docx) while preserving formatting.</p>
-                    <span class="btn-primary inline-block">Convert to Word</span>
-                </a>
+            <!-- Compress PDF -->
+            <a href="{{ url_for('compress_pdf') }}" class="tool-card group">
+                <div class="tool-icon">🗜️</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Compress PDF</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Reduce file size while maintaining quality. Perfect for sharing and storage.</p>
+                <span class="text-primary font-semibold group-hover:underline">Compress PDF →</span>
+            </a>
 
-                <div class="tool-card tool-card-disabled">
-                    <div class="text-4xl mb-4">🔒</div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Watermark PDF</h2>
-                    <p class="text-gray-600 mb-4 flex-grow">Add text or image watermarks to protect your documents.</p>
-                    <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-medium">Coming Soon</span>
+            <!-- Rotate PDF -->
+            <a href="{{ url_for('rotate_pdf') }}" class="tool-card group">
+                <div class="tool-icon">🔄</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Rotate PDF</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Rotate pages 90°, 180°, or 270°. Fix orientation issues easily.</p>
+                <span class="text-primary font-semibold group-hover:underline">Rotate PDF →</span>
+            </a>
+
+            <!-- PDF to Word -->
+            <a href="{{ url_for('pdf2word') }}" class="tool-card group">
+                <div class="tool-icon">📝</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">PDF to Word</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Convert PDF files to editable Word documents while preserving formatting.</p>
+                <span class="text-primary font-semibold group-hover:underline">Convert to Word →</span>
+            </a>
+
+            <!-- Coming Soon - Watermark -->
+            <div class="tool-card tool-card-disabled">
+                <div class="tool-icon">🔒</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Watermark PDF</h3>
+                <p class="text-gray-600 mb-6 flex-grow">Add text or image watermarks to protect your documents.</p>
+                <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-medium text-sm">Coming Soon</span>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white rounded-2xl p-12 shadow-custom mb-12">
+            <h3 class="text-3xl font-bold text-gray-900 mb-12 text-center">Why Choose ZenPDF?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="feature-icon bg-green-100">
+                        <span>✅</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">100% Free</h4>
+                    <p class="text-gray-600">No registration required for basic features. Start using immediately.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="feature-icon bg-blue-100">
+                        <span>🔒</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">Secure & Private</h4>
+                    <p class="text-gray-600">Files are automatically deleted after processing. Your privacy is our priority.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="feature-icon bg-yellow-100">
+                        <span>⚡</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">Lightning Fast</h4>
+                    <p class="text-gray-600">Process your PDFs in seconds with our optimized tools.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="feature-icon bg-purple-100">
+                        <span>📱</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">Works Everywhere</h4>
+                    <p class="text-gray-600">Fully responsive design works on desktop, tablet, and mobile.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="feature-icon bg-red-100">
+                        <span>🌐</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">No Limits</h4>
+                    <p class="text-gray-600">Process multiple files without restrictions. Up to 10MB per file for free users.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="feature-icon bg-indigo-100">
+                        <span>🎯</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">Easy to Use</h4>
+                    <p class="text-gray-600">Intuitive interface designed for everyone. No technical skills needed.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        {% if not current_user.is_authenticated %}
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-12 text-center text-white shadow-custom-lg">
+            <h3 class="text-3xl font-bold mb-4">Ready to get started?</h3>
+            <p class="text-xl mb-8 text-white/90">Sign up for free and unlock unlimited access to all our PDF tools.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('auth.register') }}" class="btn-primary bg-white text-primary hover:bg-gray-100 inline-block">Create Free Account</a>
+                <a href="{{ url_for('pricing') }}" class="btn-secondary border-white text-white hover:bg-white/10 inline-block">View Pricing</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-3xl">📄</span>
+                        <span class="text-2xl font-bold">ZenPDF</span>
+                    </div>
+                    <p class="text-gray-400">Professional PDF tools for everyone. Free, fast, and secure.</p>
+                </div>
+
+                <!-- Tools -->
+                <div>
+                    <h4 class="font-bold mb-4">PDF Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{{ url_for('split_pdf') }}" class="hover:text-white transition-colors no-underline">Split PDF</a></li>
+                        <li><a href="{{ url_for('merge_pdf') }}" class="hover:text-white transition-colors no-underline">Merge PDF</a></li>
+                        <li><a href="{{ url_for('compress_pdf') }}" class="hover:text-white transition-colors no-underline">Compress PDF</a></li>
+                        <li><a href="{{ url_for('rotate_pdf') }}" class="hover:text-white transition-colors no-underline">Rotate PDF</a></li>
+                        <li><a href="{{ url_for('pdf2word') }}" class="hover:text-white transition-colors no-underline">PDF to Word</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{{ url_for('pricing') }}" class="hover:text-white transition-colors no-underline">Pricing</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('dashboard') }}" class="hover:text-white transition-colors no-underline">Dashboard</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('auth.login') }}" class="hover:text-white transition-colors no-underline">Login</a></li>
+                            <li><a href="{{ url_for('auth.register') }}" class="hover:text-white transition-colors no-underline">Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="font-bold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors no-underline">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors no-underline">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors no-underline">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors no-underline">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg p-8 shadow-custom mb-8">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Why Choose ZenPDF?</h3>
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start">
-                        <span class="mr-3 text-xl">✅</span>
-                        <span><strong>100% Free</strong> - No registration required</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="mr-3 text-xl">🔒</span>
-                        <span><strong>Secure</strong> - Files are automatically deleted after processing</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="mr-3 text-xl">⚡</span>
-                        <span><strong>Fast</strong> - Process your PDFs in seconds</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="mr-3 text-xl">📱</span>
-                        <span><strong>Responsive</strong> - Works on all devices</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="mr-3 text-xl">🌐</span>
-                        <span><strong>No upload limits</strong> - Up to 10MB per file</span>
-                    </li>
-                </ul>
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 ZenPDF. All rights reserved. Made with ❤️ for PDF lovers everywhere.</p>
             </div>
-
-            <div class="bg-gray-100 rounded-lg p-4 mb-8">
-                <!-- Google AdSense - Content Ad -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </main>
-
-        <aside class="hidden lg:block lg:col-span-2">
-            <!-- Google AdSense - Right Sidebar Ad -->
-            <div class="sticky top-24">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="rectangle"></ins>
-            </div>
-        </aside>
         </div>
-    </div>
-
-    <div class="bg-gray-100 py-4 mt-8">
-        <!-- Google AdSense - Footer Ad -->
-        <div class="max-w-7xl mx-auto px-4">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXX"
-                 data-ad-slot="XXXXXXXXXX"
-                 data-ad-format="horizontal"
-                 data-full-width-responsive="true"></ins>
-        </div>
-    </div>
-
-    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
-        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. Free PDF tools for everyone.</p>
     </footer>
 
-    <!-- AdSense Script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+    <!-- Scripts -->
     <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-
         // Mobile Navigation Toggle
         const navToggle = document.getElementById('nav-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -225,7 +271,28 @@
         navToggle.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
         });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add stagger animation to tool cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach((card, index) => {
+                card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+            });
+        });
     </script>
 </body>
 </html>
-
