@@ -15,6 +15,7 @@ from PyPDF2 import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from dotenv import load_dotenv
+from pdf2docx import Converter
 
 # Load environment variables
 load_dotenv()
@@ -546,6 +547,67 @@ def create_app(config_name=None):
             session.pop('merge_files', None)
             return redirect(url_for('merge_pdf'))
 
+    @app.route('/pdf2word', methods=['GET', 'POST'])
+    @login_required
+    @limiter.limit("30 per hour")
+    def pdf2word():
+        """Convert PDF to Word document"""
+        if request.method == 'POST':
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('pdf2word.html')
+
+            file = request.files.get('file')
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+
+                    # Validate PDF
+                    try:
+                        reader = PdfReader(file_path)
+                        page_count = len(reader.pages)
+                        if page_count == 0:
+                            os.remove(file_path)
+                            flash('Invalid PDF: File has no pages.', 'error')
+                            return render_template('pdf2word.html')
+                    except Exception as e:
+                        os.remove(file_path)
+                        flash(f'Invalid PDF file: {str(e)}', 'error')
+                        return render_template('pdf2word.html')
+
+                    # Convert PDF to Word
+                    word_file_path = convert_pdf_to_word(file_path, app.config['SPLIT_FOLDER'])
+
+                    # Record usage
+                    record_usage('pdf2word', file_size=file_size, pages_processed=page_count)
+
+                    # Clean up uploaded PDF
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+
+                    return send_file(word_file_path, as_attachment=True,
+                                   download_name=f"converted_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx",
+                                   mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    record_usage('pdf2word', success=False, error_message=str(e))
+                    flash(f'Error converting PDF: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        return render_template('pdf2word.html')
+
     # ========== PDF PROCESSING FUNCTIONS ==========
 
     def split_pdf_pages(pdf_path, pages_to_split, output_dir):
@@ -647,6 +709,20 @@ def create_app(config_name=None):
             writer.write(output_pdf)
 
         return rotated_file_path
+
+    def convert_pdf_to_word(pdf_path, output_dir):
+        """Convert PDF to Word document using pdf2docx"""
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        word_file_path = os.path.join(output_dir, f"converted_{timestamp}.docx")
+
+        # Create converter instance
+        cv = Converter(pdf_path)
+
+        # Convert PDF to DOCX
+        cv.convert(word_file_path, start=0, end=None)
+        cv.close()
+
+        return word_file_path
 
     return app
 
