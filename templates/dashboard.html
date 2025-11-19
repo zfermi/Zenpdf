@@ -7,57 +7,57 @@
     <title>Dashboard - ZenPDF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
+<body class="min-h-screen flex flex-col bg-sand-light">
     <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline">📄 ZenPDF</a>
                 <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
-                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
-                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
-                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
-                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
-                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">PDF to Word</a></li>
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
-                    <li><span class="text-gray-300 px-2">|</span></li>
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Rotate PDF</a></li>
+                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">PDF to Word</a></li>
+                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Pricing</a></li>
+                    <li><span class="text-sand-dark px-2">|</span></li>
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Dashboard</a></li>
                         {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
+                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline">Admin</a></li>
                         {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a></li>
+                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Login</a></li>
+                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a></li>
                     {% endif %}
                 </ul>
                 <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
                 </button>
             </div>
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
-                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
-                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
-                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
-                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
-                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">PDF to Word</a>
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
-                <div class="border-t border-gray-200 my-2"></div>
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Rotate PDF</a>
+                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">PDF to Word</a>
+                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Pricing</a>
+                <div class="border-t border-sand my-2"></div>
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Dashboard</a>
                     {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline mb-1">Admin</a>
+                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline mb-1">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
+                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a>
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a>
+                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a>
                 {% endif %}
             </div>
         </div>
@@ -67,7 +67,7 @@
         <main>
             <!-- Header -->
             <div class="text-center mb-8">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Welcome, {{ current_user.username }}!</h1>
+                <h1 class="text-4xl md:text-5xl font-bold text-secondary mb-4">Welcome, {{ current_user.username }}!</h1>
                 <div>
                     {% if current_user.is_premium %}
                         <span class="inline-block bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
@@ -91,9 +91,9 @@
 
             <!-- Usage Stats -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                <div class="bg-zen-cream rounded-lg p-8 shadow-zen text-center zen-section">
                     <h3 class="text-5xl font-bold text-purple-600 mb-3">{{ daily_usage }}</h3>
-                    <p class="text-gray-600">
+                    <p class="text-secondary-light">
                         {% if current_user.is_premium %}
                             Operations Today (Unlimited)
                         {% else %}
@@ -102,12 +102,12 @@
                     </p>
                 </div>
 
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                <div class="bg-zen-cream rounded-lg p-8 shadow-zen text-center zen-section">
                     <h3 class="text-5xl font-bold text-green-500 mb-3">{{ monthly_usage }}</h3>
-                    <p class="text-gray-600">Operations This Month</p>
+                    <p class="text-secondary-light">Operations This Month</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-8 shadow-custom text-center">
+                <div class="bg-zen-cream rounded-lg p-8 shadow-zen text-center zen-section">
                     <h3 class="text-5xl font-bold text-yellow-500 mb-3">
                         {% if current_user.is_premium %}
                             ∞
@@ -115,7 +115,7 @@
                             {{ 5 - daily_usage }}
                         {% endif %}
                     </h3>
-                    <p class="text-gray-600">Remaining Today</p>
+                    <p class="text-secondary-light">Remaining Today</p>
                 </div>
             </div>
 
@@ -126,37 +126,37 @@
                 <p class="text-lg md:text-xl mb-6 opacity-90">
                     Unlimited operations • 100MB file size • Priority support
                 </p>
-                <a href="{{ url_for('pricing') }}" class="inline-block bg-white text-purple-700 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors no-underline">
+                <a href="{{ url_for('pricing') }}" class="inline-block bg-zen-cream text-purple-700 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-sand-light transition-colors no-underline">
                     View Pricing
                 </a>
             </div>
             {% endif %}
 
             <!-- Recent Activity -->
-            <div class="bg-white rounded-lg p-8 shadow-custom mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+            <div class="bg-zen-cream rounded-lg p-8 shadow-zen mb-6 zen-section">
+                <h2 class="text-2xl font-bold text-secondary mb-6">Recent Activity</h2>
 
                 {% if recent_operations %}
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="border-b-2 border-gray-200">
-                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Operation</th>
-                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Date</th>
-                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Pages</th>
-                                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Status</th>
+                            <tr class="border-b-2 border-sand">
+                                <th class="px-4 py-3 text-left text-secondary-light font-semibold">Operation</th>
+                                <th class="px-4 py-3 text-left text-secondary-light font-semibold">Date</th>
+                                <th class="px-4 py-3 text-left text-secondary-light font-semibold">Pages</th>
+                                <th class="px-4 py-3 text-left text-secondary-light font-semibold">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for operation in recent_operations %}
-                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                            <tr class="border-b border-sand hover:bg-sand-light transition-colors">
                                 <td class="px-4 py-3">
-                                    <span class="capitalize font-semibold text-gray-900">{{ operation.operation_type }}</span>
+                                    <span class="capitalize font-semibold text-secondary">{{ operation.operation_type }}</span>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600">
+                                <td class="px-4 py-3 text-secondary-light">
                                     {{ operation.created_at.strftime('%b %d, %Y %I:%M %p') }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-600">
+                                <td class="px-4 py-3 text-secondary-light">
                                     {{ operation.pages_processed or 'N/A' }}
                                 </td>
                                 <td class="px-4 py-3">
@@ -172,34 +172,34 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-center text-gray-400 py-12">
+                <p class="text-center text-secondary-light py-12">
                     No operations yet. Start by using our PDF tools!
                 </p>
                 {% endif %}
             </div>
 
             <!-- Account Info -->
-            <div class="bg-white rounded-lg p-8 shadow-custom">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
+            <div class="bg-zen-cream rounded-lg p-8 shadow-zen zen-section">
+                <h2 class="text-2xl font-bold text-secondary mb-6">Account Information</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-4 max-w-2xl">
-                    <div class="font-semibold text-gray-600">Email:</div>
-                    <div class="text-gray-900">{{ current_user.email }}</div>
+                    <div class="font-semibold text-secondary-light">Email:</div>
+                    <div class="text-secondary">{{ current_user.email }}</div>
 
-                    <div class="font-semibold text-gray-600">Username:</div>
-                    <div class="text-gray-900">{{ current_user.username }}</div>
+                    <div class="font-semibold text-secondary-light">Username:</div>
+                    <div class="text-secondary">{{ current_user.username }}</div>
 
-                    <div class="font-semibold text-gray-600">Member Since:</div>
-                    <div class="text-gray-900">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
+                    <div class="font-semibold text-secondary-light">Member Since:</div>
+                    <div class="text-secondary">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
 
-                    <div class="font-semibold text-gray-600">Subscription:</div>
-                    <div class="text-gray-900 capitalize">{{ current_user.subscription_tier }}</div>
+                    <div class="font-semibold text-secondary-light">Subscription:</div>
+                    <div class="text-secondary capitalize">{{ current_user.subscription_tier }}</div>
                 </div>
             </div>
         </main>
     </div>
 
-    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
-        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. All rights reserved.</p>
+    <footer class="bg-zen-cream border-t border-sand py-6 mt-auto">
+        <p class="text-center text-secondary-light">&copy; 2024 ZenPDF. All rights reserved.</p>
     </footer>
 
     <script>

@@ -7,57 +7,57 @@
     <title>PDF to Word - ZenPDF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
+<body class="min-h-screen flex flex-col bg-sand-light">
     <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline">📄 ZenPDF</a>
                 <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
-                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
-                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
-                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
-                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
-                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">PDF to Word</a></li>
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Rotate PDF</a></li>
+                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg bg-sand text-primary font-medium no-underline">PDF to Word</a></li>
+                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Pricing</a></li>
                     <li><span class="text-gray-300 px-2">|</span></li>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Dashboard</a></li>
                         {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
+                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline">Admin</a></li>
                         {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a></li>
+                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Login</a></li>
+                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a></li>
                     {% endif %}
                 </ul>
                 <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
                 </button>
             </div>
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
-                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
-                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
-                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
-                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
-                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">PDF to Word</a>
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
-                <div class="border-t border-gray-200 my-2"></div>
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Rotate PDF</a>
+                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg bg-sand text-primary font-medium no-underline mb-1">PDF to Word</a>
+                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Pricing</a>
+                <div class="border-t border-sand my-2"></div>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
+                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Dashboard</a>
                     {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline mb-1">Admin</a>
+                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline mb-1">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
+                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a>
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a>
+                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a>
                 {% endif %}
             </div>
         </div>
@@ -88,11 +88,11 @@
 
             <main class="lg:col-span-8">
                 <div class="mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">PDF to Word Converter</h1>
-                    <p class="text-gray-600">
+                    <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-2">PDF to Word Converter</h1>
+                    <p class="text-secondary-light">
                         <a href="{{ url_for('home') }}" class="text-primary hover:text-primary-dark">Home</a> / PDF to Word
                     </p>
-                    <p class="text-gray-600 mt-4">Convert your PDF files to editable Word documents (.docx) while preserving formatting and layout.</p>
+                    <p class="text-secondary-light mt-4">Convert your PDF files to editable Word documents (.docx) while preserving formatting and layout.</p>
                 </div>
 
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -103,26 +103,26 @@
                     {% endif %}
                 {% endwith %}
 
-                <div class="bg-white rounded-lg shadow-custom p-8">
+                <div class="zen-section shadow-zen p-8">
                     <form action="{{ url_for('pdf2word') }}" method="post" enctype="multipart/form-data" id="pdf2word-form">
                         <div class="mb-6">
                             <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
-                            <label for="file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-gray-50 hover:bg-gray-100">
+                            <label for="file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-gray-50 hover:bg-sand-light">
                                 <span class="text-6xl mb-4">📄➜📝</span>
-                                <span class="upload-text text-lg font-medium text-gray-700 mb-2">Choose PDF file or drag it here</span>
+                                <span class="upload-text text-lg font-medium text-secondary mb-2">Choose PDF file or drag it here</span>
                                 <span class="file-size text-sm text-gray-500">Max size: 10MB (Free) / 100MB (Premium)</span>
                             </label>
                         </div>
 
                         <!-- Progress Container -->
-                        <div id="progress-container" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
+                        <div id="progress-container" class="hidden mb-6 bg-sand-light rounded-lg p-4">
                             <div class="mb-2">
-                                <span class="text-sm font-medium text-gray-700">Converting PDF to Word...</span>
+                                <span class="text-sm font-medium text-secondary">Converting PDF to Word...</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
                                 <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all" style="width: 0%"></div>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-600">
+                            <div class="flex justify-between text-xs text-secondary-light">
                                 <span id="progress-percent">0%</span>
                                 <span id="progress-status">Processing...</span>
                             </div>
@@ -135,36 +135,36 @@
                             <div class="flex items-start">
                                 <span class="text-2xl mr-3">✓</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Preserve Formatting</h3>
-                                    <p class="text-sm text-gray-600">Maintains text, images, and layout structure</p>
+                                    <h3 class="font-semibold text-secondary">Preserve Formatting</h3>
+                                    <p class="text-sm text-secondary-light">Maintains text, images, and layout structure</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <span class="text-2xl mr-3">✓</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Editable Output</h3>
-                                    <p class="text-sm text-gray-600">Get fully editable .docx files</p>
+                                    <h3 class="font-semibold text-secondary">Editable Output</h3>
+                                    <p class="text-sm text-secondary-light">Get fully editable .docx files</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <span class="text-2xl mr-3">✓</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Fast Conversion</h3>
-                                    <p class="text-sm text-gray-600">Quick processing for most PDF files</p>
+                                    <h3 class="font-semibold text-secondary">Fast Conversion</h3>
+                                    <p class="text-sm text-secondary-light">Quick processing for most PDF files</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <span class="text-2xl mr-3">✓</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Secure & Private</h3>
-                                    <p class="text-sm text-gray-600">Files are automatically deleted after conversion</p>
+                                    <h3 class="font-semibold text-secondary">Secure & Private</h3>
+                                    <p class="text-sm text-secondary-light">Files are automatically deleted after conversion</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Cloud Storage Options -->
-                        <div class="pt-6 border-t border-gray-200 text-center mt-8">
-                            <p class="text-gray-600 text-sm mb-4">Or select from cloud storage:</p>
+                        <div class="pt-6 border-t border-sand text-center mt-8">
+                            <p class="text-secondary-light text-sm mb-4">Or select from cloud storage:</p>
                             <div class="flex gap-4 justify-center">
                                 <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Google Drive (coming soon)">Google Drive</a>
                                 <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Dropbox (coming soon)">Dropbox</a>
@@ -175,7 +175,7 @@
                 </div>
 
                 <div class="mt-8">
-                    <a href="{{ url_for('home') }}" class="inline-block px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">← Back to Home</a>
+                    <a href="{{ url_for('home') }}" class="inline-block px-6 py-3 bg-gray-500 hover:bg-secondary text-white rounded-lg transition-colors">← Back to Home</a>
                 </div>
             </main>
 

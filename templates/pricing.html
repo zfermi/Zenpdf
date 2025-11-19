@@ -7,57 +7,57 @@
     <title>Pricing - ZenPDF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
+<body class="min-h-screen flex flex-col bg-sand-light">
     <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline">📄 ZenPDF</a>
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline">📄 ZenPDF</a>
                 <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Home</a></li>
-                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Split PDF</a></li>
-                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Merge PDF</a></li>
-                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Compress PDF</a></li>
-                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Rotate PDF</a></li>
-                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">PDF to Word</a></li>
+                    <li><a href="{{ url_for('home') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Home</a></li>
+                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Compress PDF</a></li>
+                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Rotate PDF</a></li>
+                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">PDF to Word</a></li>
                     <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline">Pricing</a></li>
-                    <li><span class="text-gray-300 px-2">|</span></li>
+                    <li><span class="text-sand-dark px-2">|</span></li>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Dashboard</a></li>
                         {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline">Admin</a></li>
+                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline">Admin</a></li>
                         {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a></li>
+                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Login</a></li>
+                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a></li>
                     {% endif %}
                 </ul>
                 <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
+                    <span class="w-6 h-0.5 bg-secondary transition-all"></span>
                 </button>
             </div>
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Home</a>
-                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Split PDF</a>
-                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Merge PDF</a>
-                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Compress PDF</a>
-                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Rotate PDF</a>
-                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">PDF to Word</a>
+                <a href="{{ url_for('home') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Home</a>
+                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Split PDF</a>
+                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Merge PDF</a>
+                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Compress PDF</a>
+                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Rotate PDF</a>
+                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">PDF to Word</a>
                 <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg bg-primary-light text-primary font-medium no-underline mb-1">Pricing</a>
-                <div class="border-t border-gray-200 my-2"></div>
+                <div class="border-t border-sand my-2"></div>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
+                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Dashboard</a>
                     {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-red-500 text-white font-medium no-underline mb-1">Admin</a>
+                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline mb-1">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
+                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a>
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors no-underline">Sign Up</a>
+                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a>
                 {% endif %}
             </div>
         </div>
@@ -67,34 +67,34 @@
         <main>
             <!-- Header -->
             <div class="text-center mb-16">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-                <p class="text-lg md:text-xl text-gray-600">Choose the plan that works best for you</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-secondary mb-4">Simple, Transparent Pricing</h1>
+                <p class="text-lg md:text-xl text-secondary-light">Choose the plan that works best for you</p>
             </div>
 
             <!-- Pricing Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 <!-- Free Tier -->
-                <div class="bg-white rounded-xl shadow-custom p-8 flex flex-col hover:shadow-hover transition-shadow">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Free</h2>
+                <div class="bg-zen-cream rounded-xl shadow-zen p-8 flex flex-col hover:shadow-hover transition-shadow zen-section">
+                    <h2 class="text-3xl font-bold text-secondary mb-2 text-center">Free</h2>
                     <div class="text-center mb-8">
                         <span class="text-5xl font-bold text-primary">$0</span>
-                        <span class="text-gray-600">/month</span>
+                        <span class="text-secondary-light">/month</span>
                     </div>
 
                     <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span><strong class="font-semibold">5 operations/day</strong></span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>10MB file size limit</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>All basic PDF tools</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Secure file processing</span>
                         </li>
@@ -105,18 +105,18 @@
                     </ul>
 
                     {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="block w-full text-center bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors no-underline">
+                    <a href="{{ url_for('auth.register') }}" class="block w-full text-center bg-sand-light text-secondary px-6 py-3 rounded-lg font-semibold hover:bg-sand transition-colors no-underline">
                         Get Started Free
                     </a>
                     {% elif not current_user.is_premium %}
-                    <button class="w-full bg-gray-100 text-gray-500 px-6 py-3 rounded-lg font-semibold cursor-not-allowed" disabled>
+                    <button class="w-full bg-sand-light text-secondary-light px-6 py-3 rounded-lg font-semibold cursor-not-allowed" disabled>
                         Current Plan
                     </button>
                     {% endif %}
                 </div>
 
                 <!-- Premium Tier -->
-                <div class="bg-white rounded-xl shadow-hover p-8 flex flex-col relative border-4 border-primary transform lg:scale-105 hover:shadow-2xl transition-all">
+                <div class="bg-zen-cream rounded-xl shadow-zen p-8 flex flex-col relative border-4 border-primary transform lg:scale-105 hover:shadow-2xl transition-all zen-section">
                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-1.5 rounded-full text-sm font-semibold">
                         POPULAR
                     </div>
@@ -124,31 +124,31 @@
                     <h2 class="text-3xl font-bold text-primary mb-2 text-center">Premium</h2>
                     <div class="text-center mb-8">
                         <span class="text-5xl font-bold text-primary">$9.99</span>
-                        <span class="text-gray-600">/month</span>
+                        <span class="text-secondary-light">/month</span>
                     </div>
 
                     <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span><strong class="font-semibold">Unlimited operations</strong></span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span><strong class="font-semibold">100MB file size limit</strong></span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>All PDF tools</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Priority processing</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span><strong class="font-semibold">Ad-free experience</strong></span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Email support</span>
                         </li>
@@ -170,30 +170,30 @@
                 </div>
 
                 <!-- Enterprise Tier -->
-                <div class="bg-white rounded-xl shadow-custom p-8 flex flex-col hover:shadow-hover transition-shadow">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Enterprise</h2>
+                <div class="bg-zen-cream rounded-xl shadow-zen p-8 flex flex-col hover:shadow-hover transition-shadow zen-section">
+                    <h2 class="text-3xl font-bold text-secondary mb-2 text-center">Enterprise</h2>
                     <div class="text-center mb-8">
-                        <span class="text-4xl font-bold text-gray-900">Custom</span>
+                        <span class="text-4xl font-bold text-secondary">Custom</span>
                     </div>
 
                     <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Everything in Premium</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Custom file size limits</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Dedicated support</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>SLA guarantee</span>
                         </li>
-                        <li class="flex items-start border-b border-gray-100 pb-4">
+                        <li class="flex items-start border-b border-sand pb-4">
                             <span class="text-green-500 mr-3 text-xl flex-shrink-0">✓</span>
                             <span>Team management</span>
                         </li>
@@ -203,43 +203,43 @@
                         </li>
                     </ul>
 
-                    <a href="mailto:sales@zenpdf.com" class="block w-full text-center bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors no-underline">
+                    <a href="mailto:sales@zenpdf.com" class="block w-full text-center bg-sand-light text-secondary px-6 py-3 rounded-lg font-semibold hover:bg-sand transition-colors no-underline">
                         Contact Sales
                     </a>
                 </div>
             </div>
 
             <!-- FAQ Section -->
-            <div class="bg-white rounded-xl shadow-custom p-8 md:p-12">
-                <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
+            <div class="bg-zen-cream rounded-xl shadow-zen p-8 md:p-12 zen-section">
+                <h2 class="text-3xl font-bold text-secondary text-center mb-12">Frequently Asked Questions</h2>
 
                 <div class="max-w-3xl mx-auto space-y-8">
-                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I upgrade or downgrade anytime?</h3>
-                        <p class="text-gray-600 leading-relaxed">Yes! You can upgrade to Premium or downgrade to Free at any time. Changes take effect immediately.</p>
+                    <div class="border-b border-sand pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Can I upgrade or downgrade anytime?</h3>
+                        <p class="text-secondary-light leading-relaxed">Yes! You can upgrade to Premium or downgrade to Free at any time. Changes take effect immediately.</p>
                     </div>
 
-                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Is my data secure?</h3>
-                        <p class="text-gray-600 leading-relaxed">Absolutely. All files are processed securely and automatically deleted after 1 hour. We never store your documents.</p>
+                    <div class="border-b border-sand pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Is my data secure?</h3>
+                        <p class="text-secondary-light leading-relaxed">Absolutely. All files are processed securely and automatically deleted after 1 hour. We never store your documents.</p>
                     </div>
 
-                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">What payment methods do you accept?</h3>
-                        <p class="text-gray-600 leading-relaxed">We accept all major credit cards through Stripe. Your payment information is secure and encrypted.</p>
+                    <div class="border-b border-sand pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-secondary mb-3">What payment methods do you accept?</h3>
+                        <p class="text-secondary-light leading-relaxed">We accept all major credit cards through Stripe. Your payment information is secure and encrypted.</p>
                     </div>
 
-                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Do you offer refunds?</h3>
-                        <p class="text-gray-600 leading-relaxed">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
+                    <div class="border-b border-sand pb-8 last:border-b-0 last:pb-0">
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Do you offer refunds?</h3>
+                        <p class="text-secondary-light leading-relaxed">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
-        <p class="text-center text-gray-600">&copy; 2024 ZenPDF. All rights reserved.</p>
+    <footer class="bg-zen-cream border-t border-sand py-6 mt-auto">
+        <p class="text-center text-secondary-light">&copy; 2024 ZenPDF. All rights reserved.</p>
     </footer>
 
     <script>
