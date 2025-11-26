@@ -24,7 +24,8 @@
       "Bash(timeout /t 3)",
       "Bash(where railway:*)",
       "Bash(railway logs:*)",
-      "Bash(python create_admin.py:*)"
+      "Bash(python create_admin.py:*)",
+      "Bash(del app_old_backup.py app_new.py download.html)"
     ],
     "deny": [],
     "ask": []

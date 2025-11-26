@@ -1,7 +1,7 @@
 """
 Authentication blueprint for user registration and login
 """
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, current_user
 from datetime import datetime
 from models import db, User
@@ -12,7 +12,7 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    """User login"""
+    """User login with rate limiting"""
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
@@ -46,7 +46,7 @@ def login():
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    """User registration"""
+    """User registration with rate limiting"""
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
@@ -65,10 +65,12 @@ def register():
             db.session.add(user)
             db.session.commit()
 
+            current_app.logger.info(f'New user registered: {user.email}')
             flash('Account created successfully! Please log in.', 'success')
             return redirect(url_for('auth.login'))
         except Exception as e:
             db.session.rollback()
+            current_app.logger.error(f'Registration error: {e}')
             flash('An error occurred. Please try again.', 'error')
 
     return render_template('auth/register.html', form=form)

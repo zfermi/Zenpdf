@@ -5,6 +5,8 @@ Version 2.0.0 with full authentication and database support
 import os
 import zipfile
 import secrets
+import logging
+from logging.handlers import RotatingFileHandler
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_file, flash, jsonify, session
 from flask_login import LoginManager, login_required, current_user
@@ -34,6 +36,19 @@ def create_app(config_name=None):
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+
+    # Configure logging
+    if not app.debug:
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        file_handler = RotatingFileHandler('logs/zenpdf.log', maxBytes=10240000, backupCount=10)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+        ))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('ZenPDF startup')
 
     # Log configuration warnings (avoid reentrant logging issues)
     if config_name == 'production':
@@ -88,6 +103,8 @@ def create_app(config_name=None):
     def cleanup_old_files(folder, max_age_hours=1):
         """Remove files older than max_age_hours"""
         try:
+            if not os.path.exists(folder):
+                return
             current_time = datetime.now().timestamp()
             for filename in os.listdir(folder):
                 file_path = os.path.join(folder, filename)
@@ -96,10 +113,11 @@ def create_app(config_name=None):
                     if file_age > (max_age_hours * 3600):
                         try:
                             os.remove(file_path)
-                        except:
-                            pass
-        except:
-            pass
+                            app.logger.info(f'Cleaned up old file: {filename}')
+                        except OSError as e:
+                            app.logger.error(f'Failed to remove old file {filename}: {e}')
+        except Exception as e:
+            app.logger.error(f'Error during file cleanup in {folder}: {e}')
 
     def allowed_file(filename):
         """Check if file extension is allowed"""
@@ -169,14 +187,20 @@ def create_app(config_name=None):
     @app.errorhandler(413)
     @app.errorhandler(RequestEntityTooLarge)
     def too_large(e):
+        app.logger.warning(f'File too large from {request.remote_addr}')
         flash('File too large. Maximum size is 10MB for free users, 100MB for premium.', 'error')
         return redirect(request.url), 413
 
     @app.errorhandler(500)
     def internal_error(e):
+        app.logger.error(f'Internal error: {e}')
         db.session.rollback()
         flash('An error occurred. Please try again.', 'error')
         return redirect(url_for('home')), 500
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('index.html'), 404
 
     # ========== PUBLIC ROUTES ==========
 
@@ -192,6 +216,24 @@ def create_app(config_name=None):
             'name': 'ZenPDF',
             'status': 'production'
         })
+
+    @app.route('/health')
+    def health():
+        """Health check endpoint for monitoring"""
+        try:
+            # Check database connection
+            db.session.execute(db.text('SELECT 1'))
+            db_status = 'healthy'
+        except Exception as e:
+            app.logger.error(f'Database health check failed: {e}')
+            db_status = 'unhealthy'
+
+        return jsonify({
+            'status': 'healthy' if db_status == 'healthy' else 'degraded',
+            'version': __version__,
+            'database': db_status,
+            'timestamp': datetime.utcnow().isoformat()
+        }), 200 if db_status == 'healthy' else 503
 
     @app.route('/pricing')
     def pricing():
@@ -475,22 +517,214 @@ def create_app(config_name=None):
     @login_required
     @limiter.limit("30 per hour")
     def compress_pdf():
-        # [Implementation follows same pattern as split_pdf]
-        # For brevity, keeping original logic - would need same refactoring
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                flash('No file selected.', 'error')
+                return render_template('compress.html', file_uploaded=False)
+
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('compress.html', file_uploaded=False)
+
+            file = request.files['file']
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+
+                    try:
+                        reader = PdfReader(file_path)
+                        page_count = len(reader.pages)
+                        if page_count == 0:
+                            os.remove(file_path)
+                            flash('Invalid PDF: File has no pages.', 'error')
+                            return render_template('compress.html', file_uploaded=False)
+                    except Exception as e:
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        app.logger.error(f'PDF validation error: {e}')
+                        flash(f'Invalid PDF file: {str(e)}', 'error')
+                        return render_template('compress.html', file_uploaded=False)
+
+                    # Compress the PDF
+                    compressed_path = compress_pdf_file(file_path)
+
+                    # Record usage
+                    record_usage('compress', file_size=file_size, pages_processed=page_count)
+
+                    # Clean up original file
+                    try:
+                        os.remove(file_path)
+                    except OSError as e:
+                        app.logger.error(f'Failed to remove temp file: {e}')
+
+                    return send_file(compressed_path, as_attachment=True,
+                                   download_name=f"compressed_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                                   mimetype='application/pdf')
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    app.logger.error(f'Compression error: {e}')
+                    record_usage('compress', success=False, error_message=str(e))
+                    flash(f'Error compressing PDF: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
         return render_template('compress.html', file_uploaded=False)
 
     @app.route('/rotate', methods=['GET', 'POST'])
     @login_required
     @limiter.limit("30 per hour")
     def rotate_pdf():
-        # [Implementation follows same pattern]
+        if request.method == 'POST':
+            if 'file' in request.files:
+                # Check usage limit
+                can_proceed, error_msg = check_usage_limit()
+                if not can_proceed:
+                    flash(error_msg, 'error')
+                    return render_template('rotate.html', file_uploaded=False)
+
+                file = request.files['file']
+                if file and file.filename and allowed_file(file.filename):
+                    try:
+                        file_size = validate_file_size(file)
+
+                        safe_filename = sanitize_filename(file.filename)
+                        unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                        file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                        file.save(file_path)
+
+                        try:
+                            reader = PdfReader(file_path)
+                            page_count = len(reader.pages)
+                            if page_count == 0:
+                                os.remove(file_path)
+                                flash('Invalid PDF: File has no pages.', 'error')
+                                return render_template('rotate.html', file_uploaded=False)
+                        except Exception as e:
+                            if os.path.exists(file_path):
+                                os.remove(file_path)
+                            app.logger.error(f'PDF validation error: {e}')
+                            flash(f'Invalid PDF file: {str(e)}', 'error')
+                            return render_template('rotate.html', file_uploaded=False)
+
+                        session['rotate_file'] = unique_filename
+                        flash('PDF uploaded successfully!', 'success')
+                        return render_template('rotate.html', file_uploaded=True, page_count=page_count, file_name=unique_filename)
+
+                    except ValueError as e:
+                        flash(str(e), 'error')
+                    except Exception as e:
+                        app.logger.error(f'Upload error: {e}')
+                        flash(f'Error uploading file: {str(e)}', 'error')
+                else:
+                    flash('Please select a valid PDF file.', 'error')
+
+            elif 'rotation_angle' in request.form:
+                try:
+                    file_name = session.get('rotate_file') or request.form.get('file_name')
+                    if not file_name:
+                        flash('File not found. Please upload again.', 'error')
+                        return render_template('rotate.html', file_uploaded=False)
+
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
+
+                    if not os.path.exists(file_path):
+                        flash('File not found. Please upload again.', 'error')
+                        session.pop('rotate_file', None)
+                        return render_template('rotate.html', file_uploaded=False)
+
+                    rotation_angle = request.form['rotation_angle']
+                    apply_to = request.form.get('apply_to', 'all')
+
+                    # Rotate PDF
+                    rotated_path = rotate_pdf_pages(file_path, rotation_angle, apply_to)
+
+                    # Record usage
+                    file_size = os.path.getsize(file_path)
+                    reader = PdfReader(file_path)
+                    record_usage('rotate', file_size=file_size, pages_processed=len(reader.pages))
+
+                    # Clean up uploaded file
+                    try:
+                        os.remove(file_path)
+                        session.pop('rotate_file', None)
+                    except OSError as e:
+                        app.logger.error(f'Failed to remove temp file: {e}')
+
+                    return send_file(rotated_path, as_attachment=True,
+                                   download_name=f"rotated_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+                                   mimetype='application/pdf')
+
+                except Exception as e:
+                    app.logger.error(f'Rotation error: {e}')
+                    record_usage('rotate', success=False, error_message=str(e))
+                    flash(f'Error rotating PDF: {str(e)}', 'error')
+                    session.pop('rotate_file', None)
+                    return render_template('rotate.html', file_uploaded=False)
+
         return render_template('rotate.html', file_uploaded=False)
 
     @app.route('/merge', methods=['GET', 'POST'])
     @login_required
     @limiter.limit("30 per hour")
     def merge_pdf():
-        # [Implementation follows same pattern]
+        if request.method == 'POST':
+            if 'files' in request.files:
+                # Check usage limit
+                can_proceed, error_msg = check_usage_limit()
+                if not can_proceed:
+                    flash(error_msg, 'error')
+                    return render_template('merge.html', files_uploaded=False)
+
+                files = request.files.getlist('files')
+                max_files = app.config['MAX_MERGE_FILES_PREMIUM'] if current_user.is_premium else app.config['MAX_MERGE_FILES']
+
+                if len(files) < 2:
+                    flash('Please select at least 2 PDF files to merge.', 'error')
+                    return render_template('merge.html', files_uploaded=False)
+
+                if len(files) > max_files:
+                    flash(f'Maximum {max_files} files allowed.', 'error')
+                    return render_template('merge.html', files_uploaded=False)
+
+                uploaded_files = []
+                try:
+                    for file in files:
+                        if file and file.filename and allowed_file(file.filename):
+                            try:
+                                validate_file_size(file)
+                                safe_filename = sanitize_filename(file.filename)
+                                unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                                file_path = os.path.join(app.config['MERGED_FOLDER'], unique_filename)
+                                file.save(file_path)
+                                uploaded_files.append(unique_filename)
+                            except ValueError as e:
+                                # Clean up already uploaded files
+                                for uploaded_file in uploaded_files:
+                                    try:
+                                        os.remove(os.path.join(app.config['MERGED_FOLDER'], uploaded_file))
+                                    except OSError:
+                                        pass
+                                flash(str(e), 'error')
+                                return render_template('merge.html', files_uploaded=False)
+
+                    if uploaded_files:
+                        session['merge_files'] = uploaded_files
+                        flash(f'{len(uploaded_files)} files uploaded successfully!', 'success')
+                        return render_template('merge.html', files_uploaded=True, file_names=uploaded_files)
+
+                except Exception as e:
+                    app.logger.error(f'Merge upload error: {e}')
+                    flash(f'Error uploading files: {str(e)}', 'error')
+
         return render_template('merge.html', files_uploaded=False)
 
     @app.route('/rearrange', methods=['POST'])
