@@ -17,7 +17,13 @@ from PyPDF2 import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from dotenv import load_dotenv
-from pdf2docx import Converter
+
+# Optional PDF2Word conversion support
+try:
+    from pdf2docx import Converter
+    PDF2WORD_AVAILABLE = True
+except ImportError:
+    PDF2WORD_AVAILABLE = False
 
 # Load environment variables
 load_dotenv()
@@ -137,7 +143,9 @@ def create_app(config_name=None):
         size = file.tell()
         file.seek(0)
 
-        max_size = app.config['MAX_FILE_SIZE_PREMIUM'] if current_user.is_authenticated and current_user.is_premium else app.config['MAX_FILE_SIZE']
+        # Premium users get higher limits, free users and anonymous get standard limit
+        is_premium = current_user.is_authenticated and current_user.is_premium
+        max_size = app.config['MAX_FILE_SIZE_PREMIUM'] if is_premium else app.config['MAX_FILE_SIZE']
 
         if size > max_size:
             max_mb = max_size // (1024 * 1024)
@@ -164,9 +172,11 @@ def create_app(config_name=None):
 
     def check_usage_limit():
         """Check if user has exceeded their usage limit"""
+        # Anonymous users can use the service (no limits for free tier)
         if not current_user.is_authenticated:
-            return False, "Please log in to continue"
+            return True, None
 
+        # Authenticated users: check their tier limits
         if current_user.can_perform_operation():
             return True, None
         else:
@@ -364,10 +374,23 @@ def create_app(config_name=None):
         flash(f'Admin privileges {status} for {user.email}.', 'success')
         return redirect(url_for('admin_panel'))
 
+    # ========== DOWNLOAD ENDPOINT ==========
+
+    @app.route('/download/<filename>')
+    def download_file(filename):
+        """Download processed PDF file"""
+        # Check in all possible folders
+        for folder in [app.config['SPLIT_FOLDER'], app.config['MERGED_FOLDER'], app.config['UPLOAD_FOLDER']]:
+            file_path = os.path.join(folder, filename)
+            if os.path.exists(file_path):
+                return send_file(file_path, as_attachment=True, download_name=filename, mimetype='application/pdf' if filename.endswith('.pdf') else 'application/zip')
+
+        flash('File not found or has expired.', 'error')
+        return redirect(url_for('home'))
+
     # ========== PDF OPERATIONS ==========
 
     @app.route('/split', methods=['GET', 'POST'])
-    @login_required
     @limiter.limit("30 per hour")
     def split_pdf():
         if request.method == 'POST':
@@ -486,6 +509,7 @@ def create_app(config_name=None):
 
                     # Split PDF and create ZIP
                     zip_file_path = split_pdf_pages(file_path, pages_to_split, app.config['SPLIT_FOLDER'])
+                    zip_filename = os.path.basename(zip_file_path)
 
                     # Record usage
                     file_size = os.path.getsize(file_path)
@@ -498,9 +522,11 @@ def create_app(config_name=None):
                     except:
                         pass
 
-                    return send_file(zip_file_path, as_attachment=True,
-                                   download_name=f"split_pages_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
-                                   mimetype='application/zip')
+                    # Return success page with download button instead of auto-download
+                    return render_template('success.html',
+                                         operation='Split',
+                                         filename=zip_filename,
+                                         pages_count=len(pages_to_split))
 
                 except Exception as e:
                     record_usage('split', success=False, error_message=str(e))
@@ -514,7 +540,6 @@ def create_app(config_name=None):
     # (keeping original logic but adding authentication and usage tracking)
 
     @app.route('/compress', methods=['GET', 'POST'])
-    @login_required
     @limiter.limit("30 per hour")
     def compress_pdf():
         if request.method == 'POST':
@@ -554,6 +579,7 @@ def create_app(config_name=None):
 
                     # Compress the PDF
                     compressed_path = compress_pdf_file(file_path)
+                    compressed_filename = os.path.basename(compressed_path)
 
                     # Record usage
                     record_usage('compress', file_size=file_size, pages_processed=page_count)
@@ -564,9 +590,11 @@ def create_app(config_name=None):
                     except OSError as e:
                         app.logger.error(f'Failed to remove temp file: {e}')
 
-                    return send_file(compressed_path, as_attachment=True,
-                                   download_name=f"compressed_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                                   mimetype='application/pdf')
+                    # Return success page with download button
+                    return render_template('success.html',
+                                         operation='Compress',
+                                         filename=compressed_filename,
+                                         pages_count=page_count)
 
                 except ValueError as e:
                     flash(str(e), 'error')
@@ -580,7 +608,6 @@ def create_app(config_name=None):
         return render_template('compress.html', file_uploaded=False)
 
     @app.route('/rotate', methods=['GET', 'POST'])
-    @login_required
     @limiter.limit("30 per hour")
     def rotate_pdf():
         if request.method == 'POST':
@@ -646,11 +673,13 @@ def create_app(config_name=None):
 
                     # Rotate PDF
                     rotated_path = rotate_pdf_pages(file_path, rotation_angle, apply_to)
+                    rotated_filename = os.path.basename(rotated_path)
 
                     # Record usage
                     file_size = os.path.getsize(file_path)
                     reader = PdfReader(file_path)
-                    record_usage('rotate', file_size=file_size, pages_processed=len(reader.pages))
+                    pages_processed = len(reader.pages)
+                    record_usage('rotate', file_size=file_size, pages_processed=pages_processed)
 
                     # Clean up uploaded file
                     try:
@@ -659,9 +688,11 @@ def create_app(config_name=None):
                     except OSError as e:
                         app.logger.error(f'Failed to remove temp file: {e}')
 
-                    return send_file(rotated_path, as_attachment=True,
-                                   download_name=f"rotated_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                                   mimetype='application/pdf')
+                    # Return success page with download button
+                    return render_template('success.html',
+                                         operation='Rotate',
+                                         filename=rotated_filename,
+                                         pages_count=pages_processed)
 
                 except Exception as e:
                     app.logger.error(f'Rotation error: {e}')
@@ -673,7 +704,6 @@ def create_app(config_name=None):
         return render_template('rotate.html', file_uploaded=False)
 
     @app.route('/merge', methods=['GET', 'POST'])
-    @login_required
     @limiter.limit("30 per hour")
     def merge_pdf():
         if request.method == 'POST':
@@ -728,7 +758,6 @@ def create_app(config_name=None):
         return render_template('merge.html', files_uploaded=False)
 
     @app.route('/rearrange', methods=['POST'])
-    @login_required
     def rearrange_files():
         """Handle drag-and-drop reordering of files"""
         try:
@@ -742,7 +771,6 @@ def create_app(config_name=None):
             return jsonify({'success': False, 'error': str(e)}), 400
 
     @app.route('/merge_files', methods=['POST'])
-    @login_required
     def merge_files():
         """Merge multiple PDF files"""
         try:
@@ -764,6 +792,7 @@ def create_app(config_name=None):
                 return redirect(url_for('merge_pdf'))
 
             merged_file_path = merge_pdf_files(valid_paths, app.config['MERGED_FOLDER'])
+            merged_filename = os.path.basename(merged_file_path)
 
             # Record usage
             total_size = sum(os.path.getsize(os.path.join(app.config['MERGED_FOLDER'], p)) for p in valid_paths if os.path.exists(os.path.join(app.config['MERGED_FOLDER'], p)))
@@ -771,9 +800,11 @@ def create_app(config_name=None):
 
             session.pop('merge_files', None)
 
-            return send_file(merged_file_path, as_attachment=True,
-                           download_name=f"merged_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                           mimetype='application/pdf')
+            # Return success page with download button
+            return render_template('success.html',
+                                 operation='Merge',
+                                 filename=merged_filename,
+                                 files_count=len(valid_paths))
 
         except Exception as e:
             record_usage('merge', success=False, error_message=str(e))

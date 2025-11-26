@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ operation }} Complete - ZenPDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <style>
+        @keyframes checkmark {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .checkmark-circle {
+            animation: checkmark 0.6s ease-out forwards;
+        }
+
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-sand-light">
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline flex items-center gap-2">
+                    <span class="text-3xl">📄</span>
+                    <span>ZenPDF</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+            <!-- Success Checkmark -->
+            <div class="checkmark-circle mb-8">
+                <svg class="mx-auto w-24 h-24 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+                </svg>
+            </div>
+
+            <!-- Success Message -->
+            <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-4">
+                {{ operation }} Complete!
+            </h1>
+
+            <p class="text-lg text-gray-600 mb-2">
+                Your PDF has been successfully processed.
+            </p>
+
+            {% if pages_count %}
+            <p class="text-sm text-gray-500 mb-8">
+                {{ pages_count }} page{% if pages_count != 1 %}s{% endif %} processed
+            </p>
+            {% elif files_count %}
+            <p class="text-sm text-gray-500 mb-8">
+                {{ files_count }} file{% if files_count != 1 %}s{% endif %} merged
+            </p>
+            {% endif %}
+
+            <!-- Download Button - BIG and prominent -->
+            <a href="{{ url_for('download_file', filename=filename) }}"
+               class="download-btn inline-flex items-center gap-4 bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-xl md:text-2xl px-12 py-6 rounded-xl hover:from-primary-dark hover:to-primary transition-all duration-300 shadow-lg no-underline mb-6">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                <span>Download Your File</span>
+            </a>
+
+            <!-- Additional Info -->
+            <div class="mt-8 p-4 bg-sand-light rounded-lg">
+                <p class="text-sm text-gray-600">
+                    📌 Your file will be available for download for the next hour.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for(operation.lower() + '_pdf') }}"
+                   class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors no-underline font-medium">
+                    Process Another File
+                </a>
+                <a href="{{ url_for('home') }}"
+                   class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors no-underline font-medium">
+                    Back to Home
+                </a>
+            </div>
+
+            <!-- Premium Upsell (for anonymous users) -->
+            {% if not current_user.is_authenticated %}
+            <div class="mt-12 p-6 bg-gradient-to-r from-primary/10 to-primary-dark/10 rounded-xl border-2 border-primary/20">
+                <h3 class="text-lg font-bold text-secondary mb-2">
+                    Want More?
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Sign up for Premium to unlock unlimited conversions, larger file sizes (up to 100MB), and priority processing!
+                </p>
+                <div class="flex gap-3 justify-center">
+                    <a href="{{ url_for('pricing') }}"
+                       class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors no-underline font-medium">
+                        View Pricing
+                    </a>
+                    <a href="{{ url_for('auth.register') }}"
+                       class="px-6 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors no-underline font-medium">
+                        Sign Up Free
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-zen-cream border-t border-sand mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
+            <p>&copy; 2025 ZenPDF. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile menu toggle script -->
+    <script>
+        document.getElementById('nav-toggle')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
