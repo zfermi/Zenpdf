@@ -26,7 +26,22 @@
       "Bash(railway logs:*)",
       "Bash(python create_admin.py:*)",
       "Bash(del app_old_backup.py app_new.py download.html)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(npm run build:css:*)",
+      "Bash(where:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(npm install)",
+      "Bash(python:*)",
+      "Bash(curl -I https://bestpdfconverter.online)",
+      "Bash(curl -k -I https://bestpdfconverter.online)",
+      "Bash(curl -k https://bestpdfconverter.online/pricing)",
+      "Bash(curl -k https://bestpdfconverter.online/payment/ipn)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(railway whoami:*)",
+      "Bash(railway variables --help:*)",
+      "Bash(railway variables:*)",
+      "Bash(railway link:*)"
     ],
     "deny": [],
     "ask": []
