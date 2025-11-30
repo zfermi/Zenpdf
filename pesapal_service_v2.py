@@ -19,18 +19,21 @@ logger = logging.getLogger(__name__)
 class PesapalServiceV2:
     """Service class for Pesapal API 2.0 (XML-based) integration"""
 
-    def __init__(self, consumer_key, consumer_secret, is_demo=True, callback_url=None, ipn_url=None):
+    def __init__(self, consumer_key, consumer_secret, is_demo=True, callback_url=None, ipn_url=None, base_url=None):
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
         self.callback_url = callback_url
         self.ipn_url = ipn_url
-        
-        # API endpoints
-        if is_demo:
+
+        # API endpoints - use provided base_url or fall back to defaults
+        if base_url:
+            # Strip /v3 or /pesapalv3 suffix if present (API 2.0 doesn't use it)
+            self.base_url = base_url.replace('/v3', '').replace('/pesapalv3', '')
+        elif is_demo:
             self.base_url = "https://demo.pesapal.com"
         else:
             self.base_url = "https://www.pesapal.com"
-        
+
         self.post_order_url = f"{self.base_url}/API/PostPesapalDirectOrderV4"
         self.query_status_url = f"{self.base_url}/API/QueryPaymentStatus"
         self.query_status_by_ref_url = f"{self.base_url}/API/QueryPaymentStatusByMerchantRef"
@@ -150,9 +153,20 @@ class PesapalServiceV2:
             
             # The response is an iframe URL
             iframe_url = response.text.strip()
-            
+
+            # Check if the response contains an error (Pesapal returns "problem:..." URLs on error)
+            if iframe_url.startswith('problem:') or 'problem:' in iframe_url.lower():
+                error_msg = iframe_url.replace('problem:', '').strip()
+                logger.error(f"Pesapal returned error: {error_msg}")
+                raise Exception(f"Payment provider error: {error_msg}")
+
+            # Check if we got a valid URL
+            if not iframe_url.startswith('http'):
+                logger.error(f"Invalid redirect URL from Pesapal: {iframe_url}")
+                raise Exception(f"Invalid response from payment provider: {iframe_url}")
+
             logger.info(f"Payment order created successfully: {order_id}")
-            
+
             return {
                 'redirect_url': iframe_url,
                 'order_tracking_id': order_id,  # In API 2.0, we use merchant reference
@@ -240,13 +254,14 @@ class PesapalServiceV2:
 
 def create_pesapal_service(app):
     """Factory function to create PesapalServiceV2 from Flask app config"""
-    is_demo = 'demo' in app.config.get('PESAPAL_BASE_URL', '').lower() or \
-              'cybqa' in app.config.get('PESAPAL_BASE_URL', '').lower()
-    
+    base_url = app.config.get('PESAPAL_BASE_URL')
+    is_demo = 'demo' in base_url.lower() or 'cybqa' in base_url.lower() if base_url else True
+
     return PesapalServiceV2(
         consumer_key=app.config['PESAPAL_CONSUMER_KEY'],
         consumer_secret=app.config['PESAPAL_CONSUMER_SECRET'],
         is_demo=is_demo,
         callback_url=app.config['PESAPAL_CALLBACK_URL'],
-        ipn_url=app.config.get('PESAPAL_IPN_URL')
+        ipn_url=app.config.get('PESAPAL_IPN_URL'),
+        base_url=base_url
     )

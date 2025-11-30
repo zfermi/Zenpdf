@@ -1,5 +1,6 @@
 """
 Payment handling routes for Pesapal integration
+API 3.0
 """
 import secrets
 import logging
@@ -7,7 +8,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, jsonify
 from flask_login import login_required, current_user
 from models import db, User
-from pesapal_service_v2 import create_pesapal_service
+from pesapal_service import create_pesapal_service
 
 payment_bp = Blueprint('payment', __name__)
 logger = logging.getLogger(__name__)
@@ -43,9 +44,16 @@ def subscribe_premium():
             description=description
         )
 
-        # Get redirect URL from response
+        # API 3.0 response format
         redirect_url = result.get('redirect_url')
         order_tracking_id = result.get('order_tracking_id')
+
+        # Check for errors in response
+        if result.get('error'):
+            error_msg = result.get('error', {}).get('message', 'Unknown error')
+            flash(f'Failed to initiate payment: {error_msg}', 'error')
+            logger.error(f"Pesapal API error: {result.get('error')}")
+            return redirect(url_for('pricing'))
 
         if not redirect_url:
             flash('Failed to initiate payment. Please try again.', 'error')
@@ -90,8 +98,8 @@ def payment_callback():
         # Create Pesapal service
         pesapal = create_pesapal_service(current_app)
 
-        # Get transaction status (pass both merchant ref and tracking ID)
-        status_data = pesapal.get_transaction_status(order_merchant_reference, order_tracking_id)
+        # Get transaction status using order tracking ID (API 3.0)
+        status_data = pesapal.get_transaction_status(order_tracking_id)
 
         payment_status = status_data.get('payment_status_description', '').lower()
         status_code = status_data.get('status_code')
@@ -139,23 +147,23 @@ def payment_callback():
 
 @payment_bp.route('/ipn', methods=['GET', 'POST'])
 def payment_ipn():
-    """Handle IPN (Instant Payment Notification) from Pesapal"""
+    """Handle IPN (Instant Payment Notification) from Pesapal API 3.0"""
     try:
-        # API 2.0 uses different parameter names
-        order_tracking_id = request.args.get('pesapal_transaction_tracking_id') or request.args.get('OrderTrackingId')
-        order_notification_type = request.args.get('pesapal_notification_type') or request.args.get('OrderNotificationType')
-        order_merchant_reference = request.args.get('pesapal_merchant_reference') or request.args.get('OrderMerchantReference')
+        # API 3.0 parameters
+        order_tracking_id = request.args.get('OrderTrackingId')
+        order_notification_type = request.args.get('OrderNotificationType')
+        order_merchant_reference = request.args.get('OrderMerchantReference')
 
         logger.info(f"IPN received - Tracking: {order_tracking_id}, Type: {order_notification_type}, Ref: {order_merchant_reference}")
 
-        if not order_merchant_reference:
-            return jsonify({'status': 'error', 'message': 'Missing merchant reference'}), 400
+        if not order_tracking_id:
+            return jsonify({'status': 'error', 'message': 'Missing order tracking ID'}), 400
 
         # Create Pesapal service
         pesapal = create_pesapal_service(current_app)
 
-        # Get transaction status
-        status_data = pesapal.get_transaction_status(order_merchant_reference, order_tracking_id)
+        # Get transaction status using tracking ID (API 3.0)
+        status_data = pesapal.get_transaction_status(order_tracking_id)
 
         payment_status = status_data.get('payment_status_description', '').lower()
         status_code = status_data.get('status_code')
