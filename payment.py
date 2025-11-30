@@ -27,12 +27,12 @@ def subscribe_premium():
         pesapal = create_pesapal_service(current_app)
 
         # Generate unique order ID
-        order_id = f"ZENPDF-{current_user.id}-{secrets.token_hex(8)}"
+        order_id = f"BESTPDF-{current_user.id}-{secrets.token_hex(8)}"
 
         # Create payment order
         amount = current_app.config['PREMIUM_PRICE'] / 100  # Convert cents to dollars
         currency = 'USD'
-        description = f'ZenPDF Premium Subscription - Monthly ({current_user.email})'
+        description = f'Best Pdf Converter Premium Subscription - Monthly ({current_user.email})'
 
         result = pesapal.create_payment_order(
             user_email=current_user.email,

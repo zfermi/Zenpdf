@@ -1,5 +1,5 @@
 """
-Configuration classes for ZenPDF application
+Configuration classes for Best Pdf Converter application
 """
 import os
 from datetime import timedelta
@@ -12,7 +12,7 @@ class Config:
 
     # Application
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
-    APP_NAME = 'ZenPDF'
+    APP_NAME = 'Best Pdf Converter'
     VERSION = '1.0.0'
 
     # Database

@@ -1,5 +1,5 @@
 """
-ZenPDF - A SaaS PDF manipulation tool
+Best Pdf Converter - A SaaS PDF manipulation tool
 Version 2.0.0 with full authentication and database support
 """
 import os
