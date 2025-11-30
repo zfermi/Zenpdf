@@ -70,16 +70,26 @@ class Config:
     STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
     STRIPE_PRICE_ID_PREMIUM = os.environ.get('STRIPE_PRICE_ID_PREMIUM')  # Monthly premium price ID
 
+    # Pesapal (payment processing)
+    PESAPAL_CONSUMER_KEY = os.environ.get('PESAPAL_CONSUMER_KEY')
+    PESAPAL_CONSUMER_SECRET = os.environ.get('PESAPAL_CONSUMER_SECRET')
+    PESAPAL_BASE_URL = os.environ.get('PESAPAL_BASE_URL', 'https://pay.pesapal.com/v3')  # Production URL
+    PESAPAL_IPN_URL = os.environ.get('PESAPAL_IPN_URL')  # IPN callback URL
+    PESAPAL_CALLBACK_URL = os.environ.get('PESAPAL_CALLBACK_URL')  # Payment callback URL
+    PREMIUM_PRICE = 999  # $9.99 in cents
+
     # Security headers (Talisman)
     TALISMAN_FORCE_HTTPS = True
     TALISMAN_STRICT_TRANSPORT_SECURITY = True
     TALISMAN_STRICT_TRANSPORT_SECURITY_MAX_AGE = 31536000  # 1 year
     TALISMAN_CONTENT_SECURITY_POLICY = {
         'default-src': "'self'",
-        'script-src': ["'self'", "'unsafe-inline'", "https://pagead2.googlesyndication.com"],
+        'script-src': ["'self'", "'unsafe-inline'", "https://pagead2.googlesyndication.com", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
         'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': ["'self'", "data:", "https:"],
         'font-src': ["'self'", "data:"],
+        'frame-src': ["'self'", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
+        'connect-src': ["'self'", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
     }
 
     # WTForms CSRF

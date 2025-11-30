@@ -32,6 +32,7 @@ load_dotenv()
 from config import config
 from models import db, bcrypt, User, UsageRecord
 from auth import auth_bp
+from payment import payment_bp
 
 __version__ = "2.0.0"
 
@@ -103,6 +104,7 @@ def create_app(config_name=None):
 
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(payment_bp, url_prefix='/payment')
 
     # ========== HELPER FUNCTIONS ==========
 

@@ -32,3 +32,6 @@ gunicorn==21.2.0
 # PDF to Word Conversion
 pdf2docx==0.5.8
 
+# Pesapal Payment Integration
+requests==2.31.0
+
