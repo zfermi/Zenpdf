@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, jsonify
 from flask_login import login_required, current_user
 from models import db, User
-from pesapal_service import create_pesapal_service
+from pesapal_service_v2 import create_pesapal_service
 
 payment_bp = Blueprint('payment', __name__)
 logger = logging.getLogger(__name__)
@@ -65,41 +65,56 @@ def subscribe_premium():
         return redirect(url_for('pricing'))
 
 
-@payment_bp.route('/payment/callback', methods=['GET'])
-@login_required
+@payment_bp.route('/callback', methods=['GET'])
 def payment_callback():
     """Handle payment callback from Pesapal"""
     try:
-        # Get parameters from callback
-        order_tracking_id = request.args.get('OrderTrackingId')
-        order_merchant_reference = request.args.get('OrderMerchantReference')
+        # API 2.0 uses different parameter names
+        # Try API 2.0 parameters first, then fall back to API 3.0
+        order_tracking_id = request.args.get('pesapal_transaction_tracking_id') or request.args.get('OrderTrackingId')
+        order_merchant_reference = request.args.get('pesapal_merchant_reference') or request.args.get('OrderMerchantReference')
 
-        if not order_tracking_id:
+        if not order_merchant_reference:
             flash('Invalid payment callback.', 'error')
             return redirect(url_for('dashboard'))
+
+        # Identify user from merchant reference (BESTPDF-{user_id}-token)
+        user = None
+        if order_merchant_reference:
+            try:
+                user_id = int(order_merchant_reference.split('-')[1])
+                user = User.query.get(user_id)
+            except (IndexError, ValueError):
+                logger.error(f"Failed to parse merchant reference: {order_merchant_reference}")
 
         # Create Pesapal service
         pesapal = create_pesapal_service(current_app)
 
-        # Get transaction status
-        status_data = pesapal.get_transaction_status(order_tracking_id)
+        # Get transaction status (pass both merchant ref and tracking ID)
+        status_data = pesapal.get_transaction_status(order_merchant_reference, order_tracking_id)
 
         payment_status = status_data.get('payment_status_description', '').lower()
         status_code = status_data.get('status_code')
+        merchant_reference = status_data.get('merchant_reference') or order_merchant_reference
 
-        logger.info(f"Payment callback - User: {current_user.id}, Status: {payment_status}, Code: {status_code}")
+        logger.info(
+            f"Payment callback - MerchantRef: {merchant_reference}, Status: {payment_status}, Code: {status_code}"
+        )
 
         # Check if payment was successful
         if payment_status == 'completed' and status_code == 1:
-            # Update user subscription
-            current_user.subscription_tier = 'premium'
-            current_user.subscription_start = datetime.utcnow()
-            current_user.subscription_end = datetime.utcnow() + timedelta(days=30)
+            if not user:
+                flash('Payment completed, but we could not match your account. Please contact support.', 'error')
+                return redirect(url_for('pricing'))
 
-            db.session.commit()
+            if not user.is_premium:
+                user.subscription_tier = 'premium'
+                user.subscription_start = datetime.utcnow()
+                user.subscription_end = datetime.utcnow() + timedelta(days=30)
+                db.session.commit()
+                logger.info(f"Premium subscription activated for user {user.id} via callback")
 
             flash('Payment successful! Your premium subscription is now active.', 'success')
-            logger.info(f"Premium subscription activated for user {current_user.id}")
             return redirect(url_for('dashboard'))
 
         elif payment_status == 'failed' and status_code == 2:
@@ -121,31 +136,32 @@ def payment_callback():
         return redirect(url_for('dashboard'))
 
 
-@payment_bp.route('/payment/ipn', methods=['GET', 'POST'])
+
+@payment_bp.route('/ipn', methods=['GET', 'POST'])
 def payment_ipn():
     """Handle IPN (Instant Payment Notification) from Pesapal"""
     try:
-        # Get parameters from IPN
-        order_tracking_id = request.args.get('OrderTrackingId')
-        order_notification_type = request.args.get('OrderNotificationType')
-        order_merchant_reference = request.args.get('OrderMerchantReference')
+        # API 2.0 uses different parameter names
+        order_tracking_id = request.args.get('pesapal_transaction_tracking_id') or request.args.get('OrderTrackingId')
+        order_notification_type = request.args.get('pesapal_notification_type') or request.args.get('OrderNotificationType')
+        order_merchant_reference = request.args.get('pesapal_merchant_reference') or request.args.get('OrderMerchantReference')
 
-        logger.info(f"IPN received - Tracking: {order_tracking_id}, Type: {order_notification_type}")
+        logger.info(f"IPN received - Tracking: {order_tracking_id}, Type: {order_notification_type}, Ref: {order_merchant_reference}")
 
-        if not order_tracking_id:
-            return jsonify({'status': 'error', 'message': 'Missing order tracking ID'}), 400
+        if not order_merchant_reference:
+            return jsonify({'status': 'error', 'message': 'Missing merchant reference'}), 400
 
         # Create Pesapal service
         pesapal = create_pesapal_service(current_app)
 
         # Get transaction status
-        status_data = pesapal.get_transaction_status(order_tracking_id)
+        status_data = pesapal.get_transaction_status(order_merchant_reference, order_tracking_id)
 
         payment_status = status_data.get('payment_status_description', '').lower()
         status_code = status_data.get('status_code')
-        merchant_reference = status_data.get('merchant_reference', '')
+        merchant_reference = status_data.get('merchant_reference') or order_merchant_reference
 
-        # Extract user ID from merchant reference (format: ZENPDF-{user_id}-{token})
+        # Extract user ID from merchant reference (format: BESTPDF-{user_id}-{token})
         try:
             user_id = int(merchant_reference.split('-')[1])
             user = User.query.get(user_id)
@@ -177,7 +193,8 @@ def payment_ipn():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
-@payment_bp.route('/payment/status/<order_tracking_id>', methods=['GET'])
+
+@payment_bp.route('/status/<order_tracking_id>', methods=['GET'])
 @login_required
 def check_payment_status(order_tracking_id):
     """Check payment status manually"""
