@@ -19,7 +19,7 @@ def create_admin():
 
     with app.app_context():
         # Check if admin exists
-        admin = User.query.filter_by(email='admin@zenpdf.com').first()
+        admin = User.query.filter_by(email='admin@bestpdfconverter.online').first()
 
         if admin:
             print("Admin user already exists. Resetting password and ensuring admin privileges...")
@@ -34,7 +34,7 @@ def create_admin():
             print("Creating new admin user...")
             admin = User(
                 username='admin',
-                email='admin@zenpdf.com',
+                email='admin@bestpdfconverter.online',
                 is_admin=True,
                 is_active=True,
                 email_verified=True,
@@ -48,7 +48,7 @@ def create_admin():
             print("Admin user created successfully!")
 
         print("\nAdmin credentials:")
-        print("  Email: admin@zenpdf.com")
+        print("  Email: admin@bestpdfconverter.online")
         if os.environ.get('ADMIN_PASSWORD'):
             print("  Password: [Set via ADMIN_PASSWORD env var]")
         else:
