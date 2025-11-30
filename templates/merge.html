@@ -6,6 +6,84 @@
     <meta name="description" content="Merge multiple PDF files into one document. Drag and drop to reorder pages.">
     <title>Merge PDFs - Best Pdf Converter</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <style>
+        :root {
+            --zen-purple: #7c3aed;
+            --zen-indigo: #4f46e5;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%) !important;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-zen-cream {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .border-sand {
+            border-color: #e5e7eb;
+        }
+
+        .bg-sand-light {
+            background: #f8fafc;
+        }
+
+        .text-sand-dark {
+            color: #9ca3af;
+        }
+
+        .text-secondary {
+            color: #111827;
+        }
+
+        .bg-primary {
+            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
+        }
+
+        .bg-primary-dark {
+            background-color: #4338ca;
+        }
+
+        .bg-primary-light {
+            background-color: #f3e8ff;
+        }
+
+        .border-primary {
+            border-color: #8b5cf6;
+        }
+
+        .text-primary {
+            color: var(--zen-purple);
+        }
+
+        .text-primary-dark {
+            color: #4338ca;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
+            color: #fff;
+            font-weight: 600;
+            padding: 0.85rem 1.25rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
+            transition: all 0.25s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #4338ca 100%);
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
     <!-- Navigation Bar -->
@@ -14,7 +92,7 @@
             <div class="flex justify-between items-center h-16">
                 <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline flex items-center gap-2">
                     <span class="text-3xl">📄</span>
-                    <span>Best Pdf Converter</span>
+                    <span class="gradient-text">Best Pdf Converter</span>
                 </a>
                 <ul class="hidden md:flex space-x-1 items-center">
                     <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Split PDF</a></li>
@@ -372,3 +450,6 @@
     </script>
 </body>
 </html>
+
+
+
