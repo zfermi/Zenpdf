@@ -1,6 +1,5 @@
 """
-Payment handling routes for Pesapal integration
-API 3.0
+Payment handling routes for PayPal integration
 """
 import secrets
 import logging
@@ -8,7 +7,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, jsonify
 from flask_login import login_required, current_user
 from models import db, User
-from pesapal_service import create_pesapal_service
+from paypal_service import create_paypal_service
 
 payment_bp = Blueprint('payment', __name__)
 logger = logging.getLogger(__name__)
@@ -17,55 +16,50 @@ logger = logging.getLogger(__name__)
 @payment_bp.route('/subscribe/premium', methods=['GET'])
 @login_required
 def subscribe_premium():
-    """Initiate premium subscription payment"""
+    """Initiate premium subscription payment via PayPal"""
     try:
         # Check if user is already premium
         if current_user.is_premium:
             flash('You already have an active premium subscription.', 'info')
             return redirect(url_for('dashboard'))
 
-        # Create Pesapal service
-        pesapal = create_pesapal_service(current_app)
+        # Create PayPal service
+        paypal = create_paypal_service(current_app)
 
         # Generate unique order ID
-        order_id = f"BESTPDF-{current_user.id}-{secrets.token_hex(8)}"
+        order_ref = f"BESTPDF-{current_user.id}-{secrets.token_hex(8)}"
 
         # Create payment order
         amount = current_app.config['PREMIUM_PRICE'] / 100  # Convert cents to dollars
         currency = 'USD'
-        description = f'Best Pdf Converter Premium Subscription - Monthly ({current_user.email})'
+        description = f'Best Pdf Converter Premium Subscription - Monthly'
 
-        result = pesapal.create_payment_order(
-            user_email=current_user.email,
-            user_name=current_user.username,
+        # Build return and cancel URLs
+        return_url = url_for('payment.payment_success', _external=True)
+        cancel_url = url_for('payment.payment_cancel', _external=True)
+
+        result = paypal.create_order(
             amount=amount,
             currency=currency,
-            order_id=order_id,
-            description=description
+            order_id=order_ref,
+            description=description,
+            return_url=return_url,
+            cancel_url=cancel_url
         )
 
-        # API 3.0 response format
-        redirect_url = result.get('redirect_url')
-        order_tracking_id = result.get('order_tracking_id')
+        # Get approval URL
+        approve_url = result.get('approve_url')
+        paypal_order_id = result.get('order_id')
 
-        # Check for errors in response
-        if result.get('error'):
-            error_msg = result.get('error', {}).get('message', 'Unknown error')
-            flash(f'Failed to initiate payment: {error_msg}', 'error')
-            logger.error(f"Pesapal API error: {result.get('error')}")
-            return redirect(url_for('pricing'))
-
-        if not redirect_url:
+        if not approve_url:
             flash('Failed to initiate payment. Please try again.', 'error')
-            logger.error(f"No redirect URL in Pesapal response: {result}")
+            logger.error(f"No approval URL in PayPal response: {result}")
             return redirect(url_for('pricing'))
 
-        # Store order tracking ID in session or database for verification
-        # You might want to create a Payment model to track this
-        logger.info(f"Payment initiated for user {current_user.id}, order: {order_id}, tracking: {order_tracking_id}")
+        logger.info(f"Payment initiated for user {current_user.id}, PayPal order: {paypal_order_id}, ref: {order_ref}")
 
-        # Redirect to Pesapal payment page
-        return redirect(redirect_url)
+        # Redirect to PayPal for payment
+        return redirect(approve_url)
 
     except Exception as e:
         logger.error(f"Payment initiation failed: {e}")
@@ -73,147 +67,101 @@ def subscribe_premium():
         return redirect(url_for('pricing'))
 
 
-@payment_bp.route('/callback', methods=['GET'])
-def payment_callback():
-    """Handle payment callback from Pesapal"""
+@payment_bp.route('/success', methods=['GET'])
+@login_required
+def payment_success():
+    """Handle successful payment return from PayPal"""
     try:
-        # API 2.0 uses different parameter names
-        # Try API 2.0 parameters first, then fall back to API 3.0
-        order_tracking_id = request.args.get('pesapal_transaction_tracking_id') or request.args.get('OrderTrackingId')
-        order_merchant_reference = request.args.get('pesapal_merchant_reference') or request.args.get('OrderMerchantReference')
+        # Get PayPal order ID from query params
+        paypal_order_id = request.args.get('token')  # PayPal returns 'token' param
 
-        if not order_merchant_reference:
-            flash('Invalid payment callback.', 'error')
+        if not paypal_order_id:
+            flash('Invalid payment response.', 'error')
             return redirect(url_for('dashboard'))
 
-        # Identify user from merchant reference (BESTPDF-{user_id}-token)
-        user = None
-        if order_merchant_reference:
-            try:
-                user_id = int(order_merchant_reference.split('-')[1])
-                user = User.query.get(user_id)
-            except (IndexError, ValueError):
-                logger.error(f"Failed to parse merchant reference: {order_merchant_reference}")
+        # Create PayPal service
+        paypal = create_paypal_service(current_app)
 
-        # Create Pesapal service
-        pesapal = create_pesapal_service(current_app)
+        # Capture the payment
+        capture_result = paypal.capture_order(paypal_order_id)
 
-        # Get transaction status using order tracking ID (API 3.0)
-        status_data = pesapal.get_transaction_status(order_tracking_id)
+        # Check capture status
+        status = capture_result.get('status')
 
-        payment_status = status_data.get('payment_status_description', '').lower()
-        status_code = status_data.get('status_code')
-        merchant_reference = status_data.get('merchant_reference') or order_merchant_reference
+        logger.info(f"PayPal capture result for order {paypal_order_id}: Status={status}")
 
-        logger.info(
-            f"Payment callback - MerchantRef: {merchant_reference}, Status: {payment_status}, Code: {status_code}"
-        )
-
-        # Check if payment was successful
-        if payment_status == 'completed' and status_code == 1:
-            if not user:
-                flash('Payment completed, but we could not match your account. Please contact support.', 'error')
-                return redirect(url_for('pricing'))
-
-            if not user.is_premium:
-                user.subscription_tier = 'premium'
-                user.subscription_start = datetime.utcnow()
-                user.subscription_end = datetime.utcnow() + timedelta(days=30)
+        if status == 'COMPLETED':
+            # Payment successful - activate premium subscription
+            if not current_user.is_premium:
+                current_user.subscription_tier = 'premium'
+                current_user.subscription_start = datetime.utcnow()
+                current_user.subscription_end = datetime.utcnow() + timedelta(days=30)
                 db.session.commit()
-                logger.info(f"Premium subscription activated for user {user.id} via callback")
+                logger.info(f"Premium subscription activated for user {current_user.id}")
 
             flash('Payment successful! Your premium subscription is now active.', 'success')
             return redirect(url_for('dashboard'))
-
-        elif payment_status == 'failed' and status_code == 2:
-            flash('Payment failed. Please try again or contact support.', 'error')
-            return redirect(url_for('pricing'))
-
-        elif payment_status == 'invalid' and status_code == 3:
-            flash('Invalid payment. Please contact support.', 'error')
-            return redirect(url_for('pricing'))
-
         else:
-            # Pending or other status
-            flash('Payment is being processed. We will notify you once confirmed.', 'info')
-            return redirect(url_for('dashboard'))
+            flash(f'Payment status: {status}. Please contact support if you were charged.', 'warning')
+            return redirect(url_for('pricing'))
 
     except Exception as e:
-        logger.error(f"Payment callback error: {e}")
+        logger.error(f"Payment success handling failed: {e}")
         flash('An error occurred while processing your payment. Please contact support.', 'error')
         return redirect(url_for('dashboard'))
 
 
+@payment_bp.route('/cancel', methods=['GET'])
+@login_required
+def payment_cancel():
+    """Handle cancelled payment from PayPal"""
+    logger.info(f"Payment cancelled by user {current_user.id}")
+    flash('Payment was cancelled. You can try again anytime.', 'info')
+    return redirect(url_for('pricing'))
 
-@payment_bp.route('/ipn', methods=['GET', 'POST'])
-def payment_ipn():
-    """Handle IPN (Instant Payment Notification) from Pesapal API 3.0"""
+
+@payment_bp.route('/webhook', methods=['POST'])
+def paypal_webhook():
+    """
+    Handle PayPal webhook notifications (IPN alternative)
+    For production, you should verify webhook signatures
+    """
     try:
-        # API 3.0 parameters
-        order_tracking_id = request.args.get('OrderTrackingId')
-        order_notification_type = request.args.get('OrderNotificationType')
-        order_merchant_reference = request.args.get('OrderMerchantReference')
+        event_data = request.get_json()
+        event_type = event_data.get('event_type')
 
-        logger.info(f"IPN received - Tracking: {order_tracking_id}, Type: {order_notification_type}, Ref: {order_merchant_reference}")
+        logger.info(f"PayPal webhook received: {event_type}")
 
-        if not order_tracking_id:
-            return jsonify({'status': 'error', 'message': 'Missing order tracking ID'}), 400
+        # Handle different event types
+        if event_type == 'PAYMENT.CAPTURE.COMPLETED':
+            # Payment captured successfully
+            resource = event_data.get('resource', {})
+            order_id = resource.get('supplementary_data', {}).get('related_ids', {}).get('order_id')
 
-        # Create Pesapal service
-        pesapal = create_pesapal_service(current_app)
+            logger.info(f"Payment captured via webhook for order: {order_id}")
 
-        # Get transaction status using tracking ID (API 3.0)
-        status_data = pesapal.get_transaction_status(order_tracking_id)
+            # You can add additional processing here
+            # For now, the success callback handles subscription activation
 
-        payment_status = status_data.get('payment_status_description', '').lower()
-        status_code = status_data.get('status_code')
-        merchant_reference = status_data.get('merchant_reference') or order_merchant_reference
-
-        # Extract user ID from merchant reference (format: BESTPDF-{user_id}-{token})
-        try:
-            user_id = int(merchant_reference.split('-')[1])
-            user = User.query.get(user_id)
-
-            if not user:
-                logger.error(f"User not found for merchant reference: {merchant_reference}")
-                return jsonify({'status': 'error', 'message': 'User not found'}), 404
-
-            # Update subscription based on payment status
-            if payment_status == 'completed' and status_code == 1:
-                if not user.is_premium:
-                    user.subscription_tier = 'premium'
-                    user.subscription_start = datetime.utcnow()
-                    user.subscription_end = datetime.utcnow() + timedelta(days=30)
-                    db.session.commit()
-                    logger.info(f"Premium subscription activated via IPN for user {user_id}")
-
-        except (IndexError, ValueError) as e:
-            logger.error(f"Failed to parse merchant reference: {merchant_reference}, error: {e}")
-
-        # Respond to Pesapal IPN
-        return jsonify({
-            'status': 'success',
-            'message': 'IPN processed'
-        }), 200
+        return jsonify({'status': 'received'}), 200
 
     except Exception as e:
-        logger.error(f"IPN processing error: {e}")
+        logger.error(f"Webhook processing error: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
-
-@payment_bp.route('/status/<order_tracking_id>', methods=['GET'])
+@payment_bp.route('/status/<order_id>', methods=['GET'])
 @login_required
-def check_payment_status(order_tracking_id):
-    """Check payment status manually"""
+def check_payment_status(order_id):
+    """Check PayPal order status manually"""
     try:
-        # Create Pesapal service
-        pesapal = create_pesapal_service(current_app)
+        # Create PayPal service
+        paypal = create_paypal_service(current_app)
 
-        # Get transaction status
-        status_data = pesapal.get_transaction_status(order_tracking_id)
+        # Get order details
+        order_details = paypal.get_order_details(order_id)
 
-        return jsonify(status_data), 200
+        return jsonify(order_details), 200
 
     except Exception as e:
         logger.error(f"Status check error: {e}")

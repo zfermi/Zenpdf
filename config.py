@@ -70,13 +70,18 @@ class Config:
     STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
     STRIPE_PRICE_ID_PREMIUM = os.environ.get('STRIPE_PRICE_ID_PREMIUM')  # Monthly premium price ID
 
-    # Pesapal (payment processing)
+    # PayPal (payment processing) - PRIMARY
+    PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID')
+    PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET')
+    PAYPAL_BASE_URL = os.environ.get('PAYPAL_BASE_URL', 'https://api-m.sandbox.paypal.com')  # Sandbox by default
+    PREMIUM_PRICE = 999  # $9.99 in cents
+
+    # Legacy: Pesapal (deprecated - switched to PayPal)
     PESAPAL_CONSUMER_KEY = os.environ.get('PESAPAL_CONSUMER_KEY')
     PESAPAL_CONSUMER_SECRET = os.environ.get('PESAPAL_CONSUMER_SECRET')
-    PESAPAL_BASE_URL = os.environ.get('PESAPAL_BASE_URL', 'https://pay.pesapal.com/v3')  # Production URL
-    PESAPAL_IPN_URL = os.environ.get('PESAPAL_IPN_URL')  # IPN callback URL
-    PESAPAL_CALLBACK_URL = os.environ.get('PESAPAL_CALLBACK_URL')  # Payment callback URL
-    PREMIUM_PRICE = 999  # $9.99 in cents
+    PESAPAL_BASE_URL = os.environ.get('PESAPAL_BASE_URL', 'https://pay.pesapal.com/v3')
+    PESAPAL_IPN_URL = os.environ.get('PESAPAL_IPN_URL')
+    PESAPAL_CALLBACK_URL = os.environ.get('PESAPAL_CALLBACK_URL')
 
     # Security headers (Talisman)
     TALISMAN_FORCE_HTTPS = True
@@ -84,12 +89,12 @@ class Config:
     TALISMAN_STRICT_TRANSPORT_SECURITY_MAX_AGE = 31536000  # 1 year
     TALISMAN_CONTENT_SECURITY_POLICY = {
         'default-src': "'self'",
-        'script-src': ["'self'", "'unsafe-inline'", "https://pagead2.googlesyndication.com", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
+        'script-src': ["'self'", "'unsafe-inline'", "https://pagead2.googlesyndication.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
         'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': ["'self'", "data:", "https:"],
         'font-src': ["'self'", "data:"],
-        'frame-src': ["'self'", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
-        'connect-src': ["'self'", "https://www.pesapal.com", "https://pay.pesapal.com", "https://cybqa.pesapal.com"],
+        'frame-src': ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        'connect-src': ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com"],
     }
 
     # WTForms CSRF
