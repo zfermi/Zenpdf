@@ -1,324 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Choose the perfect plan for your PDF needs - Free, Premium, or Enterprise">
-    <title>Pricing - Best Pdf Converter</title>
+    <title>Pricing - Best PDF Converter</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .pricing-card {
-            transition: all 0.3s ease;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-8px);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .feature-check {
-            color: #10b981;
-            font-size: 1.25rem;
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
         }
 
-        .popular-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 0 80px;
+            background: var(--darker-bg);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pricing-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .pricing-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .currency {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+
+        .amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+        }
+
+        .period {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-left: 0.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 80px 0;
+            background: var(--dark-bg);
+        }
+
+        .faq-grid {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: #667eea;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-question h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0 2rem 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+        }
+
+        .footer-bottom p {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline flex items-center gap-2 hover:opacity-80 transition">
-                    <span class="text-3xl">📄</span>
-                    <span class="gradient-text">Best Pdf Converter</span>
-                </a>
-                <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 bg-gray-100 font-medium transition-colors no-underline">Pricing</a></li>
-                    <li><span class="text-gray-300 px-2">|</span></li>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>Best PDF Converter</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Dashboard</a></li>
-                        {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium no-underline hover:bg-purple-700 transition">Admin</a></li>
-                        {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all no-underline font-medium shadow-lg shadow-purple-500/30">Get Started</a></li>
-                    {% endif %}
-                </ul>
-                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                </button>
-            </div>
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
-                <div class="border-t border-gray-200 my-2"></div>
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Dashboard</a>
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
                     {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-purple-600 text-white font-medium no-underline mb-1 hover:bg-purple-700">Admin</a>
+                    <a href="{{ url_for('admin_panel') }}">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-colors no-underline">Get Started</a>
-                {% endif %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
+                <div class="nav-cta">
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="flex-grow">
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <!-- Header -->
-            <div class="text-center mb-16 fade-in-up">
-                <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
-                    Simple, <span class="gradient-text">Transparent</span> Pricing
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
-                    Choose the perfect plan for your PDF conversion needs. Upgrade or downgrade anytime.
-                </p>
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
+                <p>Choose the plan that works best for you</p>
             </div>
-
-            <!-- Pricing Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <div class="pricing-grid">
                 <!-- Free Plan -->
-                <div class="pricing-card bg-white rounded-2xl shadow-xl p-8 flex flex-col border-2 border-transparent hover:border-gray-200">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Free</h2>
-                        <div class="flex items-baseline justify-center">
-                            <span class="text-5xl font-extrabold text-gray-900">$0</span>
-                            <span class="text-gray-500 ml-2">/month</span>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">0</span>
+                            <span class="period">/month</span>
                         </div>
-                        <p class="text-gray-600 mt-3">Perfect for trying out</p>
                     </div>
-
-                    <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700"><strong>5 conversions</strong> per day</span>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            5 conversions per day
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">10MB file size limit</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            10MB file size limit
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">All basic PDF tools</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            All basic PDF tools
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Secure processing</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-gray-400 mr-3">-</span>
-                            <span class="text-gray-500">Ad-supported</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Secure processing
                         </li>
                     </ul>
-
                     {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="block w-full text-center bg-gray-100 text-gray-900 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all no-underline">
-                        Get Started Free
-                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline">Get Started Free</a>
                     {% elif not current_user.is_premium %}
-                    <button class="w-full bg-gray-200 text-gray-600 px-6 py-3 rounded-xl font-semibold cursor-not-allowed" disabled>
-                        Current Plan
-                    </button>
+                    <button class="btn btn-outline" style="opacity: 0.5; cursor: not-allowed;" disabled>Current
+                        Plan</button>
                     {% endif %}
                 </div>
 
-                <!-- Premium Plan (Highlighted) -->
-                <div class="pricing-card bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl shadow-2xl p-8 flex flex-col relative transform md:scale-105 border-2 border-purple-400">
-                    <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 popular-badge text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                        ⭐ MOST POPULAR
-                    </div>
-
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-white mb-4">Premium</h2>
-                        <div class="flex items-baseline justify-center">
-                            <span class="text-5xl font-extrabold text-white">$9.99</span>
-                            <span class="text-purple-200 ml-2">/month</span>
+                <!-- Premium Plan -->
+                <div class="pricing-card featured">
+                    <div class="badge">Best Value</div>
+                    <div class="pricing-header">
+                        <h3>Premium</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">9.99</span>
+                            <span class="period">/month</span>
                         </div>
-                        <p class="text-purple-100 mt-3">For power users</p>
                     </div>
-
-                    <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white"><strong>Unlimited</strong> conversions</span>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Unlimited conversions
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white"><strong>100MB</strong> file size limit</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            100MB file size limit
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white">Priority processing</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Priority processing
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white"><strong>Ad-free</strong> experience</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Ad-free experience
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white">Email support</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Email support
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-white mr-3 text-xl">✓</span>
-                            <span class="text-white">API access</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            API access
                         </li>
                     </ul>
-
                     {% if current_user.is_authenticated and current_user.is_premium %}
-                    <button class="w-full bg-white/20 text-white px-6 py-3 rounded-xl font-semibold cursor-not-allowed backdrop-blur-sm" disabled>
-                        ✓ Active Plan
-                    </button>
+                    <button class="btn btn-primary" style="opacity: 0.7; cursor: not-allowed;" disabled>✓ Active
+                        Plan</button>
                     {% elif current_user.is_authenticated %}
-                    <a href="{{ url_for('payment.subscribe_premium') }}" class="block w-full text-center bg-white text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 transition-all no-underline shadow-lg transform hover:scale-105">
-                        Upgrade Now →
-                    </a>
+                    <a href="{{ url_for('payment.subscribe_premium') }}" class="btn btn-primary">Upgrade Now →</a>
                     {% else %}
-                    <a href="{{ url_for('auth.login') }}?next={{ url_for('payment.subscribe_premium') }}" class="block w-full text-center bg-white text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 transition-all no-underline shadow-lg transform hover:scale-105">
-                        Get Premium →
-                    </a>
+                    <a href="{{ url_for('auth.login') }}?next={{ url_for('payment.subscribe_premium') }}"
+                        class="btn btn-primary">Get Premium →</a>
                     {% endif %}
                 </div>
 
                 <!-- Enterprise Plan -->
-                <div class="pricing-card bg-white rounded-2xl shadow-xl p-8 flex flex-col border-2 border-transparent hover:border-gray-200">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Enterprise</h2>
-                        <div class="flex items-baseline justify-center">
-                            <span class="text-4xl font-extrabold text-gray-900">Custom</span>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">
+                            <span class="amount" style="font-size: 2.5rem;">Custom</span>
                         </div>
-                        <p class="text-gray-600 mt-3">For large teams</p>
                     </div>
-
-                    <ul class="space-y-4 mb-8 flex-grow">
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Everything in Premium</span>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Everything in Premium
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Custom file limits</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Custom file limits
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Dedicated support</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Dedicated support
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">SLA guarantee</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            SLA guarantee
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Team management</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Team management
                         </li>
-                        <li class="flex items-start">
-                            <span class="feature-check mr-3">✓</span>
-                            <span class="text-gray-700">Custom integrations</span>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Custom integrations
                         </li>
                     </ul>
-
-                    <a href="mailto:sales@bestpdfconverter.com" class="block w-full text-center bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-all no-underline">
-                        Contact Sales
-                    </a>
+                    <a href="mailto:sales@bestpdfconverter.com" class="btn btn-outline">Contact Sales</a>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- FAQ Section -->
-            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-gray-900 text-center mb-10">Frequently Asked Questions</h2>
-
-                <div class="space-y-6">
-                    <div class="border-b border-gray-100 pb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                            <span class="text-purple-600 mr-2">•</span>
-                            Can I upgrade or downgrade anytime?
-                        </h3>
-                        <p class="text-gray-600 ml-6">Yes! You can change your plan at any time. Changes take effect immediately and you'll only be charged the difference.</p>
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about Best PDF Converter</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Can I upgrade or downgrade anytime?</h4>
                     </div>
-
-                    <div class="border-b border-gray-100 pb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                            <span class="text-purple-600 mr-2">•</span>
-                            Is my data secure?
-                        </h3>
-                        <p class="text-gray-600 ml-6">Absolutely. All files are encrypted and processed securely. We automatically delete files after 1 hour and never store your documents permanently.</p>
+                    <div class="faq-answer">
+                        <p>Yes! You can change your plan at any time. Changes take effect immediately and you'll only be
+                            charged the difference.</p>
                     </div>
+                </div>
 
-                    <div class="border-b border-gray-100 pb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                            <span class="text-purple-600 mr-2">•</span>
-                            What payment methods do you accept?
-                        </h3>
-                        <p class="text-gray-600 ml-6">We accept all major credit cards and PayPal through our secure payment processor. No PayPal account required!</p>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Is my data secure?</h4>
                     </div>
+                    <div class="faq-answer">
+                        <p>Absolutely. All files are encrypted and processed securely. We automatically delete files
+                            after 1 hour and never store your documents permanently.</p>
+                    </div>
+                </div>
 
-                    <div class="pb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                            <span class="text-purple-600 mr-2">•</span>
-                            Do you offer refunds?
-                        </h3>
-                        <p class="text-gray-600 ml-6">Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.</p>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>What payment methods do you accept?</h4>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We accept all major credit cards and PayPal through our secure payment processor. No PayPal
+                            account required!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Do you offer refunds?</h4>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer a 30-day money-back guarantee for Premium subscriptions. No questions asked.
+                        </p>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </section>
 
-    <footer class="bg-white border-t border-gray-200 py-8 mt-16">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600">&copy; 2024 Best Pdf Converter. All rights reserved.</p>
-            <p class="text-gray-500 text-sm mt-2">Secure payments powered by PayPal</p>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Secure payments powered by PayPal</p>
+            </div>
         </div>
     </footer>
-
-    <script>
-        // Mobile Navigation Toggle
-        const navToggle = document.getElementById('nav-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        navToggle.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Add animation delays
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.pricing-card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.classList.add('fade-in-up');
-            });
-        });
-    </script>
 </body>
-</html>
 
+</html>
