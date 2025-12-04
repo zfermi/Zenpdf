@@ -85,6 +85,12 @@
             color: var(--text-primary);
         }
 
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -316,7 +322,20 @@
                 <div class="nav-links">
                     <a href="{{ url_for('home') }}">Home</a>
                     <a href="{{ url_for('pricing') }}">Pricing</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    {% if current_user.is_admin %}
+                    <a href="{{ url_for('admin_panel') }}">Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
                     <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
+                <div class="nav-cta">
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
