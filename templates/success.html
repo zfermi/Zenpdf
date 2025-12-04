@@ -3,204 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ operation }} Complete - Best Pdf Converter</title>
+    <title>{{ operation }} Complete - Best PDF Converter</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+
+        .logo h1 {
+            font-size: 1.8rem; font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .page-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 80px;
+        }
+
+        .success-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
         @keyframes checkmark {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .checkmark-circle {
             animation: checkmark 0.6s ease-out forwards;
+            margin-bottom: 2rem;
+        }
+
+        .checkmark-icon {
+            width: 100px; height: 100px;
+            color: #4ade80;
+        }
+
+        .success-title {
+            font-size: 2rem; font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pages-info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
         }
 
         .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            text-decoration: none;
             transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            margin-bottom: 1.5rem;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-    <style>
-        :root {
-            --zen-purple: #7c3aed;
-            --zen-indigo: #4f46e5;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
         }
 
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%) !important;
+        .download-btn svg {
+            width: 28px; height: 28px;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .info-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .bg-zen-cream {
-            background: rgba(255, 255, 255, 0.9);
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        .border-sand {
-            border-color: #e5e7eb;
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
         }
 
-        .bg-sand-light {
-            background: #f8fafc;
-        }
-
-        .text-sand-dark {
-            color: #9ca3af;
-        }
-
-        .text-secondary {
-            color: #111827;
-        }
-
-        .bg-primary {
-            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
-        }
-
-        .bg-primary-dark {
-            background-color: #4338ca;
-        }
-
-        .bg-primary-light {
-            background-color: #f3e8ff;
-        }
-
-        .border-primary {
-            border-color: #8b5cf6;
-        }
-
-        .text-primary {
-            color: var(--zen-purple);
-        }
-
-        .text-primary-dark {
-            color: #4338ca;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
-            color: #fff;
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
             font-weight: 600;
-            padding: 0.85rem 1.25rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
-            transition: all 0.25s ease;
-            display: inline-block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+
+        .action-btn.primary {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .action-btn.primary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .action-btn.secondary {
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .action-btn.secondary:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .upsell-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .upsell-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .upsell-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .upsell-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .upsell-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .upsell-btn.primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .upsell-btn.primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .upsell-btn.secondary {
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .upsell-btn.secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
             text-align: center;
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #6d28d9 0%, #4338ca 100%);
-            transform: translateY(-1px);
+        .footer p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .success-card { padding: 2rem; }
+            .success-title { font-size: 1.5rem; }
+            .download-btn { font-size: 1rem; padding: 1rem 2rem; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-sand-light">
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline flex items-center gap-2">
-                    <span class="text-3xl">📄</span>
-                    <span class="gradient-text">Best Pdf Converter</span>
-                </a>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo"><h1>Best PDF Converter</h1></div>
             </div>
         </div>
     </nav>
 
     <!-- Success Content -->
-    <main class="flex-grow flex items-center justify-center px-4 py-12">
-        <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+    <main class="page-content">
+        <div class="success-card">
             <!-- Success Checkmark -->
-            <div class="checkmark-circle mb-8">
-                <svg class="mx-auto w-24 h-24 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="checkmark-circle">
+                <svg class="checkmark-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                 </svg>
             </div>
 
             <!-- Success Message -->
-            <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-4">
-                {{ operation }} Complete!
-            </h1>
-
-            <p class="text-lg text-gray-600 mb-2">
-                Your PDF has been successfully processed.
-            </p>
+            <h1 class="success-title">{{ operation }} Complete!</h1>
+            <p class="success-subtitle">Your PDF has been successfully processed.</p>
 
             {% if pages_count %}
-            <p class="text-sm text-gray-500 mb-8">
-                {{ pages_count }} page{% if pages_count != 1 %}s{% endif %} processed
-            </p>
+            <p class="pages-info">{{ pages_count }} page{% if pages_count != 1 %}s{% endif %} processed</p>
             {% elif files_count %}
-            <p class="text-sm text-gray-500 mb-8">
-                {{ files_count }} file{% if files_count != 1 %}s{% endif %} merged
-            </p>
+            <p class="pages-info">{{ files_count }} file{% if files_count != 1 %}s{% endif %} merged</p>
             {% endif %}
 
-            <!-- Download Button - BIG and prominent -->
-            <a href="{{ url_for('download_file', filename=filename) }}"
-               class="download-btn inline-flex items-center gap-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xl md:text-2xl px-12 py-6 rounded-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg no-underline mb-6">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Download Button -->
+            <a href="{{ url_for('download_file', filename=filename) }}" class="download-btn">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>
                 <span>Download Your File</span>
             </a>
 
             <!-- Additional Info -->
-            <div class="mt-8 p-4 bg-sand-light rounded-lg">
-                <p class="text-sm text-gray-600">
-                    📌 Your file will be available for download for the next hour.
-                </p>
+            <div class="info-box">
+                <p>&#128204; Your file will be available for download for the next hour.</p>
             </div>
 
             <!-- Action Buttons -->
-            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ url_for(operation.lower() + '_pdf') }}"
-                   class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors no-underline font-medium">
-                    Process Another File
-                </a>
-                <a href="{{ url_for('home') }}"
-                   class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors no-underline font-medium">
-                    Back to Home
-                </a>
+            <div class="action-buttons">
+                <a href="{{ url_for(operation.lower() + '_pdf') }}" class="action-btn primary">Process Another File</a>
+                <a href="{{ url_for('home') }}" class="action-btn secondary">Back to Home</a>
             </div>
 
             <!-- Premium Upsell (for anonymous users) -->
             {% if not current_user.is_authenticated %}
-            <div class="mt-12 p-6 bg-gradient-to-r from-purple-600/10 to-indigo-600/10 rounded-xl border-2 border-primary/20">
-                <h3 class="text-lg font-bold text-secondary mb-2">
-                    Want More?
-                </h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Sign up for Premium to unlock unlimited conversions, larger file sizes (up to 100MB), and priority processing!
-                </p>
-                <div class="flex gap-3 justify-center">
-                    <a href="{{ url_for('pricing') }}"
-                       class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors no-underline font-medium">
-                        View Pricing
-                    </a>
-                    <a href="{{ url_for('auth.register') }}"
-                       class="px-6 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors no-underline font-medium">
-                        Sign Up Free
-                    </a>
+            <div class="upsell-box">
+                <h3>Want More?</h3>
+                <p>Sign up for Premium to unlock unlimited conversions, larger file sizes (up to 100MB), and priority processing!</p>
+                <div class="upsell-buttons">
+                    <a href="{{ url_for('pricing') }}" class="upsell-btn primary">View Pricing</a>
+                    <a href="{{ url_for('auth.register') }}" class="upsell-btn secondary">Sign Up Free</a>
                 </div>
             </div>
             {% endif %}
@@ -208,20 +311,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-zen-cream border-t border-sand mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
-            <p>&copy; 2025 Best Pdf Converter. All rights reserved.</p>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Best PDF Converter. All rights reserved.</p>
         </div>
     </footer>
-
-    <!-- Mobile menu toggle script -->
-    <script>
-        document.getElementById('nav-toggle')?.addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>
-
-
-

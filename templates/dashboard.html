@@ -3,185 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Your Best Pdf Converter Dashboard">
-    <title>Dashboard - Best Pdf Converter</title>
+    <meta name="description" content="Your Best PDF Converter Dashboard">
+    <title>Dashboard - Best PDF Converter</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+
+        .logo h1 {
+            font-size: 1.8rem; font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.active { color: var(--text-primary); }
+        .nav-cta { display: flex; align-items: center; gap: 1rem; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600;
+            text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient); color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
+        .btn-lg { padding: 1rem 2rem; font-size: 1.1rem; }
+
+        .page-content { padding: 120px 0 80px; min-height: 100vh; }
+
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
         .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        
-        .dashboard-card {
-            transition: all 0.3s ease;
+
+        .badge {
+            display: inline-block; padding: 0.5rem 1.5rem; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 600;
         }
-        
-        .dashboard-card:hover {
+
+        .badge-premium {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+        }
+
+        .badge-free {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem; margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem; font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number.purple { background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-number.green { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-number.orange { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .stat-label { color: var(--text-secondary); font-weight: 500; }
+
+        .upgrade-banner {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .upgrade-banner h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; position: relative; z-index: 1; }
+        .upgrade-banner p { font-size: 1.1rem; color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; position: relative; z-index: 1; }
+
+        .upgrade-btn {
+            background: white; color: #667eea; padding: 1rem 2rem;
+            border-radius: 12px; font-weight: 700; text-decoration: none;
+            display: inline-block; transition: transform 0.3s ease;
+            position: relative; z-index: 1;
+        }
+
+        .upgrade-btn:hover { transform: scale(1.05); }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex; align-items: center; gap: 0.75rem;
+            font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;
+        }
+
+        .table { width: 100%; border-collapse: collapse; }
+        .table th {
+            padding: 1rem; text-align: left;
+            color: var(--text-secondary); font-weight: 600;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .table tr:hover { background: rgba(255, 255, 255, 0.02); }
+        .table tr:last-child td { border-bottom: none; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; padding: 0.25rem 0.75rem;
+            border-radius: 50px; font-size: 0.75rem; font-weight: 600;
+        }
+
+        .status-success { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
+        .status-failed { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        .empty-state {
+            text-align: center; padding: 3rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+        }
+
+        .empty-state p { color: var(--text-secondary); margin-bottom: 1rem; }
+        .empty-state a { color: #667eea; font-weight: 600; text-decoration: none; }
+        .empty-state a:hover { text-decoration: underline; }
+
+        .info-grid {
+            display: grid; grid-template-columns: auto 1fr;
+            gap: 1rem 2rem;
+        }
+
+        .info-label { color: var(--text-secondary); font-weight: 500; }
+        .info-value { font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+
+        .alert { padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); color: #4ade80; }
+        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .alert-info { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; }
+
+        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 2rem 0; text-align: center; }
+        .footer p { color: var(--text-secondary); }
+
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .page-header h1 { font-size: 1.75rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; gap: 0.5rem 0; }
+            .info-label { margin-top: 1rem; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900 no-underline flex items-center gap-2 hover:opacity-80 transition">
-                    <span class="text-3xl">📄</span>
-                    <span class="gradient-text">Best Pdf Converter</span>
-                </a>
-                <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Pricing</a></li>
-                    <li><span class="text-gray-300 px-2">|</span></li>
-                    {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-900 font-medium no-underline">Dashboard</a></li>
-                        {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium no-underline hover:bg-purple-700 transition">Admin</a></li>
-                        {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all no-underline font-medium shadow-lg shadow-purple-500/30">Get Started</a></li>
-                    {% endif %}
-                </ul>
-                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                </button>
-            </div>
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Pricing</a>
-                <div class="border-t border-gray-200 my-2"></div>
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg bg-gray-100 text-gray-900 font-medium no-underline mb-1">Dashboard</a>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo"><h1>Best PDF Converter</h1></div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
+                    <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
                     {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-purple-600 text-white font-medium no-underline mb-1 hover:bg-purple-700">Admin</a>
+                    <a href="{{ url_for('admin_panel') }}">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-colors no-underline">Get Started</a>
-                {% endif %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                </div>
+                <button class="mobile-menu-btn" id="nav-toggle">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
-        <main>
-            <!-- Header -->
-            <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Welcome, <span class="gradient-text">{{ current_user.username }}</span>!</h1>
-                <div>
-                    {% if current_user.is_premium %}
-                        <span class="inline-block bg-gradient-to-r from-green-400 to-green-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-md">
-                            PREMIUM MEMBER
-                        </span>
-                    {% else %}
-                        <span class="inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-sm font-bold">
-                            FREE TIER
-                        </span>
-                    {% endif %}
-                </div>
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Welcome, <span class="gradient-text">{{ current_user.username }}</span>!</h1>
+                {% if current_user.is_premium %}
+                <span class="badge badge-premium">PREMIUM MEMBER</span>
+                {% else %}
+                <span class="badge badge-free">FREE TIER</span>
+                {% endif %}
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="p-4 rounded-xl mb-8 {% if category == 'success' %}bg-green-50 border border-green-200 text-green-800{% elif category == 'error' %}bg-red-50 border border-red-200 text-red-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
-                            {{ message }}
-                        </div>
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
             <!-- Usage Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="dashboard-card bg-white rounded-2xl p-8 shadow-xl text-center border border-gray-100">
-                    <h3 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-3">{{ daily_usage }}</h3>
-                    <p class="text-gray-600 font-medium">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number purple">{{ daily_usage }}</div>
+                    <div class="stat-label">
                         {% if current_user.is_premium %}
                             Operations Today (Unlimited)
                         {% else %}
                             Operations Today (5/day limit)
                         {% endif %}
-                    </p>
+                    </div>
                 </div>
 
-                <div class="dashboard-card bg-white rounded-2xl p-8 shadow-xl text-center border border-gray-100">
-                    <h3 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 mb-3">{{ monthly_usage }}</h3>
-                    <p class="text-gray-600 font-medium">Operations This Month</p>
+                <div class="stat-card">
+                    <div class="stat-number green">{{ monthly_usage }}</div>
+                    <div class="stat-label">Operations This Month</div>
                 </div>
 
-                <div class="dashboard-card bg-white rounded-2xl p-8 shadow-xl text-center border border-gray-100">
-                    <h3 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number orange">
                         {% if current_user.is_premium %}
-                            ∞
+                            &#8734;
                         {% else %}
                             {{ 5 - daily_usage }}
                         {% endif %}
-                    </h3>
-                    <p class="text-gray-600 font-medium">Remaining Today</p>
+                    </div>
+                    <div class="stat-label">Remaining Today</div>
                 </div>
             </div>
 
             <!-- Upgrade Banner for Free Users -->
             {% if not current_user.is_premium %}
-            <div class="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-10 mb-12 text-center text-white shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-full bg-white opacity-5 transform -skew-x-12"></div>
-                <div class="relative z-10">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Upgrade to Premium</h2>
-                    <p class="text-lg md:text-xl mb-8 text-purple-100 max-w-2xl mx-auto">
-                        Unlock unlimited operations, 100MB file size limits, and priority support.
-                    </p>
-                    <a href="{{ url_for('pricing') }}" class="inline-block bg-white text-purple-700 px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-lg transform hover:scale-105 no-underline">
-                        View Pricing & Plans
-                    </a>
-                </div>
+            <div class="upgrade-banner">
+                <h2>Upgrade to Premium</h2>
+                <p>Unlock unlimited operations, 100MB file size limits, and priority support.</p>
+                <a href="{{ url_for('pricing') }}" class="upgrade-btn">View Pricing & Plans</a>
             </div>
             {% endif %}
 
             <!-- Recent Activity -->
-            <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <span class="mr-2">🕒</span> Recent Activity
-                </h2>
+            <div class="card">
+                <h2 class="card-header">&#128337; Recent Activity</h2>
 
                 {% if recent_operations %}
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse">
+                <div style="overflow-x: auto;">
+                    <table class="table">
                         <thead>
-                            <tr class="border-b-2 border-gray-100">
-                                <th class="px-4 py-4 text-left text-gray-500 font-semibold text-sm uppercase tracking-wider">Operation</th>
-                                <th class="px-4 py-4 text-left text-gray-500 font-semibold text-sm uppercase tracking-wider">Date</th>
-                                <th class="px-4 py-4 text-left text-gray-500 font-semibold text-sm uppercase tracking-wider">Pages</th>
-                                <th class="px-4 py-4 text-left text-gray-500 font-semibold text-sm uppercase tracking-wider">Status</th>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Date</th>
+                                <th>Pages</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for operation in recent_operations %}
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-4">
-                                    <span class="capitalize font-semibold text-gray-900">{{ operation.operation_type }}</span>
-                                </td>
-                                <td class="px-4 py-4 text-gray-600">
-                                    {{ operation.created_at.strftime('%b %d, %Y %I:%M %p') }}
-                                </td>
-                                <td class="px-4 py-4 text-gray-600">
-                                    {{ operation.pages_processed or 'N/A' }}
-                                </td>
-                                <td class="px-4 py-4">
+                            <tr>
+                                <td style="font-weight: 600; text-transform: capitalize;">{{ operation.operation_type }}</td>
+                                <td style="color: var(--text-secondary);">{{ operation.created_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+                                <td style="color: var(--text-secondary);">{{ operation.pages_processed or 'N/A' }}</td>
+                                <td>
                                     {% if operation.success %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Success
-                                        </span>
+                                    <span class="status-badge status-success">Success</span>
                                     {% else %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Failed
-                                        </span>
+                                    <span class="status-badge status-failed">Failed</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -190,55 +337,50 @@
                     </table>
                 </div>
                 {% else %}
-                <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                    <p class="text-gray-500 mb-4">No operations yet.</p>
-                    <a href="{{ url_for('home') }}#tools" class="text-purple-600 font-semibold hover:text-purple-700 no-underline">Start using our PDF tools →</a>
+                <div class="empty-state">
+                    <p>No operations yet.</p>
+                    <a href="{{ url_for('home') }}#tools">Start using our PDF tools &#8594;</a>
                 </div>
                 {% endif %}
             </div>
 
             <!-- Account Info -->
-            <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <span class="mr-2">👤</span> Account Information
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-8 gap-y-6 max-w-3xl">
-                    <div class="font-semibold text-gray-500">Email</div>
-                    <div class="text-gray-900 font-medium">{{ current_user.email }}</div>
+            <div class="card">
+                <h2 class="card-header">&#128100; Account Information</h2>
+                <div class="info-grid">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ current_user.email }}</div>
 
-                    <div class="font-semibold text-gray-500">Username</div>
-                    <div class="text-gray-900 font-medium">{{ current_user.username }}</div>
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ current_user.username }}</div>
 
-                    <div class="font-semibold text-gray-500">Member Since</div>
-                    <div class="text-gray-900 font-medium">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
+                    <div class="info-label">Member Since</div>
+                    <div class="info-value">{{ current_user.created_at.strftime('%B %d, %Y') }}</div>
 
-                    <div class="font-semibold text-gray-500">Subscription</div>
-                    <div class="text-gray-900 font-medium capitalize flex items-center">
+                    <div class="info-label">Subscription</div>
+                    <div class="info-value" style="text-transform: capitalize;">
                         {{ current_user.subscription_tier }}
                         {% if current_user.is_premium %}
-                            <span class="ml-2 text-green-500">✓</span>
+                        <span style="color: #4ade80;">&#10003;</span>
                         {% endif %}
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-
-    <footer class="bg-white border-t border-gray-200 py-8 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600">&copy; 2024 Best Pdf Converter. All rights reserved.</p>
         </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container"><p>&copy; 2024 Best PDF Converter. All rights reserved.</p></div>
     </footer>
 
     <script>
-        // Mobile Navigation Toggle
         const navToggle = document.getElementById('nav-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        navToggle.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle) {
+            navToggle.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
     </script>
 </body>
 </html>
-

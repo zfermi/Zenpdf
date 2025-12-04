@@ -4,362 +4,338 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Compress PDF files online. Reduce file size while maintaining quality.">
-    <title>Compress PDF - Best Pdf Converter</title>
+    <title>Compress PDF - Best PDF Converter</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --zen-purple: #7c3aed;
-            --zen-indigo: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%) !important;
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
         }
 
-        .bg-zen-cream {
-            background: rgba(255, 255, 255, 0.9);
+        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+
+        .logo h1 {
+            font-size: 1.8rem; font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
 
-        .border-sand {
-            border-color: #e5e7eb;
-        }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-cta { display: flex; align-items: center; gap: 1rem; }
 
-        .bg-sand-light {
-            background: #f8fafc;
-        }
-
-        .text-sand-dark {
-            color: #9ca3af;
-        }
-
-        .text-secondary {
-            color: #111827;
-        }
-
-        .bg-primary {
-            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
-        }
-
-        .bg-primary-dark {
-            background-color: #4338ca;
-        }
-
-        .bg-primary-light {
-            background-color: #f3e8ff;
-        }
-
-        .border-primary {
-            border-color: #8b5cf6;
-        }
-
-        .text-primary {
-            color: var(--zen-purple);
-        }
-
-        .text-primary-dark {
-            color: #4338ca;
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600;
+            text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--zen-purple) 0%, var(--zen-indigo) 100%);
-            color: #fff;
-            font-weight: 600;
-            padding: 0.85rem 1.25rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
-            transition: all 0.25s ease;
-            display: inline-block;
-            text-align: center;
+            background: var(--primary-gradient); color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #6d28d9 0%, #4338ca 100%);
-            transform: translateY(-1px);
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
+        .btn-lg { padding: 1rem 2rem; font-size: 1.1rem; width: 100%; }
+
+        .page-content { padding: 120px 0 80px; min-height: 100vh; }
+        .page-header { margin-bottom: 2rem; }
+        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .breadcrumb { color: var(--text-secondary); }
+        .breadcrumb a { color: #667eea; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        .card {
+            background: var(--card-bg); border-radius: 20px;
+            border: 1px solid var(--border-color); padding: 2rem;
         }
+
+        .upload-area {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%; min-height: 350px; border: 2px dashed var(--border-color);
+            border-radius: 16px; cursor: pointer; transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-area:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.05); }
+        .upload-area.dragover { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
+        .upload-icon { font-size: 5rem; margin-bottom: 1rem; }
+        .upload-text { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .upload-hint { color: var(--text-secondary); }
+
+        .success-box {
+            background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
+        }
+
+        .success-box h2 { color: #4ade80; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .success-box p { color: #86efac; }
+        .success-box strong { font-size: 1.5rem; }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.02); border: 2px solid var(--border-color);
+            border-radius: 12px; padding: 1rem; cursor: pointer;
+            transition: all 0.3s ease; margin-bottom: 1rem;
+        }
+
+        .option-card:hover { border-color: #667eea; }
+        .option-card.selected { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
+        .option-card label { display: flex; align-items: flex-start; cursor: pointer; }
+        .option-card input[type="radio"] { margin-right: 1rem; margin-top: 0.25rem; accent-color: #667eea; }
+        .option-card strong { display: block; margin-bottom: 0.25rem; }
+        .option-card p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05); border-radius: 12px;
+            padding: 1rem; margin-bottom: 1.5rem;
+        }
+
+        .progress-bar-bg {
+            width: 100%; height: 8px; background: var(--border-color);
+            border-radius: 4px; overflow: hidden; margin: 0.5rem 0;
+        }
+
+        .progress-bar { height: 100%; background: var(--primary-gradient); border-radius: 4px; transition: width 0.3s ease; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
+
+        .cloud-storage { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
+        .cloud-storage p { color: var(--text-secondary); margin-bottom: 1rem; }
+        .cloud-buttons { display: flex; gap: 1rem; justify-content: center; }
+        .cloud-btn {
+            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: var(--text-secondary); cursor: not-allowed; opacity: 0.6;
+        }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px; color: var(--text-primary); text-decoration: none;
+            transition: all 0.3s ease; margin-top: 2rem;
+        }
+
+        .back-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+        .alert { padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
+        .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); color: #4ade80; }
+        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+
+        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 2rem 0; text-align: center; }
+        .footer p { color: var(--text-secondary); }
+
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .page-header h1 { font-size: 1.75rem; }
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-zen-cream border-b border-sand shadow-sm backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ url_for('home') }}" class="text-2xl font-bold text-secondary no-underline flex items-center gap-2">
-                    <span class="text-3xl">📄</span>
-                    <span class="gradient-text">Best Pdf Converter</span>
-                </a>
-                <ul class="hidden md:flex space-x-1 items-center">
-                    <li><a href="{{ url_for('split_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Split PDF</a></li>
-                    <li><a href="{{ url_for('merge_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Merge PDF</a></li>
-                    <li><a href="{{ url_for('compress_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Compress PDF</a></li>
-                    <li><a href="{{ url_for('rotate_pdf') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Rotate PDF</a></li>
-                    <li><a href="{{ url_for('pdf2word') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">PDF to Word</a></li>
-                    <li><a href="{{ url_for('pricing') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Pricing</a></li>
-                    <li><span class="text-sand-dark px-2">|</span></li>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo"><h1>Best PDF Converter</h1></div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Dashboard</a></li>
-                        {% if current_user.is_admin %}
-                            <li><a href="{{ url_for('admin_panel') }}" class="px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline hover:bg-primary-dark">Admin</a></li>
-                        {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a></li>
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    {% if current_user.is_admin %}<a href="{{ url_for('admin_panel') }}">Admin</a>{% endif %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
                     {% else %}
-                        <li><a href="{{ url_for('auth.login') }}" class="px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Login</a></li>
-                        <li><a href="{{ url_for('auth.register') }}" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline font-medium">Sign Up</a></li>
+                    <a href="{{ url_for('auth.login') }}">Login</a>
                     {% endif %}
-                </ul>
-                <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2">
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                    <span class="w-6 h-0.5 bg-gray-600 transition-all"></span>
-                </button>
-            </div>
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('split_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Split PDF</a>
-                <a href="{{ url_for('merge_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Merge PDF</a>
-                <a href="{{ url_for('compress_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Compress PDF</a>
-                <a href="{{ url_for('rotate_pdf') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Rotate PDF</a>
-                <a href="{{ url_for('pdf2word') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">PDF to Word</a>
-                <a href="{{ url_for('pricing') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Pricing</a>
-                <div class="border-t border-sand my-2"></div>
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Dashboard</a>
-                    {% if current_user.is_admin %}
-                        <a href="{{ url_for('admin_panel') }}" class="block px-4 py-2 rounded-lg bg-primary text-white font-medium no-underline mb-1 hover:bg-primary-dark">Admin</a>
+                </div>
+                <div class="nav-cta">
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="block px-4 py-2 rounded-lg text-secondary hover:bg-sand-light transition-colors no-underline mb-1">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="block px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors no-underline">Sign Up</a>
-                {% endif %}
+                </div>
+                <button class="mobile-menu-btn" id="nav-toggle">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <div class="bg-gray-100 py-4">
-        <div class="max-w-7xl mx-auto px-4">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXX"
-                 data-ad-slot="XXXXXXXXXX"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-        </div>
-    </div>
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Compress PDF</h1>
+                <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / Compress PDF</p>
+            </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <aside class="hidden lg:block lg:col-span-2">
-                <div class="sticky top-24">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="rectangle"></ins>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if not file_uploaded %}
+                <div class="card">
+                    <form action="{{ url_for('compress_pdf') }}" method="post" enctype="multipart/form-data" id="compress-form">
+                        <div style="margin-bottom: 1.5rem;">
+                            <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
+                            <label for="file" class="upload-area" id="upload-label">
+                                <span class="upload-icon">&#128476;&#65039;</span>
+                                <span class="upload-text">Choose PDF file or drag it here</span>
+                                <span class="upload-hint">Max size: 10MB</span>
+                            </label>
+                        </div>
+
+                        <div id="progress-container" class="progress-container hidden">
+                            <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Uploading...</span></div>
+                            <div class="progress-bar-bg"><div id="progress-bar" class="progress-bar" style="width: 0%"></div></div>
+                            <div class="progress-info">
+                                <span id="progress-percent">0%</span>
+                                <span id="progress-speed">0 MB/s</span>
+                                <span id="progress-time">Time left: calculating...</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">Upload and Prepare Compression</button>
+
+                        <div class="cloud-storage">
+                            <p>Or select from cloud storage:</p>
+                            <div class="cloud-buttons">
+                                <span class="cloud-btn">Google Drive</span>
+                                <span class="cloud-btn">Dropbox</span>
+                            </div>
+                            <p style="font-size: 0.8rem; margin-top: 0.75rem;">Cloud storage coming soon</p>
+                        </div>
+                    </form>
                 </div>
-            </aside>
-
-            <main class="lg:col-span-10">
-                <div class="mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Compress PDF</h1>
-                    <p class="text-gray-600">
-                        <a href="{{ url_for('home') }}" class="text-primary hover:text-primary-dark">Home</a> / Compress PDF
-                    </p>
+            {% else %}
+                <div class="success-box">
+                    <h2>&#10004; PDF Uploaded Successfully</h2>
+                    <p>Total Pages: <strong>{{ page_count }}</strong></p>
+                    <p style="margin-top: 0.5rem;">Original Size: <strong>{{ "%.2f"|format(original_size / (1024*1024)) }} MB</strong></p>
                 </div>
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+                <div class="card">
+                    <form action="{{ url_for('compress_pdf') }}" method="post" id="compress-form">
+                        <input type="hidden" name="file_name" value="{{ file_name }}">
 
-                {% if not file_uploaded %}
-                    <div class="bg-white rounded-lg shadow-custom p-8">
-                        <form action="{{ url_for('compress_pdf') }}" method="post" enctype="multipart/form-data" id="compress-form">
-                            <div class="mb-6">
-                                <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
-                                <label for="file" class="flex flex-col items-center justify-center w-full h-80 md:h-96 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-gray-50 hover:bg-gray-100">
-                                    <span class="text-7xl md:text-8xl mb-4">🗜️</span>
-                                    <span class="upload-text text-xl md:text-2xl font-medium text-gray-700 mb-2">Choose PDF file or drag it here</span>
-                                    <span class="file-size text-base text-gray-500">Max size: 10MB</span>
+                        <div style="margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Choose Compression Level:</h3>
+
+                            <div class="option-card selected">
+                                <label>
+                                    <input type="radio" name="compression_level" value="low" checked>
+                                    <div>
+                                        <strong>Low Compression</strong>
+                                        <p>Small file size reduction. Best quality preservation.</p>
+                                    </div>
                                 </label>
                             </div>
 
-                            <!-- Progress Container -->
-                            <div id="progress-container" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
-                                <div class="mb-2">
-                                    <span class="text-sm font-medium text-gray-700">Uploading...</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                    <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all" style="width: 0%"></div>
-                                </div>
-                                <div class="flex justify-between text-xs text-gray-600">
-                                    <span id="progress-percent">0%</span>
-                                    <span id="progress-speed">0 MB/s</span>
-                                    <span id="progress-time">Time left: calculating...</span>
-                                </div>
+                            <div class="option-card">
+                                <label>
+                                    <input type="radio" name="compression_level" value="medium">
+                                    <div>
+                                        <strong>Medium Compression (Recommended)</strong>
+                                        <p>Balanced compression. Good quality with moderate file size reduction.</p>
+                                    </div>
+                                </label>
                             </div>
 
-                            <button type="submit" class="btn-primary w-full mb-6">Upload and Prepare Compression</button>
-
-                            <!-- Cloud Storage Options -->
-                            <div class="pt-6 border-t border-gray-200 text-center">
-                                <p class="text-gray-600 text-sm mb-4">Or select from cloud storage:</p>
-                                <div class="flex gap-4 justify-center">
-                                    <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Google Drive (coming soon)">Google Drive</a>
-                                    <a href="#" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed opacity-60" title="Upload from Dropbox (coming soon)">Dropbox</a>
-                                </div>
-                                <p class="text-gray-400 text-xs mt-3">Cloud storage coming soon</p>
+                            <div class="option-card">
+                                <label>
+                                    <input type="radio" name="compression_level" value="high">
+                                    <div>
+                                        <strong>High Compression</strong>
+                                        <p>Maximum file size reduction. Some quality loss may occur.</p>
+                                    </div>
+                                </label>
                             </div>
-                        </form>
-                    </div>
-                {% else %}
-                    <div class="space-y-6">
-                        <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6 text-center">
-                            <h2 class="text-2xl font-bold text-green-800 mb-2">✅ PDF Uploaded Successfully</h2>
-                            <p class="text-lg text-green-700">Total Pages: <strong class="text-2xl">{{ page_count }}</strong></p>
-                            <p class="text-lg text-green-700 mt-2">Original Size: <strong class="text-2xl">{{ "%.2f"|format(original_size / (1024*1024)) }} MB</strong></p>
                         </div>
 
-                        <form action="{{ url_for('compress_pdf') }}" method="post" id="compress-form" class="bg-white rounded-lg shadow-custom p-8">
-                            <input type="hidden" name="file_name" value="{{ file_name }}">
-
-                            <div class="mb-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-4">Choose Compression Level:</h3>
-
-                                <div class="space-y-4">
-                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
-                                        <label class="flex items-start cursor-pointer">
-                                            <input type="radio" name="compression_level" value="low" checked class="mt-1 mr-3">
-                                            <div class="flex-grow">
-                                                <strong class="text-gray-900">Low Compression</strong>
-                                                <p class="text-sm text-gray-600 mt-1">Small file size reduction. Best quality preservation.</p>
-                                            </div>
-                                        </label>
-                                    </div>
-
-                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
-                                        <label class="flex items-start cursor-pointer">
-                                            <input type="radio" name="compression_level" value="medium" class="mt-1 mr-3">
-                                            <div class="flex-grow">
-                                                <strong class="text-gray-900">Medium Compression (Recommended)</strong>
-                                                <p class="text-sm text-gray-600 mt-1">Balanced compression. Good quality with moderate file size reduction.</p>
-                                            </div>
-                                        </label>
-                                    </div>
-
-                                    <div class="option-card border-2 border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
-                                        <label class="flex items-start cursor-pointer">
-                                            <input type="radio" name="compression_level" value="high" class="mt-1 mr-3">
-                                            <div class="flex-grow">
-                                                <strong class="text-gray-900">High Compression</strong>
-                                                <p class="text-sm text-gray-600 mt-1">Maximum file size reduction. Some quality loss may occur.</p>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bg-gray-100 rounded-lg p-4 mb-6">
-                                <ins class="adsbygoogle"
-                                     style="display:block"
-                                     data-ad-client="ca-pub-XXXXXXXXXX"
-                                     data-ad-slot="XXXXXXXXXX"
-                                     data-ad-format="auto"
-                                     data-full-width-responsive="true"></ins>
-                            </div>
-
-                            <button type="submit" class="btn-primary w-full text-lg py-4">Compress PDF Now</button>
-                        </form>
-                    </div>
-                {% endif %}
-
-                <div class="mt-8">
-                    <a href="{{ url_for('home') }}" class="inline-block px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">← Back to Home</a>
+                        <button type="submit" class="btn btn-primary btn-lg">Compress PDF Now</button>
+                    </form>
                 </div>
-            </main>
+            {% endif %}
 
-            <aside class="hidden lg:block lg:col-span-2">
-                <div class="sticky top-24">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="rectangle"></ins>
-                </div>
-            </aside>
+            <a href="{{ url_for('home') }}" class="back-btn">&larr; Back to Home</a>
         </div>
-    </div>
+    </section>
 
-    <div class="bg-gray-100 py-4 mt-8">
-        <div class="max-w-7xl mx-auto px-4">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXX"
-                 data-ad-slot="XXXXXXXXXX"
-                 data-ad-format="horizontal"
-                 data-full-width-responsive="true"></ins>
-        </div>
-    </div>
+    <footer class="footer">
+        <div class="container"><p>&copy; 2024 Best PDF Converter. All rights reserved.</p></div>
+    </footer>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
     <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-
-        // Mobile Navigation Toggle
         const navToggle = document.getElementById('nav-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle) {
+            navToggle.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
 
-        navToggle.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // File input styling and drag & drop
         const fileInput = document.getElementById('file');
-        const fileLabel = document.querySelector('label[for="file"]');
+        const uploadLabel = document.getElementById('upload-label');
         const progressContainer = document.getElementById('progress-container');
         const progressBar = document.getElementById('progress-bar');
         const progressPercent = document.getElementById('progress-percent');
         const progressSpeed = document.getElementById('progress-speed');
         const progressTime = document.getElementById('progress-time');
 
-        if (fileInput && fileLabel) {
-            // File selection
+        if (fileInput && uploadLabel) {
             fileInput.addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     const fileName = e.target.files[0].name;
                     const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
-                    document.querySelector('.upload-text').textContent = fileName;
-                    document.querySelector('.file-size').textContent = `${fileSize} MB`;
+                    uploadLabel.querySelector('.upload-text').textContent = fileName;
+                    uploadLabel.querySelector('.upload-hint').textContent = `${fileSize} MB`;
                 }
             });
 
-            // Drag and drop
-            fileLabel.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                fileLabel.classList.add('border-primary', 'bg-primary-light');
+            uploadLabel.addEventListener('dragover', function(e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.add('dragover');
             });
 
-            fileLabel.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                fileLabel.classList.remove('border-primary', 'bg-primary-light');
+            uploadLabel.addEventListener('dragleave', function(e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.remove('dragover');
             });
 
-            fileLabel.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                fileLabel.classList.remove('border-primary', 'bg-primary-light');
-
+            uploadLabel.addEventListener('drop', function(e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.remove('dragover');
                 const files = e.dataTransfer.files;
                 if (files.length > 0 && files[0].type === 'application/pdf') {
                     fileInput.files = files;
@@ -367,27 +343,21 @@
                 }
             });
 
-            // Progress tracking with simulated metrics
             const form = document.getElementById('compress-form');
             form.addEventListener('submit', function(e) {
-                if (fileInput.files.length > 0) {
+                if (fileInput && fileInput.files.length > 0) {
                     progressContainer.classList.remove('hidden');
                     const fileSize = fileInput.files[0].size;
-                    const uploadDuration = 2000; // Simulate 2 second upload
+                    const uploadDuration = 2000;
                     const startTime = Date.now();
 
                     const progressInterval = setInterval(() => {
                         const elapsed = Date.now() - startTime;
                         const percent = Math.min((elapsed / uploadDuration) * 100, 100);
-
                         progressBar.style.width = percent + '%';
                         progressPercent.textContent = Math.round(percent) + '%';
-
-                        // Calculate speed (MB/s)
                         const speed = (fileSize / (1024 * 1024)) / (elapsed / 1000);
                         progressSpeed.textContent = speed.toFixed(2) + ' MB/s';
-
-                        // Calculate time left
                         if (percent < 100) {
                             const timeLeft = (uploadDuration - elapsed) / 1000;
                             progressTime.textContent = 'Time left: ' + Math.ceil(timeLeft) + 's';
@@ -398,26 +368,18 @@
                     }, 100);
                 }
             });
-
-            // Radio button selection visual feedback
-            document.querySelectorAll('input[type="radio"][name="compression_level"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    document.querySelectorAll('.option-card').forEach(card => {
-                        card.classList.remove('border-primary', 'bg-primary-light');
-                    });
-                    if (this.checked) {
-                        this.closest('.option-card').classList.add('border-primary', 'bg-primary-light');
-                    }
-                });
-            });
-
-            // Set initial selected state
-            const checkedRadio = document.querySelector('input[type="radio"][name="compression_level"]:checked');
-            if (checkedRadio) {
-                checkedRadio.closest('.option-card').classList.add('border-primary', 'bg-primary-light');
-            }
         }
+
+        document.querySelectorAll('input[type="radio"][name="compression_level"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.option-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                if (this.checked) {
+                    this.closest('.option-card').classList.add('selected');
+                }
+            });
+        });
     </script>
 </body>
 </html>
-
