@@ -33,6 +33,8 @@ from config import config
 from models import db, bcrypt, User, UsageRecord
 from auth import auth_bp
 from payment import payment_bp
+from analytics import init_analytics
+from analytics_middleware import setup_analytics_middleware
 
 __version__ = "2.0.0"
 
@@ -105,6 +107,12 @@ def create_app(config_name=None):
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(payment_bp, url_prefix='/payment')
+
+    # Initialize server-side analytics
+    from analytics import analytics
+    init_analytics(app)
+    if analytics:
+        setup_analytics_middleware(app, analytics)
 
     # ========== HELPER FUNCTIONS ==========
 

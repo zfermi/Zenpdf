@@ -104,6 +104,11 @@ class Config:
     # File cleanup
     FILE_CLEANUP_HOURS = 1
 
+    # Google Analytics 4 (Server-side tracking)
+    GA4_MEASUREMENT_ID = os.environ.get('GA4_MEASUREMENT_ID', 'G-JT9QHQ41H9')
+    GA4_API_SECRET = os.environ.get('GA4_API_SECRET')  # Get from GA4 Admin > Data Streams > Measurement Protocol API secrets
+
+
 
 class DevelopmentConfig(Config):
     """Development configuration"""
