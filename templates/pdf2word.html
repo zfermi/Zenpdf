@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JT9QHQ41H9"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-JT9QHQ41H9');
+        gtag('config', 'G-48KRBHY1X8');
     </script>
 
     <!-- Primary Meta Tags -->
     <title>PDF to Word Converter Online Free - Convert PDF to DOCX | Best PDF Converter</title>
     <meta name="title" content="PDF to Word Converter Online Free - Convert PDF to DOCX | Best PDF Converter">
-    <meta name="description" content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting. No registration required. Fast and secure.">
-    <meta name="keywords" content="PDF to Word, convert PDF to DOCX, PDF to Word converter, PDF converter, free PDF to Word, online PDF converter, editable Word document, PDF to DOC">
+    <meta name="description"
+        content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting. No registration required. Fast and secure.">
+    <meta name="keywords"
+        content="PDF to Word, convert PDF to DOCX, PDF to Word converter, PDF converter, free PDF to Word, online PDF converter, editable Word document, PDF to DOC">
     <meta name="author" content="Best PDF Converter">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bestpdfconverter.online/pdf2word">
@@ -27,7 +30,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bestpdfconverter.online/pdf2word">
     <meta property="og:title" content="PDF to Word Converter Online Free - Convert PDF to DOCX">
-    <meta property="og:description" content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
+    <meta property="og:description"
+        content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
     <meta property="og:image" content="https://bestpdfconverter.online/static/og-pdf2word.png">
     <meta property="og:site_name" content="Best PDF Converter">
 
@@ -35,7 +39,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://bestpdfconverter.online/pdf2word">
     <meta name="twitter:title" content="PDF to Word Converter Online Free - Convert PDF to DOCX">
-    <meta name="twitter:description" content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
+    <meta name="twitter:description"
+        content="Convert PDF to Word documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
     <meta name="twitter:image" content="https://bestpdfconverter.online/static/og-pdf2word.png">
 
     <!-- Additional SEO -->
@@ -85,7 +90,8 @@
     </script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -99,7 +105,11 @@
             --border-color: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -109,155 +119,408 @@
             line-height: 1.6;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
         .navbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
             background: rgba(10, 14, 26, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 0;
         }
 
-        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         .logo h1 {
-            font-size: 1.8rem; font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 700;
             background: var(--primary-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
-        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
 
         /* Tools Dropdown */
-        .nav-dropdown { position: relative; }
-        .nav-dropdown-toggle { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
-        .nav-dropdown-toggle::after { content: '▼'; font-size: 0.6rem; transition: transform 0.3s ease; }
-        .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 0.5rem; min-width: 200px; opacity: 0; visibility: hidden;
-            transition: all 0.3s ease; margin-top: 0.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); z-index: 1001;
+        .nav-dropdown {
+            position: relative;
         }
-        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; }
-        .nav-dropdown-menu a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; }
-        .nav-dropdown-menu a:hover { background: rgba(102, 126, 234, 0.1); }
-        .nav-dropdown-menu .tool-icon { font-size: 1.2rem; }
 
-        .nav-cta { display: flex; align-items: center; gap: 1rem; }
+        .nav-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: 0.6rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-dropdown-menu .tool-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
         .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600;
-            text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
         }
 
         .btn-primary {
-            background: var(--primary-gradient); color: white;
+            background: var(--primary-gradient);
+            color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
-        .btn-lg { padding: 1rem 2rem; font-size: 1.1rem; width: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
 
-        .page-content { padding: 120px 0 80px; min-height: 100vh; }
-        .page-header { margin-bottom: 2rem; }
-        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .page-header .description { color: var(--text-secondary); margin-top: 1rem; }
-        .breadcrumb { color: var(--text-secondary); }
-        .breadcrumb a { color: #667eea; text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        .page-content {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header .description {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
 
         .card {
-            background: var(--card-bg); border-radius: 20px;
-            border: 1px solid var(--border-color); padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
         }
 
         .upload-area {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; min-height: 350px; border: 2px dashed var(--border-color);
-            border-radius: 16px; cursor: pointer; transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 350px;
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.02);
         }
 
-        .upload-area:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.05); }
-        .upload-area.dragover { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
-        .upload-icon { font-size: 5rem; margin-bottom: 1rem; }
-        .upload-text { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .upload-hint { color: var(--text-secondary); }
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+        }
 
         .features-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem; margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
         .feature-item {
-            display: flex; align-items: flex-start; gap: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
         }
 
-        .feature-icon { color: #4ade80; font-size: 1.5rem; }
-        .feature-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
-        .feature-item p { color: var(--text-secondary); font-size: 0.85rem; }
+        .feature-icon {
+            color: #4ade80;
+            font-size: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
 
         .progress-container {
-            background: rgba(255, 255, 255, 0.05); border-radius: 12px;
-            padding: 1rem; margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .progress-bar-bg {
-            width: 100%; height: 8px; background: var(--border-color);
-            border-radius: 4px; overflow: hidden; margin: 0.5rem 0;
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
         }
 
-        .progress-bar { height: 100%; background: var(--primary-gradient); border-radius: 4px; transition: width 0.3s ease; }
-        .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
 
-        .cloud-storage { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
-        .cloud-storage p { color: var(--text-secondary); margin-bottom: 1rem; }
-        .cloud-buttons { display: flex; gap: 1rem; justify-content: center; }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .cloud-storage {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .cloud-storage p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .cloud-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
         .cloud-btn {
-            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color); border-radius: 8px;
-            color: var(--text-secondary); cursor: not-allowed; opacity: 0.6;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .back-btn {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px; color: var(--text-primary); text-decoration: none;
-            transition: all 0.3s ease; margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
         }
 
-        .back-btn:hover { background: rgba(255, 255, 255, 0.15); }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-        .alert { padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
-        .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); color: #4ade80; }
-        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
 
-        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 2rem 0; text-align: center; }
-        .footer p { color: var(--text-secondary); }
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
 
-        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .mobile-menu-btn { display: block; }
-            .page-header h1 { font-size: 1.75rem; }
-            .features-grid { grid-template-columns: 1fr; }
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
-                <div class="logo"><h1>Best PDF Converter</h1></div>
+                <div class="logo">
+                    <h1>Best PDF Converter</h1>
+                </div>
                 <div class="nav-links">
                     <a href="{{ url_for('home') }}">Home</a>
                     <div class="nav-dropdown">
@@ -294,15 +557,16 @@
             <div class="page-header">
                 <h1>PDF to Word Converter</h1>
                 <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / PDF to Word</p>
-                <p class="description">Convert your PDF files to editable Word documents (.docx) while preserving formatting and layout.</p>
+                <p class="description">Convert your PDF files to editable Word documents (.docx) while preserving
+                    formatting and layout.</p>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             {% endwith %}
 
             <div class="card">
@@ -317,8 +581,11 @@
                     </div>
 
                     <div id="progress-container" class="progress-container hidden">
-                        <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Converting PDF to Word...</span></div>
-                        <div class="progress-bar-bg"><div id="progress-bar" class="progress-bar" style="width: 0%"></div></div>
+                        <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Converting PDF to
+                                Word...</span></div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                        </div>
                         <div class="progress-info">
                             <span id="progress-percent">0%</span>
                             <span id="progress-status">Processing...</span>
@@ -374,14 +641,16 @@
     </section>
 
     <footer class="footer">
-        <div class="container"><p>&copy; 2024 Best PDF Converter. All rights reserved.</p></div>
+        <div class="container">
+            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
     </footer>
 
     <script>
         const navToggle = document.getElementById('nav-toggle');
         const navLinks = document.querySelector('.nav-links');
         if (navToggle) {
-            navToggle.addEventListener('click', function() {
+            navToggle.addEventListener('click', function () {
                 navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
             });
         }
@@ -394,7 +663,7 @@
         const progressStatus = document.getElementById('progress-status');
 
         if (fileInput && uploadLabel) {
-            fileInput.addEventListener('change', function(e) {
+            fileInput.addEventListener('change', function (e) {
                 if (e.target.files.length > 0) {
                     const fileName = e.target.files[0].name;
                     const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
@@ -403,17 +672,17 @@
                 }
             });
 
-            uploadLabel.addEventListener('dragover', function(e) {
+            uploadLabel.addEventListener('dragover', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.add('dragover');
             });
 
-            uploadLabel.addEventListener('dragleave', function(e) {
+            uploadLabel.addEventListener('dragleave', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
             });
 
-            uploadLabel.addEventListener('drop', function(e) {
+            uploadLabel.addEventListener('drop', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
                 const files = e.dataTransfer.files;
@@ -424,7 +693,7 @@
             });
 
             const form = document.getElementById('pdf2word-form');
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 if (fileInput.files.length > 0) {
                     progressContainer.classList.remove('hidden');
                     const uploadDuration = 3000;
@@ -452,4 +721,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JT9QHQ41H9"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-JT9QHQ41H9');
+        gtag('config', 'G-48KRBHY1X8');
     </script>
 
     <!-- Primary Meta Tags -->
     <title>Merge PDF Files Online Free - Combine PDFs | Best PDF Converter</title>
     <meta name="title" content="Merge PDF Files Online Free - Combine PDFs | Best PDF Converter">
-    <meta name="description" content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages. Combine PDFs easily without registration. Fast and secure.">
-    <meta name="keywords" content="merge PDF, combine PDF, PDF merger, join PDF files, combine multiple PDFs, free PDF combiner, online PDF merger, PDF joiner">
+    <meta name="description"
+        content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages. Combine PDFs easily without registration. Fast and secure.">
+    <meta name="keywords"
+        content="merge PDF, combine PDF, PDF merger, join PDF files, combine multiple PDFs, free PDF combiner, online PDF merger, PDF joiner">
     <meta name="author" content="Best PDF Converter">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bestpdfconverter.online/merge">
@@ -27,7 +30,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bestpdfconverter.online/merge">
     <meta property="og:title" content="Merge PDF Files Online Free - Combine PDFs">
-    <meta property="og:description" content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages.">
+    <meta property="og:description"
+        content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages.">
     <meta property="og:image" content="https://bestpdfconverter.online/static/og-merge.png">
     <meta property="og:site_name" content="Best PDF Converter">
 
@@ -35,7 +39,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://bestpdfconverter.online/merge">
     <meta name="twitter:title" content="Merge PDF Files Online Free - Combine PDFs">
-    <meta name="twitter:description" content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages.">
+    <meta name="twitter:description"
+        content="Merge multiple PDF files into one document online for free. Drag and drop to reorder pages.">
     <meta name="twitter:image" content="https://bestpdfconverter.online/static/og-merge.png">
 
     <!-- Additional SEO -->
@@ -85,7 +90,8 @@
     </script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -101,7 +107,11 @@
             --border-color: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -111,183 +121,491 @@
             line-height: 1.6;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
         .navbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
             background: rgba(10, 14, 26, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 0;
         }
 
-        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         .logo h1 {
-            font-size: 1.8rem; font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 700;
             background: var(--primary-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
-        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
 
         /* Tools Dropdown */
-        .nav-dropdown { position: relative; }
-        .nav-dropdown-toggle { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
-        .nav-dropdown-toggle::after { content: '▼'; font-size: 0.6rem; transition: transform 0.3s ease; }
-        .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 0.5rem; min-width: 200px; opacity: 0; visibility: hidden;
-            transition: all 0.3s ease; margin-top: 0.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); z-index: 1001;
+        .nav-dropdown {
+            position: relative;
         }
-        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; }
-        .nav-dropdown-menu a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; }
-        .nav-dropdown-menu a:hover { background: rgba(102, 126, 234, 0.1); }
-        .nav-dropdown-menu .tool-icon { font-size: 1.2rem; }
 
-        .nav-cta { display: flex; align-items: center; gap: 1rem; }
+        .nav-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: 0.6rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-dropdown-menu .tool-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
         .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600;
-            text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
         }
 
         .btn-primary {
-            background: var(--primary-gradient); color: white;
+            background: var(--primary-gradient);
+            color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
-        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: white; backdrop-filter: blur(10px); }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
-        .btn-lg { padding: 1rem 2rem; font-size: 1.1rem; width: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
 
-        .page-content { padding: 120px 0 80px; min-height: 100vh; }
-        .page-header { margin-bottom: 2rem; }
-        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .breadcrumb { color: var(--text-secondary); }
-        .breadcrumb a { color: #667eea; text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        .page-content {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
 
         .card {
-            background: var(--card-bg); border-radius: 20px;
-            border: 1px solid var(--border-color); padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
         }
 
         .upload-area {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; min-height: 350px; border: 2px dashed var(--border-color);
-            border-radius: 16px; cursor: pointer; transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 350px;
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.02);
         }
 
-        .upload-area:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.05); }
-        .upload-area.dragover { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
-        .upload-icon { font-size: 5rem; margin-bottom: 1rem; }
-        .upload-text { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .upload-hint { color: var(--text-secondary); }
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+        }
 
         .success-box {
-            background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3);
-            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
-        .success-box h2 { color: #4ade80; font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .success-box p { color: #86efac; }
+        .success-box h2 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-box p {
+            color: #86efac;
+        }
 
         .file-item {
-            background: rgba(255, 255, 255, 0.02); border: 2px solid var(--border-color);
-            border-radius: 12px; padding: 1rem; margin-bottom: 1rem;
-            transition: all 0.3s ease; cursor: move;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: move;
         }
 
-        .file-item:hover { border-color: #667eea; }
-        .file-item .drag-handle { color: var(--text-secondary); font-size: 1.5rem; cursor: grab; }
-        .file-item .drag-handle:active { cursor: grabbing; }
-        .file-item .file-info { display: flex; align-items: center; gap: 1rem; }
-        .file-item .file-icon { font-size: 2.5rem; position: relative; }
-        .file-item .file-badge {
-            position: absolute; bottom: -5px; right: -5px;
-            background: var(--primary-gradient); color: white;
-            font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 600;
+        .file-item:hover {
+            border-color: #667eea;
         }
-        .file-item .file-name { font-weight: 500; }
-        .file-item .file-meta { color: var(--text-secondary); font-size: 0.85rem; }
+
+        .file-item .drag-handle {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: grab;
+        }
+
+        .file-item .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .file-item .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-item .file-icon {
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .file-item .file-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .file-item .file-name {
+            font-weight: 500;
+        }
+
+        .file-item .file-meta {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
 
         .premium-box {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .premium-box h4 { font-size: 1.1rem; margin-bottom: 1rem; }
-        .premium-option { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
-        .premium-option.disabled { opacity: 0.5; cursor: not-allowed; }
+        .premium-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .premium-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .premium-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .premium-badge {
-            background: rgba(251, 191, 36, 0.2); color: #fbbf24;
-            font-size: 0.7rem; padding: 4px 8px; border-radius: 10px; font-weight: 600;
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-weight: 600;
         }
 
         .progress-container {
-            background: rgba(255, 255, 255, 0.05); border-radius: 12px;
-            padding: 1rem; margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .progress-bar-bg {
-            width: 100%; height: 8px; background: var(--border-color);
-            border-radius: 4px; overflow: hidden; margin: 0.5rem 0;
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
         }
 
-        .progress-bar { height: 100%; background: var(--primary-gradient); border-radius: 4px; transition: width 0.3s ease; }
-        .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
 
-        .cloud-storage { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
-        .cloud-storage p { color: var(--text-secondary); margin-bottom: 1rem; }
-        .cloud-buttons { display: flex; gap: 1rem; justify-content: center; }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .cloud-storage {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .cloud-storage p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .cloud-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
         .cloud-btn {
-            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color); border-radius: 8px;
-            color: var(--text-secondary); cursor: not-allowed; opacity: 0.6;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .back-btn {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px; color: var(--text-primary); text-decoration: none;
-            transition: all 0.3s ease; margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
         }
 
-        .back-btn:hover { background: rgba(255, 255, 255, 0.15); }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-        .alert { padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
-        .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); color: #4ade80; }
-        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
 
-        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 2rem 0; text-align: center; }
-        .footer p { color: var(--text-secondary); }
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
 
-        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .mobile-menu-btn { display: block; }
-            .page-header h1 { font-size: 1.75rem; }
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
         }
 
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
-                <div class="logo"><h1>Best PDF Converter</h1></div>
+                <div class="logo">
+                    <h1>Best PDF Converter</h1>
+                </div>
                 <div class="nav-links">
                     <a href="{{ url_for('home') }}">Home</a>
                     <div class="nav-dropdown">
@@ -328,96 +646,101 @@
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             {% endwith %}
 
             {% if not files_uploaded %}
-                <div class="card">
-                    <form action="{{ url_for('merge_pdf') }}" method="post" enctype="multipart/form-data" id="merge-form">
-                        <div style="margin-bottom: 1.5rem;">
-                            <input type="file" id="files" name="files" accept=".pdf" multiple required class="hidden">
-                            <label for="files" class="upload-area" id="upload-label">
-                                <span class="upload-icon">&#128218;</span>
-                                <span class="upload-text">Choose PDF files or drag them here (up to 5 files)</span>
-                                <span class="upload-hint">Max size: 10MB per file</span>
-                            </label>
-                        </div>
+            <div class="card">
+                <form action="{{ url_for('merge_pdf') }}" method="post" enctype="multipart/form-data" id="merge-form">
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="file" id="files" name="files" accept=".pdf" multiple required class="hidden">
+                        <label for="files" class="upload-area" id="upload-label">
+                            <span class="upload-icon">&#128218;</span>
+                            <span class="upload-text">Choose PDF files or drag them here (up to 5 files)</span>
+                            <span class="upload-hint">Max size: 10MB per file</span>
+                        </label>
+                    </div>
 
-                        <div id="progress-container" class="progress-container hidden">
-                            <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Uploading files...</span></div>
-                            <div class="progress-bar-bg"><div id="progress-bar" class="progress-bar" style="width: 0%"></div></div>
-                            <div class="progress-info">
-                                <span id="progress-percent">0%</span>
-                                <span id="progress-speed">0 MB/s</span>
-                                <span id="progress-time">Time left: calculating...</span>
-                            </div>
+                    <div id="progress-container" class="progress-container hidden">
+                        <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Uploading files...</span>
                         </div>
-
-                        <button type="submit" class="btn btn-primary btn-lg">Upload Files</button>
-
-                        <div class="cloud-storage">
-                            <p>Or select from cloud storage:</p>
-                            <div class="cloud-buttons">
-                                <span class="cloud-btn">Google Drive</span>
-                                <span class="cloud-btn">Dropbox</span>
-                            </div>
-                            <p style="font-size: 0.8rem; margin-top: 0.75rem;">Cloud storage coming soon</p>
+                        <div class="progress-bar-bg">
+                            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
                         </div>
-                    </form>
-                </div>
+                        <div class="progress-info">
+                            <span id="progress-percent">0%</span>
+                            <span id="progress-speed">0 MB/s</span>
+                            <span id="progress-time">Time left: calculating...</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Upload Files</button>
+
+                    <div class="cloud-storage">
+                        <p>Or select from cloud storage:</p>
+                        <div class="cloud-buttons">
+                            <span class="cloud-btn">Google Drive</span>
+                            <span class="cloud-btn">Dropbox</span>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 0.75rem;">Cloud storage coming soon</p>
+                    </div>
+                </form>
+            </div>
             {% else %}
-                <div class="success-box">
-                    <h2>&#10004; Files Uploaded Successfully</h2>
-                    <p>Drag and drop files to reorder them before merging.</p>
-                </div>
+            <div class="success-box">
+                <h2>&#10004; Files Uploaded Successfully</h2>
+                <p>Drag and drop files to reorder them before merging.</p>
+            </div>
 
-                <div class="card">
-                    <form action="{{ url_for('merge_files') }}" method="post" id="merge-form">
-                        <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">File Order (drag to reorder):</h3>
+            <div class="card">
+                <form action="{{ url_for('merge_files') }}" method="post" id="merge-form">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">File Order (drag to reorder):
+                    </h3>
 
-                        <ul id="file-list" style="list-style: none; margin-bottom: 1.5rem;">
-                            {% for file in file_paths %}
-                            <li class="file-item" id="file-{{ loop.index0 }}" data-file="{{ file }}">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <span class="drag-handle">&#9776;</span>
-                                    <div class="file-info">
-                                        <div class="file-icon">&#128196;<span class="file-badge">PDF</span></div>
-                                        <div>
-                                            <div class="file-name">{{ file.split('_', 2)[-1] if '_' in file else file }}</div>
-                                            <div class="file-meta">PDF Document</div>
+                    <ul id="file-list" style="list-style: none; margin-bottom: 1.5rem;">
+                        {% for file in file_paths %}
+                        <li class="file-item" id="file-{{ loop.index0 }}" data-file="{{ file }}">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span class="drag-handle">&#9776;</span>
+                                <div class="file-info">
+                                    <div class="file-icon">&#128196;<span class="file-badge">PDF</span></div>
+                                    <div>
+                                        <div class="file-name">{{ file.split('_', 2)[-1] if '_' in file else file }}
                                         </div>
+                                        <div class="file-meta">PDF Document</div>
                                     </div>
                                 </div>
-                                <input type="hidden" name="file_paths[]" value="{{ file }}">
-                            </li>
-                            {% endfor %}
-                        </ul>
+                            </div>
+                            <input type="hidden" name="file_paths[]" value="{{ file }}">
+                        </li>
+                        {% endfor %}
+                    </ul>
 
-                        <div class="premium-box">
-                            <h4>Advanced Options:</h4>
-                            <label class="premium-option" style="cursor: pointer;">
-                                <input type="checkbox" id="merge-toggle" style="accent-color: #667eea;">
-                                <span>Merge all files into one PDF</span>
-                            </label>
-                            <label class="premium-option disabled">
-                                <input type="checkbox" disabled>
-                                <span style="color: var(--text-secondary);">Add cover page</span>
-                                <span class="premium-badge">Premium</span>
-                            </label>
-                            <label class="premium-option disabled">
-                                <input type="checkbox" disabled>
-                                <span style="color: var(--text-secondary);">Compress output PDF</span>
-                                <span class="premium-badge">Premium</span>
-                            </label>
-                        </div>
+                    <div class="premium-box">
+                        <h4>Advanced Options:</h4>
+                        <label class="premium-option" style="cursor: pointer;">
+                            <input type="checkbox" id="merge-toggle" style="accent-color: #667eea;">
+                            <span>Merge all files into one PDF</span>
+                        </label>
+                        <label class="premium-option disabled">
+                            <input type="checkbox" disabled>
+                            <span style="color: var(--text-secondary);">Add cover page</span>
+                            <span class="premium-badge">Premium</span>
+                        </label>
+                        <label class="premium-option disabled">
+                            <input type="checkbox" disabled>
+                            <span style="color: var(--text-secondary);">Compress output PDF</span>
+                            <span class="premium-badge">Premium</span>
+                        </label>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg">Merge PDFs Now</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-primary btn-lg">Merge PDFs Now</button>
+                </form>
+            </div>
             {% endif %}
 
             <a href="{{ url_for('home') }}" class="back-btn">&larr; Back to Home</a>
@@ -425,7 +748,9 @@
     </section>
 
     <footer class="footer">
-        <div class="container"><p>&copy; 2024 Best PDF Converter. All rights reserved.</p></div>
+        <div class="container">
+            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
@@ -433,7 +758,7 @@
         const navToggle = document.getElementById('nav-toggle');
         const navLinks = document.querySelector('.nav-links');
         if (navToggle) {
-            navToggle.addEventListener('click', function() {
+            navToggle.addEventListener('click', function () {
                 navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
             });
         }
@@ -445,7 +770,7 @@
                 animation: 200,
                 handle: '.drag-handle',
                 ghostClass: 'opacity-50',
-                onEnd: function(evt) {
+                onEnd: function (evt) {
                     const items = fileList.querySelectorAll('li');
                     items.forEach((item, index) => { item.setAttribute('id', `file-${index}`); });
                 }
@@ -462,7 +787,7 @@
         const progressTime = document.getElementById('progress-time');
 
         if (fileInput && uploadLabel) {
-            fileInput.addEventListener('change', function(e) {
+            fileInput.addEventListener('change', function (e) {
                 if (e.target.files.length > 0) {
                     const count = e.target.files.length;
                     uploadLabel.querySelector('.upload-text').textContent = `${count} file(s) selected`;
@@ -475,17 +800,17 @@
                 }
             });
 
-            uploadLabel.addEventListener('dragover', function(e) {
+            uploadLabel.addEventListener('dragover', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.add('dragover');
             });
 
-            uploadLabel.addEventListener('dragleave', function(e) {
+            uploadLabel.addEventListener('dragleave', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
             });
 
-            uploadLabel.addEventListener('drop', function(e) {
+            uploadLabel.addEventListener('drop', function (e) {
                 e.preventDefault(); e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
                 const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
@@ -499,7 +824,7 @@
 
             const form = document.getElementById('merge-form');
             if (form) {
-                form.addEventListener('submit', function(e) {
+                form.addEventListener('submit', function (e) {
                     if (fileInput.files.length > 0 && progressContainer) {
                         progressContainer.classList.remove('hidden');
                         const totalSize = Array.from(fileInput.files).reduce((sum, f) => sum + f.size, 0);
@@ -527,4 +852,5 @@
         }
     </script>
 </body>
+
 </html>

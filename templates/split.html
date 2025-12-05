@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JT9QHQ41H9"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-JT9QHQ41H9');
+        gtag('config', 'G-48KRBHY1X8');
     </script>
 
     <!-- Primary Meta Tags -->
     <title>Split PDF Online Free - Extract Pages from PDF | Best PDF Converter</title>
     <meta name="title" content="Split PDF Online Free - Extract Pages from PDF | Best PDF Converter">
-    <meta name="description" content="Split PDF files online for free. Extract specific pages, page ranges, or separate all pages from your PDF documents. No registration required. Fast and secure.">
-    <meta name="keywords" content="split PDF, extract PDF pages, PDF splitter, separate PDF pages, PDF page extractor, free PDF split, online PDF splitter">
+    <meta name="description"
+        content="Split PDF files online for free. Extract specific pages, page ranges, or separate all pages from your PDF documents. No registration required. Fast and secure.">
+    <meta name="keywords"
+        content="split PDF, extract PDF pages, PDF splitter, separate PDF pages, PDF page extractor, free PDF split, online PDF splitter">
     <meta name="author" content="Best PDF Converter">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bestpdfconverter.online/split">
@@ -27,7 +30,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bestpdfconverter.online/split">
     <meta property="og:title" content="Split PDF Online Free - Extract Pages from PDF">
-    <meta property="og:description" content="Split PDF files online for free. Extract specific pages or page ranges from your PDF documents. No registration required.">
+    <meta property="og:description"
+        content="Split PDF files online for free. Extract specific pages or page ranges from your PDF documents. No registration required.">
     <meta property="og:image" content="https://bestpdfconverter.online/static/og-split.png">
     <meta property="og:site_name" content="Best PDF Converter">
 
@@ -35,7 +39,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://bestpdfconverter.online/split">
     <meta name="twitter:title" content="Split PDF Online Free - Extract Pages from PDF">
-    <meta name="twitter:description" content="Split PDF files online for free. Extract specific pages or page ranges from your PDF documents.">
+    <meta name="twitter:description"
+        content="Split PDF files online for free. Extract specific pages or page ranges from your PDF documents.">
     <meta name="twitter:image" content="https://bestpdfconverter.online/static/og-split.png">
 
     <!-- Additional SEO -->
@@ -91,7 +96,8 @@
     </script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -590,6 +596,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -642,115 +649,120 @@
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             {% endwith %}
 
             {% if not file_uploaded %}
-                <div class="card">
-                    <form action="{{ url_for('split_pdf') }}" method="post" enctype="multipart/form-data" id="split-form">
-                        <div style="margin-bottom: 1.5rem;">
-                            <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
-                            <label for="file" class="upload-area" id="upload-label">
-                                <span class="upload-icon">&#128196;</span>
-                                <span class="upload-text">Choose PDF file or drag it here</span>
-                                <span class="upload-hint">Max size: 10MB</span>
+            <div class="card">
+                <form action="{{ url_for('split_pdf') }}" method="post" enctype="multipart/form-data" id="split-form">
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
+                        <label for="file" class="upload-area" id="upload-label">
+                            <span class="upload-icon">&#128196;</span>
+                            <span class="upload-text">Choose PDF file or drag it here</span>
+                            <span class="upload-hint">Max size: 10MB</span>
+                        </label>
+                    </div>
+
+                    <!-- Progress Container -->
+                    <div id="progress-container" class="progress-container hidden">
+                        <div style="margin-bottom: 0.5rem;">
+                            <span style="font-weight: 500;">Uploading...</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="progress-percent">0%</span>
+                            <span id="progress-speed">0 MB/s</span>
+                            <span id="progress-time">Time left: calculating...</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Upload and Show Page Count</button>
+
+                    <!-- Cloud Storage Options -->
+                    <div class="cloud-storage">
+                        <p>Or select from cloud storage:</p>
+                        <div class="cloud-buttons">
+                            <span class="cloud-btn">Google Drive</span>
+                            <span class="cloud-btn">Dropbox</span>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 0.75rem;">Cloud storage coming soon</p>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="success-box">
+                <h2>&#10004; PDF Uploaded Successfully</h2>
+                <p>Total Pages: <strong>{{ page_count }}</strong></p>
+            </div>
+
+            <div class="card">
+                <form action="{{ url_for('split_pdf') }}" method="post" id="split-form">
+                    <input type="hidden" name="file_name" value="{{ file_name }}">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Choose Split Method:</h3>
+
+                        <div class="option-card selected" id="option-range">
+                            <label>
+                                <input type="radio" name="split_type" value="range" checked>
+                                <div>
+                                    <strong>Range (From - To)</strong>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;">
+                                        <input type="number" name="start_page" min="1" max="{{ page_count }}"
+                                            placeholder="Start page">
+                                        <span style="color: var(--text-secondary);">to</span>
+                                        <input type="number" name="end_page" min="1" max="{{ page_count }}"
+                                            placeholder="End page">
+                                    </div>
+                                </div>
                             </label>
                         </div>
 
-                        <!-- Progress Container -->
-                        <div id="progress-container" class="progress-container hidden">
-                            <div style="margin-bottom: 0.5rem;">
-                                <span style="font-weight: 500;">Uploading...</span>
-                            </div>
-                            <div class="progress-bar-bg">
-                                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
-                            </div>
-                            <div class="progress-info">
-                                <span id="progress-percent">0%</span>
-                                <span id="progress-speed">0 MB/s</span>
-                                <span id="progress-time">Time left: calculating...</span>
-                            </div>
+                        <div class="option-card" id="option-specific">
+                            <label>
+                                <input type="radio" name="split_type" value="specific">
+                                <div style="flex-grow: 1;">
+                                    <strong>Specific Pages</strong>
+                                    <div style="margin-top: 0.75rem;">
+                                        <input type="text" name="specific_pages" placeholder="e.g., 1,3,5-7"
+                                            style="width: 100%;">
+                                        <small
+                                            style="color: var(--text-secondary); font-size: 0.75rem; display: block; margin-top: 0.5rem;">Enter
+                                            page numbers separated by commas or use ranges (e.g., 1-5,7,9-12)</small>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg">Upload and Show Page Count</button>
-
-                        <!-- Cloud Storage Options -->
-                        <div class="cloud-storage">
-                            <p>Or select from cloud storage:</p>
-                            <div class="cloud-buttons">
-                                <span class="cloud-btn">Google Drive</span>
-                                <span class="cloud-btn">Dropbox</span>
-                            </div>
-                            <p style="font-size: 0.8rem; margin-top: 0.75rem;">Cloud storage coming soon</p>
-                        </div>
-                    </form>
-                </div>
-            {% else %}
-                <div class="success-box">
-                    <h2>&#10004; PDF Uploaded Successfully</h2>
-                    <p>Total Pages: <strong>{{ page_count }}</strong></p>
-                </div>
-
-                <div class="card">
-                    <form action="{{ url_for('split_pdf') }}" method="post" id="split-form">
-                        <input type="hidden" name="file_name" value="{{ file_name }}">
-
-                        <div style="margin-bottom: 1.5rem;">
-                            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Choose Split Method:</h3>
-
-                            <div class="option-card selected" id="option-range">
-                                <label>
-                                    <input type="radio" name="split_type" value="range" checked>
-                                    <div>
-                                        <strong>Range (From - To)</strong>
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;">
-                                            <input type="number" name="start_page" min="1" max="{{ page_count }}" placeholder="Start page">
-                                            <span style="color: var(--text-secondary);">to</span>
-                                            <input type="number" name="end_page" min="1" max="{{ page_count }}" placeholder="End page">
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="option-card" id="option-specific">
-                                <label>
-                                    <input type="radio" name="split_type" value="specific">
-                                    <div style="flex-grow: 1;">
-                                        <strong>Specific Pages</strong>
-                                        <div style="margin-top: 0.75rem;">
-                                            <input type="text" name="specific_pages" placeholder="e.g., 1,3,5-7" style="width: 100%;">
-                                            <small style="color: var(--text-secondary); font-size: 0.75rem; display: block; margin-top: 0.5rem;">Enter page numbers separated by commas or use ranges (e.g., 1-5,7,9-12)</small>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="option-card" id="option-even">
-                                <label>
-                                    <input type="radio" name="split_type" value="even">
-                                    <div>
-                                        <strong>Even Pages Only</strong>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="option-card" id="option-odd">
-                                <label>
-                                    <input type="radio" name="split_type" value="odd">
-                                    <div>
-                                        <strong>Odd Pages Only</strong>
-                                    </div>
-                                </label>
-                            </div>
+                        <div class="option-card" id="option-even">
+                            <label>
+                                <input type="radio" name="split_type" value="even">
+                                <div>
+                                    <strong>Even Pages Only</strong>
+                                </div>
+                            </label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg">Split PDF Now</button>
-                    </form>
-                </div>
+                        <div class="option-card" id="option-odd">
+                            <label>
+                                <input type="radio" name="split_type" value="odd">
+                                <div>
+                                    <strong>Odd Pages Only</strong>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Split PDF Now</button>
+                </form>
+            </div>
             {% endif %}
 
             <a href="{{ url_for('home') }}" class="back-btn">&larr; Back to Home</a>
@@ -770,7 +782,7 @@
         const navLinks = document.querySelector('.nav-links');
 
         if (navToggle) {
-            navToggle.addEventListener('click', function() {
+            navToggle.addEventListener('click', function () {
                 navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
             });
         }
@@ -786,7 +798,7 @@
 
         if (fileInput && uploadLabel) {
             // File selection
-            fileInput.addEventListener('change', function(e) {
+            fileInput.addEventListener('change', function (e) {
                 if (e.target.files.length > 0) {
                     const fileName = e.target.files[0].name;
                     const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
@@ -796,19 +808,19 @@
             });
 
             // Drag and drop
-            uploadLabel.addEventListener('dragover', function(e) {
+            uploadLabel.addEventListener('dragover', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 uploadLabel.classList.add('dragover');
             });
 
-            uploadLabel.addEventListener('dragleave', function(e) {
+            uploadLabel.addEventListener('dragleave', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
             });
 
-            uploadLabel.addEventListener('drop', function(e) {
+            uploadLabel.addEventListener('drop', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 uploadLabel.classList.remove('dragover');
@@ -822,7 +834,7 @@
 
             // Progress tracking with simulated metrics
             const form = document.getElementById('split-form');
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 if (fileInput && fileInput.files.length > 0) {
                     progressContainer.classList.remove('hidden');
                     const fileSize = fileInput.files[0].size;
@@ -853,7 +865,7 @@
 
         // Radio button selection visual feedback
         document.querySelectorAll('input[type="radio"][name="split_type"]').forEach(radio => {
-            radio.addEventListener('change', function() {
+            radio.addEventListener('change', function () {
                 document.querySelectorAll('.option-card').forEach(card => {
                     card.classList.remove('selected');
                 });
@@ -864,4 +876,5 @@
         });
     </script>
 </body>
+
 </html>

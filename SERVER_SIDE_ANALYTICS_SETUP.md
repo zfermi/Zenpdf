@@ -18,7 +18,7 @@ This implementation uses **server-side tracking** with Google Analytics 4 Measur
 ### Step 1: Get Your GA4 API Secret
 
 1. Go to [Google Analytics](https://analytics.google.com)
-2. Select your property (G-JT9QHQ41H9)
+2. Select your property (G-48KRBHY1X8)
 3. Click **Admin** (gear icon at bottom left)
 4. Under **Data Streams**, click on your web stream
 5. Scroll down to **Measurement Protocol API secrets**
@@ -31,7 +31,7 @@ This implementation uses **server-side tracking** with Google Analytics 4 Measur
 #### For Local Development:
 Create or update `.env` file in your project root:
 ```bash
-GA4_MEASUREMENT_ID=G-JT9QHQ41H9
+GA4_MEASUREMENT_ID=G-48KRBHY1X8
 GA4_API_SECRET=your_api_secret_here
 ```
 
@@ -156,12 +156,12 @@ If you want to completely remove the client-side Google Analytics code from your
 
 ```html
 <!-- Remove this block -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JT9QHQ41H9"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-JT9QHQ41H9');
+  gtag('config', 'G-48KRBHY1X8');
 </script>
 ```
 
