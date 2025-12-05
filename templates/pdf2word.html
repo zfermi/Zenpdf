@@ -49,6 +49,24 @@
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
         .nav-links a:hover { color: var(--text-primary); }
+
+        /* Tools Dropdown */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-toggle { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+        .nav-dropdown-toggle::after { content: '▼'; font-size: 0.6rem; transition: transform 0.3s ease; }
+        .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
+        .nav-dropdown-menu {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 0.5rem; min-width: 200px; opacity: 0; visibility: hidden;
+            transition: all 0.3s ease; margin-top: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); z-index: 1001;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; }
+        .nav-dropdown-menu a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; }
+        .nav-dropdown-menu a:hover { background: rgba(102, 126, 234, 0.1); }
+        .nav-dropdown-menu .tool-icon { font-size: 1.2rem; }
+
         .nav-cta { display: flex; align-items: center; gap: 1rem; }
 
         .btn {
@@ -161,6 +179,16 @@
                 <div class="logo"><h1>Best PDF Converter</h1></div>
                 <div class="nav-links">
                     <a href="{{ url_for('home') }}">Home</a>
+                    <div class="nav-dropdown">
+                        <a class="nav-dropdown-toggle">Tools</a>
+                        <div class="nav-dropdown-menu">
+                            <a href="{{ url_for('split_pdf') }}"><span class="tool-icon">✂️</span> Split PDF</a>
+                            <a href="{{ url_for('merge_pdf') }}"><span class="tool-icon">📑</span> Merge PDF</a>
+                            <a href="{{ url_for('compress_pdf') }}"><span class="tool-icon">🗜️</span> Compress PDF</a>
+                            <a href="{{ url_for('rotate_pdf') }}"><span class="tool-icon">🔄</span> Rotate PDF</a>
+                            <a href="{{ url_for('pdf2word') }}"><span class="tool-icon">📝</span> PDF to Word</a>
+                        </div>
+                    </div>
                     <a href="{{ url_for('pricing') }}">Pricing</a>
                     {% if current_user.is_authenticated %}
                     <a href="{{ url_for('dashboard') }}">Dashboard</a>
