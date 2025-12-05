@@ -1,0 +1,30 @@
+# OCR Dependencies for ZenPDF
+# Add these to your main requirements.txt
+
+# Core OCR
+pytesseract==0.3.10          # Python wrapper for Tesseract OCR
+pdf2image==1.17.0            # Convert PDF pages to images
+
+# Image Processing
+Pillow==10.1.0               # Image manipulation
+opencv-python-headless==4.8.1.78  # Computer vision (headless for servers)
+numpy==1.26.2                # Array operations
+
+# PDF Generation (for searchable PDFs)
+reportlab==4.0.7             # PDF generation library
+
+# Note: System dependencies required (install via apt-get or brew):
+# - tesseract-ocr (OCR engine)
+# - tesseract-ocr-eng (English language data)
+# - poppler-utils (PDF rendering for pdf2image)
+#
+# Ubuntu/Debian:
+#   apt-get install tesseract-ocr tesseract-ocr-eng poppler-utils
+#
+# macOS:
+#   brew install tesseract poppler
+#
+# Windows:
+#   Download from:
+#   - Tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+#   - Poppler: https://github.com/oschwartz10612/poppler-windows/releases
