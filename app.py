@@ -220,6 +220,14 @@ def create_app(config_name=None):
     def home():
         return render_template('index.html', version=__version__)
 
+    @app.route('/sitemap.xml')
+    def sitemap():
+        return send_file('static/sitemap.xml', mimetype='application/xml')
+
+    @app.route('/robots.txt')
+    def robots():
+        return send_file('static/robots.txt', mimetype='text/plain')
+
     @app.route('/version')
     def version():
         """API endpoint to check version"""

@@ -1,0 +1,29 @@
+# robots.txt for Best PDF Converter
+# https://bestpdfconverter.online
+
+User-agent: *
+Allow: /
+Allow: /split
+Allow: /merge
+Allow: /compress
+Allow: /rotate
+Allow: /pdf2word
+Allow: /pricing
+
+# Disallow private/auth pages
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+
+# Disallow temporary files
+Disallow: /uploads/
+Disallow: /temp/
+Disallow: /static/uploads/
+
+# Sitemap location
+Sitemap: https://bestpdfconverter.online/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
