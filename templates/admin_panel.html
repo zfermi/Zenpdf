@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RCZ009MD6"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JT9QHQ41H9"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-6RCZ009MD6');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-JT9QHQ41H9');
     </script>
 
     <!-- Primary Meta Tags -->
@@ -20,7 +22,8 @@
     <meta name="theme-color" content="#667eea">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -34,7 +37,11 @@
             --border-color: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -44,55 +51,146 @@
             line-height: 1.6;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
         .navbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
             background: rgba(10, 14, 26, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 0;
         }
 
-        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         .logo h1 {
-            font-size: 1.8rem; font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 700;
             background: var(--primary-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
-        .nav-links a:hover { color: var(--text-primary); }
-        .nav-links a.active { color: var(--text-primary); }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
 
         /* Tools Dropdown */
-        .nav-dropdown { position: relative; }
-        .nav-dropdown-toggle { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
-        .nav-dropdown-toggle::after { content: '▼'; font-size: 0.6rem; transition: transform 0.3s ease; }
-        .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 0.5rem; min-width: 200px; opacity: 0; visibility: hidden;
-            transition: all 0.3s ease; margin-top: 0.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); z-index: 1001;
+        .nav-dropdown {
+            position: relative;
         }
-        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; }
-        .nav-dropdown-menu a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; }
-        .nav-dropdown-menu a:hover { background: rgba(102, 126, 234, 0.1); }
-        .nav-dropdown-menu .tool-icon { font-size: 1.2rem; }
 
-        .page-content { padding: 120px 0 80px; min-height: 100vh; }
+        .nav-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
 
-        .page-header { margin-bottom: 3rem; }
-        .page-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .page-header p { color: var(--text-secondary); }
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: 0.6rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-dropdown-menu .tool-icon {
+            font-size: 1.2rem;
+        }
+
+        .page-content {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+        }
 
         .stats-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem; margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
@@ -104,18 +202,37 @@
             transition: transform 0.3s ease;
         }
 
-        .stat-card:hover { transform: translateY(-3px); }
-
-        .stat-number {
-            font-size: 2.5rem; font-weight: 800; margin-bottom: 0.25rem;
+        .stat-card:hover {
+            transform: translateY(-3px);
         }
 
-        .stat-number.blue { color: #3b82f6; }
-        .stat-number.green { color: #22c55e; }
-        .stat-number.purple { color: #a855f7; }
-        .stat-number.yellow { color: #eab308; }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
 
-        .stat-label { color: var(--text-secondary); font-weight: 500; font-size: 0.9rem; }
+        .stat-number.blue {
+            color: #3b82f6;
+        }
+
+        .stat-number.green {
+            color: #22c55e;
+        }
+
+        .stat-number.purple {
+            color: #a855f7;
+        }
+
+        .stat-number.yellow {
+            color: #eab308;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
 
         .card {
             background: var(--card-bg);
@@ -126,33 +243,72 @@
         }
 
         .card-header {
-            display: flex; align-items: center; gap: 0.75rem;
-            font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
         }
 
-        .table { width: 100%; border-collapse: collapse; }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         .table th {
-            padding: 1rem; text-align: left;
-            color: var(--text-secondary); font-weight: 600;
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+            padding: 1rem;
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             border-bottom: 2px solid var(--border-color);
         }
+
         .table td {
             padding: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
-        .table tr:hover { background: rgba(255, 255, 255, 0.02); }
 
-        .status-badge {
-            display: inline-flex; align-items: center; padding: 0.25rem 0.75rem;
-            border-radius: 50px; font-size: 0.7rem; font-weight: 600;
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        .status-active { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
-        .status-inactive { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        .status-admin { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
-        .status-success { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
-        .status-failed { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .status-admin {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+        }
+
+        .status-success {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
 
         .tier-select {
             background: var(--dark-bg);
@@ -180,50 +336,127 @@
             margin-right: 0.5rem;
         }
 
-        .action-btn.deactivate { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        .action-btn.deactivate:hover { background: rgba(239, 68, 68, 0.2); }
-        .action-btn.activate { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
-        .action-btn.activate:hover { background: rgba(74, 222, 128, 0.2); }
-        .action-btn.admin { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
-        .action-btn.admin:hover { background: rgba(168, 85, 247, 0.2); }
-        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .action-btn.deactivate {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .action-btn.deactivate:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .action-btn.activate {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        .action-btn.activate:hover {
+            background: rgba(74, 222, 128, 0.2);
+        }
+
+        .action-btn.admin {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+        }
+
+        .action-btn.admin:hover {
+            background: rgba(168, 85, 247, 0.2);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
         .empty-state {
-            text-align: center; padding: 3rem;
+            text-align: center;
+            padding: 3rem;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
             border: 2px dashed var(--border-color);
             color: var(--text-secondary);
         }
 
-        .alert { padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; }
-        .alert-success { background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.3); color: #4ade80; }
-        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
 
-        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 2rem 0; text-align: center; }
-        .footer p { color: var(--text-secondary); }
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
 
-        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
 
         @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .mobile-menu-btn { display: block; }
-            .page-header h1 { font-size: 1.75rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .table { font-size: 0.85rem; }
-            .table th, .table td { padding: 0.75rem 0.5rem; }
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.75rem 0.5rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
-                <div class="logo"><h1>Best PDF Converter</h1></div>
+                <div class="logo">
+                    <h1>Best PDF Converter</h1>
+                </div>
                 <div class="nav-links">
                     <a href="{{ url_for('home') }}">Home</a>
                     <div class="nav-dropdown">
@@ -254,11 +487,11 @@
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             {% endwith %}
 
             <!-- System Stats -->
@@ -303,11 +536,16 @@
                                 <td style="font-weight: 500;">{{ user.email }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>
-                                    <form method="POST" action="{{ url_for('admin_update_user_tier', user_id=user.id) }}" style="display: inline;">
+                                    <form method="POST"
+                                        action="{{ url_for('admin_update_user_tier', user_id=user.id) }}"
+                                        style="display: inline;">
                                         <select name="tier" onchange="this.form.submit()" class="tier-select">
-                                            <option value="free" {% if user.subscription_tier=='free' %}selected{% endif %}>Free</option>
-                                            <option value="premium" {% if user.subscription_tier=='premium' %}selected{% endif %}>Premium</option>
-                                            <option value="enterprise" {% if user.subscription_tier=='enterprise' %}selected{% endif %}>Enterprise</option>
+                                            <option value="free" {% if user.subscription_tier=='free' %}selected{% endif
+                                                %}>Free</option>
+                                            <option value="premium" {% if user.subscription_tier=='premium' %}selected{%
+                                                endif %}>Premium</option>
+                                            <option value="enterprise" {% if user.subscription_tier=='enterprise'
+                                                %}selected{% endif %}>Enterprise</option>
                                         </select>
                                     </form>
                                 </td>
@@ -325,15 +563,22 @@
                                     <span style="color: var(--text-secondary); font-size: 0.85rem;">No</span>
                                     {% endif %}
                                 </td>
-                                <td style="color: var(--text-secondary); font-size: 0.85rem;">{{ user.created_at.strftime('%b %d, %Y') }}</td>
+                                <td style="color: var(--text-secondary); font-size: 0.85rem;">{{
+                                    user.created_at.strftime('%b %d, %Y') }}</td>
                                 <td>
-                                    <form method="POST" action="{{ url_for('admin_toggle_user_active', user_id=user.id) }}" style="display: inline;">
-                                        <button type="submit" class="action-btn {% if user.is_active %}deactivate{% else %}activate{% endif %}">
+                                    <form method="POST"
+                                        action="{{ url_for('admin_toggle_user_active', user_id=user.id) }}"
+                                        style="display: inline;">
+                                        <button type="submit"
+                                            class="action-btn {% if user.is_active %}deactivate{% else %}activate{% endif %}">
                                             {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
                                         </button>
                                     </form>
-                                    <form method="POST" action="{{ url_for('admin_toggle_user_admin', user_id=user.id) }}" style="display: inline;">
-                                        <button type="submit" class="action-btn admin" {% if user.id==current_user.id %}disabled title="Cannot modify your own admin status"{% endif %}>
+                                    <form method="POST"
+                                        action="{{ url_for('admin_toggle_user_admin', user_id=user.id) }}"
+                                        style="display: inline;">
+                                        <button type="submit" class="action-btn admin" {% if user.id==current_user.id
+                                            %}disabled title="Cannot modify your own admin status" {% endif %}>
                                             {% if user.is_admin %}Remove Admin{% else %}Make Admin{% endif %}
                                         </button>
                                     </form>
@@ -365,8 +610,10 @@
                             {% for operation in recent_operations %}
                             <tr>
                                 <td style="font-weight: 500;">{{ operation.user.email }}</td>
-                                <td style="text-transform: capitalize; font-weight: 500;">{{ operation.operation_type }}</td>
-                                <td style="color: var(--text-secondary);">{{ operation.created_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+                                <td style="text-transform: capitalize; font-weight: 500;">{{ operation.operation_type }}
+                                </td>
+                                <td style="color: var(--text-secondary);">{{ operation.created_at.strftime('%b %d, %Y
+                                    %I:%M %p') }}</td>
                                 <td style="color: var(--text-secondary);">{{ operation.pages_processed or 'N/A' }}</td>
                                 <td>
                                     {% if operation.success %}
@@ -390,17 +637,20 @@
     </section>
 
     <footer class="footer">
-        <div class="container"><p>&copy; 2024 Best PDF Converter. All rights reserved.</p></div>
+        <div class="container">
+            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
     </footer>
 
     <script>
         const navToggle = document.getElementById('nav-toggle');
         const navLinks = document.querySelector('.nav-links');
         if (navToggle) {
-            navToggle.addEventListener('click', function() {
+            navToggle.addEventListener('click', function () {
                 navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
             });
         }
     </script>
 </body>
+
 </html>

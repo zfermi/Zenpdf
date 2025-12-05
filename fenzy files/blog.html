@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Fenzy</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .blog-page {
+            padding: 100px 0 80px;
+            background: var(--darker-bg);
+            min-height: 100vh;
+        }
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .blog-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .blog-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        .blog-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .blog-card:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        .blog-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .blog-content {
+            padding: 2rem;
+        }
+        .blog-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .blog-card h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .blog-card h2 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .blog-card h2 a:hover {
+            color: #667eea;
+        }
+        .blog-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: gap 0.3s ease;
+        }
+        .read-more:hover {
+            gap: 1rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        @media (max-width: 768px) {
+            .blog-header h1 {
+                font-size: 2rem;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-page">
+        <div class="blog-container">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Home
+            </a>
+
+            <div class="blog-header">
+                <h1>Fenzy Blog</h1>
+                <p>Latest news, updates, and streaming tips</p>
+            </div>
+
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&auto=format&fit=crop" alt="Streaming Revolution" class="blog-image">
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
+                                    <line x1="8" y1="2" x2="8" y2="6" stroke-width="2"/>
+                                    <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+                                </svg>
+                                Nov 29, 2024
+                            </span>
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                    <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+                                </svg>
+                                5 min read
+                            </span>
+                        </div>
+                        <h2><a href="blog-post-1.html">The Future of Streaming: Why IPTV is Revolutionizing Home Entertainment</a></h2>
+                        <p class="blog-excerpt">
+                            The way we consume entertainment has dramatically changed over the past decade. Gone are the days of expensive cable packages and rigid TV schedules. IPTV technology is leading the charge in this streaming revolution, and Fenzy is at the forefront...
+                        </p>
+                        <a href="blog-post-1.html" class="read-more">
+                            Read More
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="5" y1="12" x2="19" y2="12" stroke-width="2"/>
+                                <polyline points="12 5 19 12 12 19" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&auto=format&fit=crop" alt="Maximize Fenzy" class="blog-image">
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
+                                    <line x1="8" y1="2" x2="8" y2="6" stroke-width="2"/>
+                                    <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+                                </svg>
+                                Nov 28, 2024
+                            </span>
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                    <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+                                </svg>
+                                7 min read
+                            </span>
+                        </div>
+                        <h2><a href="blog-post-2.html">10 Hidden Features in Fenzy That Will Transform Your Viewing Experience</a></h2>
+                        <p class="blog-excerpt">
+                            You've downloaded Fenzy and you're enjoying unlimited streaming, but are you making the most of what the app has to offer? Most users don't realize that Fenzy is packed with powerful features that can completely transform how you watch...
+                        </p>
+                        <a href="blog-post-2.html" class="read-more">
+                            Read More
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="5" y1="12" x2="19" y2="12" stroke-width="2"/>
+                                <polyline points="12 5 19 12 12 19" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

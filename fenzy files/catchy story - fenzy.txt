@@ -1,0 +1,89 @@
+Option 1: The Hotel Room Nightmare
+Title: Finally solved my hotel room entertainment problem Body:
+So I travel a lot for work, and hotel TV is always the same story - 200 channels of nothing, half are shopping networks, and good luck finding anything in English if you're abroad.
+
+Last month I'm in a hotel room at 11pm, jet-lagged and can't sleep. Scrolling through channel 147 (another infomercial), channel 148 (static), channel 149 (QVC in a language I don't speak)...
+
+Gave up and started building something on my phone during those sleepless nights. Figured if I'm gonna be stuck in hotels, might as well have access to actual content I want to watch.
+
+Fast forward to now - just finished v1.1.0. It's called Fenzy, and honestly it's been a lifesaver. Thousands of channels, actual movies, works with Chromecast so I can use the hotel TV, and I can finally watch what I want.
+
+Thought some of you might have the same problem, so here it is:
+https://pixeldrain.com/u/XtjPfN9W
+
+12 languages supported too, which has been clutch when traveling.
+
+Anyone else have ridiculous hotel TV stories? 😅
+Option 2: The Family Reunion
+Title: How I became the favorite cousin at family gatherings Body:
+Family reunion last summer. 20+ people crammed in my uncle's cabin. Everyone fighting over the TV.
+
+Grandma wants her Turkish soap operas. Dad wants the game. Cousins want to watch anime. Mom's asking if we can get that French cooking show. It's chaos.
+
+Uncle's cable package has like 50 channels and nobody's happy.
+
+I'm the tech guy in the family, so everyone's looking at me like I can magically fix this. Spoiler: I couldn't. That weekend was... tense.
+
+But it got me thinking. Spent the next few months building an app that could actually handle this scenario. Called it Fenzy - basically threw in every channel type I could find, 12 language support, Chromecast so people could take turns easily.
+
+Just finished v1.1.0 and tested it last weekend at another family thing. Grandma got her shows, kids got their content, everyone happy. I'm now the golden child. 
+
+Download: https://pixeldrain.com/u/XtjPfN9W
+
+Pro tip: Being able to save the day with tech makes you everyone's favorite relative 😂
+
+What's your worst family TV fight story?
+Option 3: The Roommate Wars
+Title: My roommate's "solution" to our streaming bills almost destroyed our friendship Body:
+Roommate sees our monthly streaming costs and loses it. "We're paying $80/month for THIS?!"
+
+His brilliant solution? Cancel everything. All of it.
+
+For three days we're sitting there with literally nothing to watch. He's smug about the money we're saving. I'm going insane.
+
+Day 4, I crack and start looking for alternatives. Not going back to cable, that's even worse. Spend the weekend down a rabbit hole of IPTV and streaming tech.
+
+End up building something just so we'd have SOMETHING to watch. Added a free trial mode because I knew he wouldn't pay for anything after his streaming purge rampage.
+
+Long story short - Fenzy was born out of roommate-induced desperation. v1.1.0 just dropped:
+https://pixeldrain.com/u/XtjPfN9W
+
+Roommate tried it, loved it, now acts like it was his idea all along. 🙄
+
+We still friends though. Barely.
+
+Anyone else have roommates that make questionable money-saving decisions?
+Option 4: The Expat Struggle
+Title: Being homesick abroad hit different when you can't even watch your own country's TV Body:
+Moved abroad for work 2 years ago. Awesome opportunity, great pay, cool city.
+
+What they don't tell you: You'll be desperately trying to watch your home country's news at 2am and hitting geo-blocks everywhere.
+
+VPNs help but they're janky. Subscriptions add up. Half the services don't even work. I just wanted to watch the game and some familiar shows, you know?
+
+Got so frustrated I started tinkering. Built something that actually works. Added 12 languages because I figured other expats probably have the same problem.
+
+It's called Fenzy, just hit v1.1.0:
+https://pixeldrain.com/u/XtjPfN9W
+
+Has guest mode so you can try it first. Chromecast works great. Honestly wish this existed when I first moved - would've saved me so much headache.
+
+Any other expats here? How do you deal with the content access problem?
+Option 5: The Power Outage (Shortest/Catchiest)
+Title: Built this during a 3-day internet outage. Stockholm syndrome is real. Body:
+Storm knocked out internet for 3 days. Had mobile data but couldn't stream anything heavy.
+
+Day 1: Fine, I'll read.
+Day 2: Maybe I'll learn guitar.
+Day 3: *starts coding furiously on phone*
+
+When internet came back, I had the basic framework for an IPTV app. Figured might as well finish it.
+
+Several months later - Fenzy v1.1.0:
+https://pixeldrain.com/u/XtjPfN9W
+
+Moral of the story: Boredom + spite = productivity
+
+Works great on mobile data btw. Tested extensively during my involuntary offline period 😅
+
+What's the weirdest project you've started out of pure boredom?
