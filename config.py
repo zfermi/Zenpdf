@@ -30,7 +30,7 @@ class Config:
     }
 
     # File upload settings
-    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB for free tier
+    MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB for free tier
     MAX_FILE_SIZE_PREMIUM = 100 * 1024 * 1024  # 100MB for premium
     MAX_MERGE_FILES = 5
     MAX_MERGE_FILES_PREMIUM = 20
@@ -53,7 +53,7 @@ class Config:
     # Rate limiting (free tier)
     RATELIMIT_STORAGE_URL = os.environ.get('REDIS_URL') or 'memory://'
     RATELIMIT_STRATEGY = 'fixed-window'
-    DAILY_OPERATION_LIMIT_FREE = 5
+    DAILY_OPERATION_LIMIT_FREE = 10
     DAILY_OPERATION_LIMIT_PREMIUM = 1000  # Effectively unlimited
 
     # Email configuration

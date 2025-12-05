@@ -191,7 +191,7 @@ def create_app(config_name=None):
             return True, None
         else:
             daily_count = current_user.get_daily_usage_count()
-            return False, f"Daily limit reached ({daily_count}/5 operations). Upgrade to Premium for unlimited access!"
+            return False, f"Daily limit reached ({daily_count}/10 operations). Upgrade to Premium for unlimited access!"
 
     # Ensure upload folders exist
     for folder in [app.config['UPLOAD_FOLDER'], app.config['SPLIT_FOLDER'], app.config['MERGED_FOLDER']]:
@@ -208,7 +208,7 @@ def create_app(config_name=None):
     @app.errorhandler(RequestEntityTooLarge)
     def too_large(e):
         app.logger.warning(f'File too large from {request.remote_addr}')
-        flash('File too large. Maximum size is 10MB for free users, 100MB for premium.', 'error')
+        flash('File too large. Maximum size is 50MB for free users, 100MB for premium.', 'error')
         return redirect(request.url), 413
 
     @app.errorhandler(500)
