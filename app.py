@@ -831,7 +831,6 @@ def create_app(config_name=None):
             return redirect(url_for('merge_pdf'))
 
     @app.route('/pdf2word', methods=['GET', 'POST'])
-    @login_required
     @limiter.limit("30 per hour")
     def pdf2word():
         """Convert PDF to Word document"""
