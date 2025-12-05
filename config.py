@@ -89,12 +89,12 @@ class Config:
     TALISMAN_STRICT_TRANSPORT_SECURITY_MAX_AGE = 31536000  # 1 year
     TALISMAN_CONTENT_SECURITY_POLICY = {
         'default-src': "'self'",
-        'script-src': ["'self'", "'unsafe-inline'", "https://pagead2.googlesyndication.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        'script-src': ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com", "https://pagead2.googlesyndication.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
         'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': ["'self'", "data:", "https:"],
         'font-src': ["'self'", "data:"],
         'frame-src': ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
-        'connect-src': ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com"],
+        'connect-src': ["'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com", "https://analytics.google.com", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com"],
     }
 
     # WTForms CSRF
