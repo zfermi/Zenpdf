@@ -4,13 +4,22 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Install Node.js (needed for Tailwind CSS)
+# Install system dependencies including OCR
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    tesseract-ocr-spa \
+    tesseract-ocr-fra \
+    tesseract-ocr-deu \
+    poppler-utils \
+    libgl1-mesa-glx \
+    libglib2.0-0 && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
 
 # Copy package files for Node.js dependencies
 COPY package*.json ./

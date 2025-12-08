@@ -8,7 +8,10 @@ Allow: /merge
 Allow: /compress
 Allow: /rotate
 Allow: /pdf2word
+Allow: /ocr
 Allow: /pricing
+Allow: /blog
+Allow: /blog/
 
 # Disallow private/auth pages
 Disallow: /dashboard

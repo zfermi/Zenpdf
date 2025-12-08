@@ -41,7 +41,9 @@
       "Bash(railway whoami:*)",
       "Bash(railway variables --help:*)",
       "Bash(railway variables:*)",
-      "Bash(railway link:*)"
+      "Bash(railway link:*)",
+      "Bash(xargs:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

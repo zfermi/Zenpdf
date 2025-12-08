@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-48KRBHY1X8');
+    </script>
+
+    <!-- Primary Meta Tags -->
+    <title>How to Rotate PDF Pages and Fix Orientation [Free Tool] | Best PDF Converter</title>
+    <meta name="title" content="How to Rotate PDF Pages and Fix Orientation [Free Tool]">
+    <meta name="description"
+        content="Rotate PDF pages 90, 180, or 270 degrees for free. Fix upside-down or sideways PDFs instantly. Rotate single pages or entire documents online. No software needed.">
+    <meta name="keywords"
+        content="rotate PDF, flip PDF, turn PDF, PDF rotation, fix PDF orientation, rotate PDF pages, rotate PDF online free, sideways PDF fix">
+    <meta name="author" content="Best PDF Converter">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bestpdfconverter.online/blog/rotate-pdf-fix-orientation">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://bestpdfconverter.online/blog/rotate-pdf-fix-orientation">
+    <meta property="og:title" content="How to Rotate PDF Pages and Fix Orientation">
+    <meta property="og:description" content="Rotate PDF pages and fix orientation for free. No software needed.">
+    <meta property="og:image" content="https://bestpdfconverter.online/static/og-rotate-guide.png">
+    <meta property="article:published_time" content="2024-11-22">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Rotate PDF Pages and Fix Orientation">
+    <meta name="twitter:description" content="Rotate PDF pages and fix orientation for free.">
+
+    <meta name="theme-color" content="#667eea">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Rotate PDF Pages",
+        "description": "Fix upside-down or sideways PDF pages quickly.",
+        "step": [
+            {"@type": "HowToStep", "name": "Upload PDF", "text": "Upload the PDF with pages that need rotating."},
+            {"@type": "HowToStep", "name": "Select rotation", "text": "Choose pages to rotate and select 90, 180, or 270 degrees."},
+            {"@type": "HowToStep", "name": "Download", "text": "Download your correctly oriented PDF."}
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: var(--text-primary); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 14, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+        .logo h1 { font-size: 1.8rem; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo a { text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .article-page { padding: 120px 0 80px; }
+        .article-container { max-width: 800px; margin: 0 auto; }
+        .breadcrumb { display: flex; gap: 0.5rem; margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .breadcrumb a { color: #667eea; text-decoration: none; }
+        .article-header { margin-bottom: 2rem; }
+        .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .article-header h1 { font-size: 2.5rem; line-height: 1.3; margin-bottom: 1rem; }
+        .article-intro { font-size: 1.2rem; color: var(--text-secondary); line-height: 1.8; }
+        .article-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 3rem; margin-top: 2rem; }
+        .article-content h2 { font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .article-content h2:first-child { margin-top: 0; }
+        .article-content h3 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .article-content p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem; }
+        .article-content ul, .article-content ol { color: var(--text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        .article-content li { margin-bottom: 0.5rem; }
+        .article-content strong { color: var(--text-primary); }
+        .highlight-box { background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; padding: 1.5rem; margin: 2rem 0; border-radius: 0 12px 12px 0; }
+        .highlight-box p { margin: 0; }
+        .step-box { background: var(--darker-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .step-number { display: inline-block; background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: 600; margin-right: 0.75rem; }
+        .cta-box { background: var(--primary-gradient); padding: 2.5rem; border-radius: 16px; text-align: center; margin: 3rem 0; }
+        .cta-box h3 { color: white; font-size: 1.5rem; margin-bottom: 1rem; }
+        .cta-box p { color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; }
+        .cta-box .btn { display: inline-block; background: white; color: #667eea; padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-weight: 600; }
+        .rotation-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .rotation-option { background: var(--darker-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .rotation-option h4 { color: var(--text-primary); margin-bottom: 0.5rem; }
+        .rotation-option p { margin: 0; font-size: 0.9rem; }
+        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 3rem 0 2rem; margin-top: 4rem; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        .footer-copy { color: var(--text-secondary); font-size: 0.9rem; }
+        @media (max-width: 768px) { .article-header h1 { font-size: 1.8rem; } .article-content { padding: 1.5rem; } .nav-links { display: none; } }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo"><a href="/"><h1>Best PDF Converter</h1></a></div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#tools">Tools</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/blog" class="active">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="article-page">
+        <div class="container article-container">
+            <nav class="breadcrumb">
+                <a href="/">Home</a> &gt;
+                <a href="/blog">Blog</a> &gt;
+                <span>Rotate PDF Guide</span>
+            </nav>
+
+            <header class="article-header">
+                <div class="article-meta">
+                    <span>November 22, 2024</span>
+                    <span>4 min read</span>
+                    <span>Rotate PDF</span>
+                </div>
+                <h1>How to Rotate PDF Pages and Fix Orientation</h1>
+                <p class="article-intro">
+                    Got a PDF with upside-down or sideways pages? It happens all the time with scanned documents.
+                    Here's how to quickly fix PDF orientation in just a few clicks.
+                </p>
+            </header>
+
+            <div class="article-content">
+                <h2>Why PDFs Get Rotated Wrong</h2>
+                <p>
+                    PDF pages can end up in the wrong orientation for several reasons:
+                </p>
+                <ul>
+                    <li><strong>Scanner settings:</strong> Document fed in wrong direction</li>
+                    <li><strong>Phone scans:</strong> Camera orientation not detected correctly</li>
+                    <li><strong>Merged files:</strong> Combined PDFs with different orientations</li>
+                    <li><strong>Export issues:</strong> Software exporting with incorrect rotation</li>
+                </ul>
+
+                <h2>How to Rotate PDF Pages</h2>
+
+                <div class="step-box">
+                    <p><span class="step-number">1</span><strong>Upload Your PDF</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Go to our <a href="/rotate" style="color: #667eea;">Rotate PDF tool</a> and upload your document.
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <p><span class="step-number">2</span><strong>Select Pages & Rotation</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Choose which pages to rotate and select your rotation angle (90°, 180°, or 270°).
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <p><span class="step-number">3</span><strong>Download Fixed PDF</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Click rotate and download your correctly oriented PDF.
+                    </p>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Fix Your PDF Orientation Now</h3>
+                    <p>Free, fast, and easy. No registration required.</p>
+                    <a href="/rotate" class="btn">Rotate PDF Free</a>
+                </div>
+
+                <h2>Rotation Options</h2>
+
+                <div class="rotation-options">
+                    <div class="rotation-option">
+                        <h4>90° Clockwise</h4>
+                        <p>Turn right - fixes landscape pages</p>
+                    </div>
+                    <div class="rotation-option">
+                        <h4>180°</h4>
+                        <p>Flip upside down - fixes inverted pages</p>
+                    </div>
+                    <div class="rotation-option">
+                        <h4>90° Counter-clockwise</h4>
+                        <p>Turn left - alternative landscape fix</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <p><strong>Quick Tip:</strong> If a page is upside down, rotate 180°.
+                    If it's sideways, try 90° clockwise first. If that's wrong, 90° counter-clockwise will fix it.</p>
+                </div>
+
+                <h2>Common Scenarios</h2>
+
+                <h3>Single Page Rotated Wrong</h3>
+                <p>
+                    Sometimes just one page in a document is wrong (like a landscape table in a portrait document).
+                    Select just that page and rotate it individually.
+                </p>
+
+                <h3>All Pages Upside Down</h3>
+                <p>
+                    Document scanned upside down? Select all pages and rotate 180° to flip the entire document.
+                </p>
+
+                <h3>Mixed Orientations</h3>
+                <p>
+                    When different pages need different rotations, process them in groups.
+                    Or rotate pages individually if needed.
+                </p>
+
+                <h2>Rotate vs. Flip</h2>
+                <p>
+                    <strong>Rotation</strong> turns the page while keeping the content the same.
+                    The text and images stay as they are, just viewed from a different angle.
+                </p>
+                <p>
+                    <strong>Flipping</strong> (mirroring) would create a mirror image, reversing the content.
+                    This is rarely what you want for documents.
+                </p>
+                <p>
+                    Our rotate tool performs proper rotation, not flipping, so your documents remain readable.
+                </p>
+
+                <h2>Tips for Scanning</h2>
+                <p>
+                    To avoid rotation issues in the future:
+                </p>
+                <ul>
+                    <li>Check your scanner's orientation settings before scanning</li>
+                    <li>Feed documents consistently (top edge first)</li>
+                    <li>Use your scanner's auto-rotate feature if available</li>
+                    <li>Preview scans before saving to catch orientation issues</li>
+                </ul>
+
+                <h2>Frequently Asked Questions</h2>
+
+                <h3>Does rotating affect quality?</h3>
+                <p>
+                    No. Rotation is a lossless operation. The content quality remains exactly the same;
+                    only the viewing angle changes.
+                </p>
+
+                <h3>Can I rotate just some pages?</h3>
+                <p>
+                    Yes! You can select specific pages to rotate while leaving others unchanged.
+                    Perfect for documents with mixed orientations.
+                </p>
+
+                <h3>Will this work on scanned PDFs?</h3>
+                <p>
+                    Yes. Rotation works on any PDF, whether it's text-based or scanned images.
+                    The entire page is rotated together.
+                </p>
+
+                <div class="cta-box">
+                    <h3>Ready to Fix Your PDF?</h3>
+                    <p>Correct page orientation in seconds.</p>
+                    <a href="/rotate" class="btn">Rotate PDF Now</a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/#tools">Tools</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/blog">Blog</a>
+            </div>
+            <p class="footer-copy">&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

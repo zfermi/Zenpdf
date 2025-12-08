@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-48KRBHY1X8');
+    </script>
+
+    <!-- Primary Meta Tags -->
+    <title>How to Split PDF and Extract Specific Pages [Free Tool] | Best PDF Converter</title>
+    <meta name="title" content="How to Split PDF and Extract Specific Pages [Free Tool]">
+    <meta name="description"
+        content="Split PDF files and extract specific pages for free. Learn how to separate PDF pages, extract page ranges, and split large PDFs into smaller files. No software needed.">
+    <meta name="keywords"
+        content="split PDF, extract PDF pages, PDF splitter, separate PDF pages, split PDF online free, extract pages from PDF, divide PDF">
+    <meta name="author" content="Best PDF Converter">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bestpdfconverter.online/blog/split-pdf-extract-pages">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://bestpdfconverter.online/blog/split-pdf-extract-pages">
+    <meta property="og:title" content="How to Split PDF and Extract Specific Pages">
+    <meta property="og:description" content="Split PDF files and extract specific pages for free. No software needed.">
+    <meta property="og:image" content="https://bestpdfconverter.online/static/og-split-guide.png">
+    <meta property="article:published_time" content="2024-12-01">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Split PDF and Extract Specific Pages">
+    <meta name="twitter:description" content="Split PDF files and extract specific pages for free. No software needed.">
+
+    <meta name="theme-color" content="#667eea">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Split PDF and Extract Pages",
+        "description": "Extract specific pages or split large PDFs into smaller files.",
+        "step": [
+            {"@type": "HowToStep", "name": "Upload PDF", "text": "Upload the PDF file you want to split."},
+            {"@type": "HowToStep", "name": "Select pages", "text": "Choose which pages to extract or how to split the document."},
+            {"@type": "HowToStep", "name": "Download", "text": "Download your extracted pages or split files."}
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: var(--text-primary); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 14, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+        .nav-content { display: flex; align-items: center; justify-content: space-between; }
+        .logo h1 { font-size: 1.8rem; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo a { text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .article-page { padding: 120px 0 80px; }
+        .article-container { max-width: 800px; margin: 0 auto; }
+        .breadcrumb { display: flex; gap: 0.5rem; margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .breadcrumb a { color: #667eea; text-decoration: none; }
+        .article-header { margin-bottom: 2rem; }
+        .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .article-header h1 { font-size: 2.5rem; line-height: 1.3; margin-bottom: 1rem; }
+        .article-intro { font-size: 1.2rem; color: var(--text-secondary); line-height: 1.8; }
+        .article-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 3rem; margin-top: 2rem; }
+        .article-content h2 { font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .article-content h2:first-child { margin-top: 0; }
+        .article-content h3 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .article-content p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem; }
+        .article-content ul, .article-content ol { color: var(--text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        .article-content li { margin-bottom: 0.5rem; }
+        .article-content strong { color: var(--text-primary); }
+        .highlight-box { background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; padding: 1.5rem; margin: 2rem 0; border-radius: 0 12px 12px 0; }
+        .highlight-box p { margin: 0; }
+        .step-box { background: var(--darker-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .step-number { display: inline-block; background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: 600; margin-right: 0.75rem; }
+        .cta-box { background: var(--primary-gradient); padding: 2.5rem; border-radius: 16px; text-align: center; margin: 3rem 0; }
+        .cta-box h3 { color: white; font-size: 1.5rem; margin-bottom: 1rem; }
+        .cta-box p { color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; }
+        .cta-box .btn { display: inline-block; background: white; color: #667eea; padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-weight: 600; }
+        .footer { background: var(--darker-bg); border-top: 1px solid var(--border-color); padding: 3rem 0 2rem; margin-top: 4rem; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        .footer-copy { color: var(--text-secondary); font-size: 0.9rem; }
+        @media (max-width: 768px) { .article-header h1 { font-size: 1.8rem; } .article-content { padding: 1.5rem; } .nav-links { display: none; } }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo"><a href="/"><h1>Best PDF Converter</h1></a></div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#tools">Tools</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/blog" class="active">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="article-page">
+        <div class="container article-container">
+            <nav class="breadcrumb">
+                <a href="/">Home</a> &gt;
+                <a href="/blog">Blog</a> &gt;
+                <span>Split PDF Guide</span>
+            </nav>
+
+            <header class="article-header">
+                <div class="article-meta">
+                    <span>December 1, 2024</span>
+                    <span>6 min read</span>
+                    <span>Split PDF</span>
+                </div>
+                <h1>How to Split PDF and Extract Specific Pages</h1>
+                <p class="article-intro">
+                    Got a large PDF but only need certain pages? Learn how to split PDFs into separate files
+                    and extract exactly the pages you need - all for free, right in your browser.
+                </p>
+            </header>
+
+            <div class="article-content">
+                <h2>When to Split a PDF</h2>
+                <p>
+                    Splitting PDFs is useful in many situations:
+                </p>
+                <ul>
+                    <li><strong>Extract specific pages:</strong> Pull out just the pages you need from a large document</li>
+                    <li><strong>Share portions:</strong> Send only relevant sections to colleagues</li>
+                    <li><strong>Reduce file size:</strong> Create smaller files that are easier to email</li>
+                    <li><strong>Organize content:</strong> Separate chapters, sections, or topics</li>
+                    <li><strong>Remove unwanted pages:</strong> Delete cover pages, ads, or irrelevant content</li>
+                </ul>
+
+                <h2>How to Split PDF: Step by Step</h2>
+
+                <div class="step-box">
+                    <p><span class="step-number">1</span><strong>Upload Your PDF</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Go to our <a href="/split" style="color: #667eea;">Split PDF tool</a> and upload your document.
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <p><span class="step-number">2</span><strong>Select Pages to Extract</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Click on the pages you want to extract. You can select individual pages or ranges.
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <p><span class="step-number">3</span><strong>Download Your Files</strong></p>
+                    <p style="margin-left: 45px; margin-top: 0.5rem;">
+                        Click "Split" and download your extracted pages as a new PDF.
+                    </p>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Split Your PDF Now</h3>
+                    <p>Free, fast, and no registration required.</p>
+                    <a href="/split" class="btn">Split PDF Free</a>
+                </div>
+
+                <h2>Different Ways to Split PDFs</h2>
+
+                <h3>Extract Specific Pages</h3>
+                <p>
+                    Select individual pages (e.g., pages 1, 5, and 10) to create a new PDF with just those pages.
+                    Perfect when you need specific content from a larger document.
+                </p>
+
+                <h3>Extract Page Ranges</h3>
+                <p>
+                    Select a range of pages (e.g., pages 5-15) to extract an entire section.
+                    Great for pulling out chapters or specific sections.
+                </p>
+
+                <h3>Split Into Equal Parts</h3>
+                <p>
+                    Divide a large PDF into smaller chunks of equal size.
+                    Useful for breaking up long documents into manageable pieces.
+                </p>
+
+                <div class="highlight-box">
+                    <p><strong>Tip:</strong> After splitting, you can use our <a href="/merge" style="color: #667eea;">Merge tool</a>
+                    to combine pages in a new order, or our <a href="/compress" style="color: #667eea;">Compress tool</a> to reduce file size.</p>
+                </div>
+
+                <h2>Common Use Cases</h2>
+
+                <h3>Extracting a Single Page</h3>
+                <p>
+                    Need just one page from a multi-page document? Select that single page and download it
+                    as its own PDF. Perfect for certificates, specific forms, or reference pages.
+                </p>
+
+                <h3>Removing the First or Last Page</h3>
+                <p>
+                    Many documents have cover pages or blank pages you don't need.
+                    Select all pages except those, and you'll have a cleaner document.
+                </p>
+
+                <h3>Splitting a Book by Chapters</h3>
+                <p>
+                    If you have a PDF book, you can split it into individual chapter files
+                    for easier navigation and sharing.
+                </p>
+
+                <h2>Tips for Best Results</h2>
+                <ul>
+                    <li><strong>Preview first:</strong> Scroll through the PDF to identify exactly which pages you need</li>
+                    <li><strong>Note page numbers:</strong> Keep track of the page numbers you want to extract</li>
+                    <li><strong>Check orientation:</strong> If pages are rotated wrong, use the rotate tool first</li>
+                    <li><strong>Verify the result:</strong> Always open the extracted PDF to confirm you got the right pages</li>
+                </ul>
+
+                <h2>Frequently Asked Questions</h2>
+
+                <h3>Is splitting a PDF free?</h3>
+                <p>
+                    Yes! Our split tool is completely free to use. No registration or payment required.
+                </p>
+
+                <h3>Will splitting affect PDF quality?</h3>
+                <p>
+                    No. Splitting is a lossless operation - the extracted pages maintain their original quality,
+                    including all text, images, and formatting.
+                </p>
+
+                <h3>Can I split a scanned PDF?</h3>
+                <p>
+                    Yes! Scanned PDFs work just like regular PDFs. Each page is treated as an image
+                    and can be extracted normally.
+                </p>
+
+                <div class="cta-box">
+                    <h3>Ready to Split Your PDF?</h3>
+                    <p>Extract exactly the pages you need in seconds.</p>
+                    <a href="/split" class="btn">Start Splitting</a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/#tools">Tools</a>
+                <a href="/pricing">Pricing</a>
+                <a href="/blog">Blog</a>
+            </div>
+            <p class="footer-copy">&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -268,6 +268,43 @@ def create_app(config_name=None):
         """Pricing page"""
         return render_template('pricing.html')
 
+    # ========== BLOG ==========
+
+    @app.route('/blog')
+    def blog():
+        """Blog listing page"""
+        return render_template('blog.html')
+
+    @app.route('/blog/how-to-compress-pdf-without-losing-quality')
+    def blog_compress():
+        """Blog post: How to compress PDF"""
+        return render_template('blog/how-to-compress-pdf-without-losing-quality.html')
+
+    @app.route('/blog/merge-pdf-files-free-online')
+    def blog_merge():
+        """Blog post: How to merge PDF files"""
+        return render_template('blog/merge-pdf-files-free-online.html')
+
+    @app.route('/blog/split-pdf-extract-pages')
+    def blog_split():
+        """Blog post: How to split PDF"""
+        return render_template('blog/split-pdf-extract-pages.html')
+
+    @app.route('/blog/convert-pdf-to-word-editable')
+    def blog_pdf2word():
+        """Blog post: Convert PDF to Word"""
+        return render_template('blog/convert-pdf-to-word-editable.html')
+
+    @app.route('/blog/ocr-pdf-extract-text-scanned')
+    def blog_ocr():
+        """Blog post: OCR PDF extract text"""
+        return render_template('blog/ocr-pdf-extract-text-scanned.html')
+
+    @app.route('/blog/rotate-pdf-fix-orientation')
+    def blog_rotate():
+        """Blog post: Rotate PDF fix orientation"""
+        return render_template('blog/rotate-pdf-fix-orientation.html')
+
     # ========== DASHBOARD ==========
 
     @app.route('/dashboard')
@@ -889,6 +926,115 @@ def create_app(config_name=None):
                 flash('Please select a valid PDF file.', 'error')
 
         return render_template('pdf2word.html')
+
+    # ========== OCR (Premium Feature) ==========
+
+    @app.route('/ocr', methods=['GET', 'POST'])
+    @limiter.limit("20 per hour")
+    def ocr_pdf():
+        """OCR - Extract text from scanned PDFs (Premium feature)"""
+        # Check if user is logged in
+        if not current_user.is_authenticated:
+            return render_template('ocr.html', ocr_results=None)
+        
+        # Check if user is premium
+        if not current_user.is_premium:
+            return render_template('ocr.html', ocr_results=None)
+        
+        if request.method == 'POST':
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('ocr.html', ocr_results=None)
+            
+            file = request.files.get('file')
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+                    language = request.form.get('language', 'eng')
+                    output_format = request.form.get('output_format', 'searchable_pdf')
+                    
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+                    
+                    # Validate PDF
+                    try:
+                        reader = PdfReader(file_path)
+                        page_count = len(reader.pages)
+                        if page_count == 0:
+                            os.remove(file_path)
+                            flash('Invalid PDF: File has no pages.', 'error')
+                            return render_template('ocr.html', ocr_results=None)
+                    except Exception as e:
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        flash(f'Invalid PDF file: {str(e)}', 'error')
+                        return render_template('ocr.html', ocr_results=None)
+                    
+                    # Perform OCR
+                    try:
+                        from ocr_engine import OCREngine, create_searchable_pdf
+                        
+                        ocr = OCREngine(dpi=300, language=language)
+                        ocr_results = ocr.extract_text_from_pdf(file_path)
+                        
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        
+                        # Create searchable PDF
+                        output_filename = f"ocr_{timestamp}.pdf"
+                        output_path = os.path.join(app.config['SPLIT_FOLDER'], output_filename)
+                        create_searchable_pdf(file_path, ocr_results, output_path)
+                        
+                        # Create text file
+                        text_filename = f"ocr_text_{timestamp}.txt"
+                        text_path = os.path.join(app.config['SPLIT_FOLDER'], text_filename)
+                        with open(text_path, 'w', encoding='utf-8') as f:
+                            for result in ocr_results:
+                                f.write(f"=== Page {result['page']} ===\n")
+                                f.write(result['text'])
+                                f.write("\n\n")
+                        
+                        # Record usage
+                        record_usage('ocr', file_size=file_size, pages_processed=page_count)
+                        
+                        # Clean up uploaded file
+                        try:
+                            os.remove(file_path)
+                        except:
+                            pass
+                        
+                        flash('OCR processing completed successfully!', 'success')
+                        return render_template('ocr.html', 
+                                             ocr_results=ocr_results,
+                                             output_filename=output_filename,
+                                             text_filename=text_filename)
+                        
+                    except ImportError as e:
+                        app.logger.error(f'OCR import error: {e}')
+                        flash('OCR feature is not available. Missing dependencies.', 'error')
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        return render_template('ocr.html', ocr_results=None)
+                    except Exception as e:
+                        app.logger.error(f'OCR processing error: {e}')
+                        record_usage('ocr', success=False, error_message=str(e))
+                        flash(f'OCR processing failed: {str(e)}', 'error')
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        return render_template('ocr.html', ocr_results=None)
+                    
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    app.logger.error(f'OCR error: {e}')
+                    flash(f'Error processing file: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+        
+        return render_template('ocr.html', ocr_results=None)
 
     # ========== PDF PROCESSING FUNCTIONS ==========
 

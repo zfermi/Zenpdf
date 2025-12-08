@@ -35,3 +35,10 @@ pdf2docx==0.5.8
 # Pesapal Payment Integration
 requests==2.31.0
 
+# OCR (Optical Character Recognition)
+pytesseract==0.3.10
+pdf2image==1.17.0
+opencv-python-headless==4.8.1.78
+reportlab==4.0.7
+numpy>=1.26.0
+Pillow>=10.0.0
