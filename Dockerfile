@@ -15,9 +15,7 @@ RUN apt-get update && \
     tesseract-ocr-spa \
     tesseract-ocr-fra \
     tesseract-ocr-deu \
-    poppler-utils \
-    libgl1 \
-    libglib2.0-0 && \
+    poppler-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
