@@ -483,6 +483,9 @@
                             <a href="{{ url_for('compress_pdf') }}"><span class="tool-icon">🗜️</span> Compress PDF</a>
                             <a href="{{ url_for('rotate_pdf') }}"><span class="tool-icon">🔄</span> Rotate PDF</a>
                             <a href="{{ url_for('pdf2word') }}"><span class="tool-icon">📝</span> PDF to Word</a>
+                            <a href="{{ url_for('ai_tools') }}"
+                                style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);"><span
+                                    class="tool-icon">🤖</span> AI Tools</a>
                         </div>
                     </div>
                     <a href="{{ url_for('pricing') }}">Pricing</a>
@@ -563,7 +566,7 @@
 
                 <!-- Premium Plan -->
                 <div class="pricing-card featured">
-                    <div class="badge">Best Value</div>
+                    <div class="badge">🤖 Best Value</div>
                     <div class="pricing-header">
                         <h3>Premium</h3>
                         <div class="price">
@@ -578,7 +581,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Unlimited conversions
+                            <strong>Unlimited</strong> conversions
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -594,6 +597,34 @@
                             </svg>
                             Priority processing
                         </li>
+                        <li style="color: #00d2ff;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            🤖 <strong>AI PDF Summarizer</strong>
+                        </li>
+                        <li style="color: #00d2ff;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            📊 <strong>AI Table Extractor</strong>
+                        </li>
+                        <li style="color: #00d2ff;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            💬 <strong>AI Document Q&A</strong>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            OCR Text Extraction
+                        </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
@@ -606,28 +637,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Email support
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            OCR (Coming Soon)
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            Batch Processing (Coming Soon)
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            Digital Signatures (Coming Soon)
+                            Priority email support
                         </li>
                     </ul>
                     {% if current_user.is_authenticated and current_user.is_premium %}
