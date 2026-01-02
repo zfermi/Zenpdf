@@ -55,8 +55,8 @@
     {
         "@context": "https://schema.org",
         "@type": "Product",
-        "name": "Best PDF Converter Premium",
-        "description": "Premium PDF conversion tools with unlimited usage",
+        "name": "Best PDF Converter",
+        "description": "AI-powered PDF conversion and document intelligence tools",
         "brand": {
             "@type": "Brand",
             "name": "Best PDF Converter"
@@ -71,11 +71,19 @@
             },
             {
                 "@type": "Offer",
-                "name": "Premium Plan",
-                "price": "3.00",
+                "name": "Pro Plan",
+                "price": "9.00",
                 "priceCurrency": "USD",
-                "priceValidUntil": "2025-12-31",
-                "description": "Unlimited PDF conversions and premium features"
+                "priceValidUntil": "2026-12-31",
+                "description": "Unlimited conversions with basic AI features"
+            },
+            {
+                "@type": "Offer",
+                "name": "Business Plan",
+                "price": "19.00",
+                "priceCurrency": "USD",
+                "priceValidUntil": "2026-12-31",
+                "description": "Full AI Document Intelligence suite"
             }
         ]
     }
@@ -453,13 +461,23 @@
             color: var(--text-secondary);
         }
 
+        @media (max-width: 1200px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
 
             .pricing-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+            }
+
+            .pricing-card {
+                padding: 2rem;
             }
         }
     </style>
@@ -515,7 +533,7 @@
                 <h2>Simple, <span class="gradient-text">Transparent</span> Pricing</h2>
                 <p>Choose the plan that works best for you</p>
             </div>
-            <div class="pricing-grid">
+            <div class="pricing-grid" style="grid-template-columns: repeat(4, 1fr);">
                 <!-- Free Plan -->
                 <div class="pricing-card">
                     <div class="pricing-header">
@@ -532,21 +550,21 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            10 conversions per day
+                            5 conversions per day
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            50MB file size limit
+                            25MB file size limit
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            All basic PDF tools
+                            Basic PDF tools
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -558,20 +576,20 @@
                     </ul>
                     {% if not current_user.is_authenticated %}
                     <a href="{{ url_for('auth.register') }}" class="btn btn-outline">Get Started Free</a>
-                    {% elif not current_user.is_premium %}
+                    {% elif current_user.subscription_tier == 'free' %}
                     <button class="btn btn-outline" style="opacity: 0.5; cursor: not-allowed;" disabled>Current
                         Plan</button>
                     {% endif %}
                 </div>
 
-                <!-- Premium Plan -->
+                <!-- Pro Plan -->
                 <div class="pricing-card featured">
-                    <div class="badge">🤖 Best Value</div>
+                    <div class="badge">Popular</div>
                     <div class="pricing-header">
-                        <h3>Premium</h3>
+                        <h3>Pro</h3>
                         <div class="price">
                             <span class="currency">$</span>
-                            <span class="amount">3</span>
+                            <span class="amount">9</span>
                             <span class="period">/month</span>
                         </div>
                     </div>
@@ -588,7 +606,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            100MB file size limit
+                            50MB file size limit
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -602,7 +620,68 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            🤖 <strong>AI PDF Summarizer</strong>
+                            🤖 AI Summarizer (20/mo)
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            OCR Text Extraction
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Ad-free experience
+                        </li>
+                    </ul>
+                    {% if current_user.is_authenticated and current_user.subscription_tier == 'premium' %}
+                    <button class="btn btn-primary" style="opacity: 0.7; cursor: not-allowed;" disabled>✓
+                        Active</button>
+                    {% elif current_user.is_authenticated %}
+                    <a href="{{ url_for('payment.subscribe_premium') }}" class="btn btn-primary">Get Pro →</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}?next={{ url_for('payment.subscribe_premium') }}"
+                        class="btn btn-primary">Get Pro →</a>
+                    {% endif %}
+                </div>
+
+                <!-- Business Plan -->
+                <div class="pricing-card"
+                    style="border-color: #00d2ff; background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(58, 123, 213, 0.08) 100%);">
+                    <div class="badge" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">🤖 Best
+                        for AI</div>
+                    <div class="pricing-header">
+                        <h3>Business</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">19</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <strong>Everything in Pro</strong>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            100MB file size limit
+                        </li>
+                        <li style="color: #00d2ff;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            🤖 <strong>Unlimited AI Summarizer</strong>
                         </li>
                         <li style="color: #00d2ff;">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -623,31 +702,20 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            OCR Text Extraction
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            Ad-free experience
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            Priority email support
+                            Priority support
                         </li>
                     </ul>
-                    {% if current_user.is_authenticated and current_user.is_premium %}
-                    <button class="btn btn-primary" style="opacity: 0.7; cursor: not-allowed;" disabled>✓ Active
-                        Plan</button>
+                    {% if current_user.is_authenticated and current_user.subscription_tier == 'enterprise' %}
+                    <button class="btn btn-primary"
+                        style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); opacity: 0.7; cursor: not-allowed;"
+                        disabled>✓ Active</button>
                     {% elif current_user.is_authenticated %}
-                    <a href="{{ url_for('payment.subscribe_premium') }}" class="btn btn-primary">Upgrade Now →</a>
+                    <a href="{{ url_for('payment.subscribe_premium') }}?tier=business" class="btn btn-primary"
+                        style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">Get Business →</a>
                     {% else %}
                     <a href="{{ url_for('auth.login') }}?next={{ url_for('payment.subscribe_premium') }}"
-                        class="btn btn-primary">Get Premium →</a>
+                        class="btn btn-primary"
+                        style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);">Get Business →</a>
                     {% endif %}
                 </div>
 
@@ -656,7 +724,7 @@
                     <div class="pricing-header">
                         <h3>Enterprise</h3>
                         <div class="price">
-                            <span class="amount" style="font-size: 2.5rem;">Custom</span>
+                            <span class="amount" style="font-size: 2rem;">Custom</span>
                         </div>
                     </div>
                     <ul class="pricing-features">
@@ -665,7 +733,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Everything in Premium
+                            Everything in Business
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -679,7 +747,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Dedicated support
+                            Dedicated account manager
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -700,10 +768,10 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Custom integrations
+                            API access
                         </li>
                     </ul>
-                    <a href="mailto:sales@bestpdfconverter.com" class="btn btn-outline">Contact Sales</a>
+                    <a href="mailto:enterprise@bestpdfconverter.online" class="btn btn-outline">Contact Sales</a>
                 </div>
             </div>
         </div>
