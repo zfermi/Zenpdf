@@ -646,6 +646,9 @@
                             <a href="{{ url_for('compress_pdf') }}"><span class="tool-icon">🗜️</span> Compress PDF</a>
                             <a href="{{ url_for('rotate_pdf') }}"><span class="tool-icon">🔄</span> Rotate PDF</a>
                             <a href="{{ url_for('pdf2word') }}"><span class="tool-icon">📝</span> PDF to Word</a>
+                            <a href="{{ url_for('ai_tools') }}"
+                                style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);"><span
+                                    class="tool-icon">🤖</span> AI Tools</a>
                         </div>
                     </div>
                     <a href="#features">Features</a>
@@ -793,16 +796,17 @@
                     <p>Convert PDF files to editable Word documents while preserving all formatting.</p>
                 </a>
 
-                <div class="feature-card" style="opacity: 0.6;">
+                <a href="{{ url_for('ai_tools') }}" class="feature-card"
+                    style="text-decoration: none; color: inherit; background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(58, 123, 213, 0.08) 100%); border: 1px solid rgba(0, 210, 255, 0.3);">
                     <div class="feature-icon">
-                        <div style="font-size: 3rem;">🔒</div>
+                        <div style="font-size: 3rem;">🤖</div>
                     </div>
-                    <h3>Watermark PDF</h3>
-                    <p>Add text or image watermarks to protect your important documents.</p>
+                    <h3>AI Document Tools</h3>
+                    <p>Summarize PDFs, extract tables to Excel, and ask questions about your documents using AI.</p>
                     <span
-                        style="display: inline-block; background: var(--primary-gradient); color: white; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-top: 1rem;">Coming
-                        Soon</span>
-                </div>
+                        style="display: inline-block; background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); color: white; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-top: 1rem;">New
+                        ✨</span>
+                </a>
             </div>
         </div>
     </section>

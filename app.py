@@ -1036,6 +1036,363 @@ def create_app(config_name=None):
         
         return render_template('ocr.html', ocr_results=None)
 
+    # ========== AI DOCUMENT INTELLIGENCE (Premium Features) ==========
+
+    @app.route('/ai-tools')
+    def ai_tools():
+        """AI Tools hub page"""
+        return render_template('ai-tools.html')
+
+    @app.route('/ai/summarize', methods=['GET', 'POST'])
+    @limiter.limit("20 per hour")
+    def ai_summarize():
+        """AI-powered PDF summarization"""
+        if request.method == 'GET':
+            return render_template('ai-summarize.html')
+        
+        # POST - Process the summarization request
+        try:
+            # Check if AI service is configured
+            from ai_services import get_ai_service, summarize_document
+            from document_intelligence import process_pdf_for_ai
+            
+            ai_service = get_ai_service()
+            if not ai_service.is_configured():
+                return jsonify({
+                    'success': False,
+                    'error': 'AI service not configured. Please contact administrator.'
+                }), 503
+            
+            # Check user authentication for premium features
+            if not current_user.is_authenticated:
+                return jsonify({
+                    'success': False,
+                    'error': 'Please log in to use AI features.'
+                }), 401
+            
+            if not current_user.is_premium:
+                return jsonify({
+                    'success': False,
+                    'error': 'AI features require a premium subscription.'
+                }), 403
+            
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                return jsonify({'success': False, 'error': error_msg}), 429
+            
+            # Get file and options
+            file = request.files.get('file')
+            length = request.form.get('length', 'medium')
+            format_type = request.form.get('format', 'paragraph')
+            
+            if not file or not file.filename:
+                return jsonify({'success': False, 'error': 'No file provided'}), 400
+            
+            if not allowed_file(file.filename):
+                return jsonify({'success': False, 'error': 'Invalid file type. Please upload a PDF.'}), 400
+            
+            # Save and process file
+            try:
+                file_size = validate_file_size(file)
+            except ValueError as e:
+                return jsonify({'success': False, 'error': str(e)}), 400
+            
+            safe_filename = sanitize_filename(file.filename)
+            unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(file_path)
+            
+            try:
+                # Extract text from PDF
+                pdf_data = process_pdf_for_ai(file_path)
+                
+                if not pdf_data['success']:
+                    return jsonify({
+                        'success': False,
+                        'error': pdf_data.get('error', 'Failed to extract text from PDF')
+                    }), 400
+                
+                if not pdf_data['text'] or len(pdf_data['text'].strip()) < 50:
+                    return jsonify({
+                        'success': False,
+                        'error': 'PDF contains too little text to summarize.'
+                    }), 400
+                
+                # Generate summary
+                summary_result = summarize_document(
+                    pdf_data['text'],
+                    length=length,
+                    format=format_type
+                )
+                
+                if not summary_result.get('success'):
+                    return jsonify({
+                        'success': False,
+                        'error': summary_result.get('error', 'Summarization failed')
+                    }), 500
+                
+                # Record usage
+                record_usage('ai_summarize', file_size=file_size, pages_processed=pdf_data['page_count'])
+                
+                # Return results
+                return jsonify({
+                    'success': True,
+                    'summary': summary_result.get('summary'),
+                    'key_points': summary_result.get('key_points', []),
+                    'main_topic': summary_result.get('main_topic'),
+                    'document_type': summary_result.get('document_type'),
+                    'page_count': pdf_data['page_count'],
+                    'original_word_count': pdf_data['word_count'],
+                    'summary_word_count': summary_result.get('summary_word_count', 0)
+                })
+                
+            finally:
+                # Clean up
+                if os.path.exists(file_path):
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+                        
+        except ImportError as e:
+            app.logger.error(f'AI module import error: {e}')
+            return jsonify({
+                'success': False,
+                'error': 'AI features are not available. Missing dependencies.'
+            }), 503
+        except Exception as e:
+            app.logger.error(f'AI summarization error: {e}')
+            return jsonify({
+                'success': False,
+                'error': f'An error occurred: {str(e)}'
+            }), 500
+
+    @app.route('/ai/extract-tables', methods=['GET', 'POST'])
+    @limiter.limit("20 per hour")
+    def ai_extract_tables():
+        """Extract tables from PDF to CSV/JSON"""
+        if request.method == 'GET':
+            return render_template('ai-extract-tables.html')
+        
+        try:
+            from document_intelligence import extract_tables_to_format, process_pdf_for_ai
+            from ai_services import get_ai_service, detect_tables_in_text
+            
+            # Check user authentication
+            if not current_user.is_authenticated:
+                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
+            
+            if not current_user.is_premium:
+                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
+            
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                return jsonify({'success': False, 'error': error_msg}), 429
+            
+            # Get file and format
+            file = request.files.get('file')
+            output_format = request.form.get('format', 'csv')
+            
+            if not file or not file.filename:
+                return jsonify({'success': False, 'error': 'No file provided'}), 400
+            
+            if not allowed_file(file.filename):
+                return jsonify({'success': False, 'error': 'Invalid file type. Please upload a PDF.'}), 400
+            
+            # Save and process file
+            try:
+                file_size = validate_file_size(file)
+            except ValueError as e:
+                return jsonify({'success': False, 'error': str(e)}), 400
+            
+            safe_filename = sanitize_filename(file.filename)
+            unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(file_path)
+            
+            try:
+                # Extract tables using pattern matching first
+                table_result = extract_tables_to_format(file_path, output_format)
+                
+                # If no tables found with pattern matching, try AI detection
+                if table_result.get('success') and not table_result.get('tables_found'):
+                    ai_service = get_ai_service()
+                    if ai_service.is_configured():
+                        # Get the text first
+                        pdf_data = process_pdf_for_ai(file_path)
+                        if pdf_data['success'] and pdf_data['text']:
+                            ai_tables = detect_tables_in_text(pdf_data['text'])
+                            if ai_tables.get('success') and ai_tables.get('tables_found'):
+                                table_result = {
+                                    'success': True,
+                                    'tables_found': True,
+                                    'table_count': ai_tables['table_count'],
+                                    'tables': ai_tables['tables'],
+                                    'formatted_data': json.dumps(ai_tables['tables'], indent=2) if output_format == 'json' else '',
+                                    'detection_method': 'ai'
+                                }
+                
+                # Record usage
+                record_usage('ai_extract_tables', file_size=file_size)
+                
+                return jsonify(table_result)
+                
+            finally:
+                # Clean up
+                if os.path.exists(file_path):
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+                        
+        except ImportError as e:
+            app.logger.error(f'Document intelligence import error: {e}')
+            return jsonify({
+                'success': False,
+                'error': 'Table extraction features are not available.'
+            }), 503
+        except Exception as e:
+            app.logger.error(f'Table extraction error: {e}')
+            return jsonify({'success': False, 'error': str(e)}), 500
+
+    @app.route('/ai/process-pdf', methods=['POST'])
+    @limiter.limit("30 per hour")
+    def ai_process_pdf():
+        """Process PDF and extract text for Q&A"""
+        try:
+            from document_intelligence import process_pdf_for_ai
+            
+            # Check user authentication
+            if not current_user.is_authenticated:
+                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
+            
+            if not current_user.is_premium:
+                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
+            
+            file = request.files.get('file')
+            if not file or not file.filename:
+                return jsonify({'success': False, 'error': 'No file provided'}), 400
+            
+            if not allowed_file(file.filename):
+                return jsonify({'success': False, 'error': 'Invalid file type'}), 400
+            
+            try:
+                file_size = validate_file_size(file)
+            except ValueError as e:
+                return jsonify({'success': False, 'error': str(e)}), 400
+            
+            safe_filename = sanitize_filename(file.filename)
+            unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(file_path)
+            
+            try:
+                pdf_data = process_pdf_for_ai(file_path)
+                
+                if not pdf_data['success']:
+                    return jsonify({
+                        'success': False,
+                        'error': pdf_data.get('error', 'Failed to process PDF')
+                    }), 400
+                
+                return jsonify({
+                    'success': True,
+                    'text': pdf_data['text'],
+                    'page_count': pdf_data['page_count'],
+                    'word_count': pdf_data['word_count'],
+                    'file_name': file.filename
+                })
+                
+            finally:
+                if os.path.exists(file_path):
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+                        
+        except ImportError:
+            return jsonify({
+                'success': False,
+                'error': 'Document processing features are not available.'
+            }), 503
+        except Exception as e:
+            app.logger.error(f'PDF processing error: {e}')
+            return jsonify({'success': False, 'error': str(e)}), 500
+
+    @app.route('/ai/qa', methods=['GET', 'POST'])
+    @limiter.limit("30 per hour")
+    def ai_qa():
+        """AI-powered PDF Q&A"""
+        if request.method == 'GET':
+            return render_template('ai-qa.html')
+        
+        try:
+            from ai_services import get_ai_service, answer_question
+            
+            ai_service = get_ai_service()
+            if not ai_service.is_configured():
+                return jsonify({
+                    'success': False,
+                    'error': 'AI service not configured.'
+                }), 503
+            
+            # Check user authentication
+            if not current_user.is_authenticated:
+                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
+            
+            if not current_user.is_premium:
+                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
+            
+            # Check usage limit
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                return jsonify({'success': False, 'error': error_msg}), 429
+            
+            # Get question and text from request
+            data = request.get_json()
+            if not data:
+                return jsonify({'success': False, 'error': 'No data provided'}), 400
+            
+            question = data.get('question', '').strip()
+            text = data.get('text', '')
+            
+            if not question:
+                return jsonify({'success': False, 'error': 'Please provide a question'}), 400
+            
+            if not text:
+                return jsonify({'success': False, 'error': 'No document text provided'}), 400
+            
+            # Answer the question
+            qa_result = answer_question(text, question)
+            
+            if not qa_result.get('success'):
+                return jsonify({
+                    'success': False,
+                    'error': qa_result.get('error', 'Failed to answer question')
+                }), 500
+            
+            # Record usage
+            record_usage('ai_qa')
+            
+            return jsonify({
+                'success': True,
+                'answer': qa_result.get('answer'),
+                'confidence': qa_result.get('confidence', 'medium'),
+                'relevant_quotes': qa_result.get('relevant_quotes', []),
+                'question': question
+            })
+            
+        except ImportError:
+            return jsonify({
+                'success': False,
+                'error': 'AI features are not available.'
+            }), 503
+        except Exception as e:
+            app.logger.error(f'AI Q&A error: {e}')
+            return jsonify({'success': False, 'error': str(e)}), 500
+
     # ========== PDF PROCESSING FUNCTIONS ==========
 
     def split_pdf_pages(pdf_path, pages_to_split, output_dir):

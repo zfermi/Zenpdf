@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-48KRBHY1X8');
+    </script>
+
+    <!-- Primary Meta Tags -->
+    <title>PDF Table Extractor - Extract Tables to Excel/CSV | Best PDF Converter</title>
+    <meta name="description"
+        content="Extract tables from PDF documents to Excel or CSV format automatically. AI-powered table detection for invoices, reports, and data documents.">
+    <link rel="canonical" href="https://bestpdfconverter.online/ai/extract-tables">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success-green: #38ef7d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo a {
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--success-green);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 120px 0 60px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(56, 239, 125, 0.1);
+            border: 1px solid rgba(56, 239, 125, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--success-green);
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .gradient-text {
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Upload Card */
+        .upload-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(56, 239, 125, 0.3);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(56, 239, 125, 0.02);
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--success-green);
+            background: rgba(56, 239, 125, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-selected {
+            display: none;
+            background: rgba(56, 239, 125, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-selected.show {
+            display: flex;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-info-icon {
+            font-size: 2rem;
+        }
+
+        .file-info-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .file-info-text p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .remove-file {
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: #ef4444;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Options */
+        .options-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .options-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .format-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .format-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .format-option:hover {
+            border-color: rgba(56, 239, 125, 0.4);
+        }
+
+        .format-option.selected {
+            border-color: var(--success-green);
+            background: rgba(56, 239, 125, 0.08);
+        }
+
+        .format-option input {
+            display: none;
+        }
+
+        .format-option .format-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .format-option .format-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .format-option .format-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 3rem;
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(56, 239, 125, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .btn-submit.loading .spinner {
+            display: block;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .results-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .tables-found {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(56, 239, 125, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--success-green);
+        }
+
+        /* Table Preview */
+        .table-preview {
+            margin-bottom: 2rem;
+        }
+
+        .table-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(56, 239, 125, 0.08);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .table-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .table-content {
+            overflow-x: auto;
+            padding: 1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: rgba(56, 239, 125, 0.1);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Download Buttons */
+        .download-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(56, 239, 125, 0.3);
+        }
+
+        .btn-download.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        /* No Tables */
+        .no-tables {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .no-tables .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #ef4444;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .upload-card {
+                padding: 1.5rem;
+            }
+
+            .format-options {
+                flex-direction: column;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <a href="{{ url_for('home') }}">
+                    <h1>Best PDF Converter</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('ai_tools') }}" class="active">AI Tools</a>
+                <a href="{{ url_for('pricing') }}">Pricing</a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="tool-badge">
+                    <span>📊</span>
+                    <span>AI-Powered</span>
+                </div>
+                <h1 class="page-title">
+                    <span class="gradient-text">Table Extractor</span>
+                </h1>
+                <p class="page-subtitle">
+                    Extract tables from PDF documents and export them to Excel or CSV format.
+                    Perfect for invoices, financial reports, and data documents.
+                </p>
+            </div>
+
+            <!-- Upload Card -->
+            <form id="extract-form" class="upload-card" enctype="multipart/form-data">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="drop-zone">
+                    <div class="upload-icon">📊</div>
+                    <div class="upload-text">
+                        <h3>Drop your PDF here</h3>
+                        <p>or click to browse files</p>
+                    </div>
+                </div>
+                <input type="file" id="file-input" name="file" accept=".pdf">
+
+                <!-- File Selected -->
+                <div class="file-selected" id="file-selected">
+                    <div class="file-info">
+                        <span class="file-info-icon">📄</span>
+                        <div class="file-info-text">
+                            <h4 id="file-name">document.pdf</h4>
+                            <p id="file-size">2.4 MB</p>
+                        </div>
+                    </div>
+                    <button type="button" class="remove-file" id="remove-file">Remove</button>
+                </div>
+
+                <!-- Options -->
+                <div class="options-section">
+                    <h4 class="options-title">Export Format</h4>
+                    <div class="format-options">
+                        <label class="format-option selected">
+                            <input type="radio" name="format" value="csv" checked>
+                            <div class="format-icon">📄</div>
+                            <div class="format-name">CSV</div>
+                            <div class="format-desc">Universal format</div>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="format" value="json">
+                            <div class="format-icon">📋</div>
+                            <div class="format-name">JSON</div>
+                            <div class="format-desc">Structured data</div>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="format" value="excel">
+                            <div class="format-icon">📊</div>
+                            <div class="format-name">Excel</div>
+                            <div class="format-desc">Coming soon</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="submit-section">
+                    <button type="submit" class="btn-submit" id="submit-btn" disabled>
+                        <span class="spinner"></span>
+                        <span class="btn-text">📊 Extract Tables</span>
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="error-message"></div>
+            </form>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section">
+                <div class="results-header">
+                    <h3><span>✨</span> Extraction Results</h3>
+                    <div class="tables-found" id="tables-found">
+                        <span>📊</span>
+                        <span id="table-count">0 tables found</span>
+                    </div>
+                </div>
+
+                <!-- Table Preview -->
+                <div class="table-preview" id="table-preview"></div>
+
+                <!-- Download Section -->
+                <div class="download-section" id="download-section">
+                    <a href="#" class="btn-download" id="download-btn">
+                        <span>⬇️</span> Download Data
+                    </a>
+                    <button class="btn-download secondary" id="copy-data-btn">
+                        <span>📋</span> Copy to Clipboard
+                    </button>
+                </div>
+
+                <!-- No Tables Message -->
+                <div class="no-tables" id="no-tables" style="display: none;">
+                    <div class="icon">📋</div>
+                    <h4>No Tables Detected</h4>
+                    <p>The document doesn't appear to contain any extractable tables.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileSelected = document.getElementById('file-selected');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const removeFileBtn = document.getElementById('remove-file');
+        const submitBtn = document.getElementById('submit-btn');
+        const form = document.getElementById('extract-form');
+        const errorMessage = document.getElementById('error-message');
+        const resultsSection = document.getElementById('results-section');
+        const formatOptions = document.querySelectorAll('.format-option');
+
+        let selectedFile = null;
+        let extractedData = null;
+
+        // Format options selection
+        formatOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                formatOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Handle file selection
+        function handleFile(file) {
+            if (!file) return;
+
+            if (!file.name.toLowerCase().endsWith('.pdf')) {
+                showError('Please select a PDF file.');
+                return;
+            }
+
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileSelected.classList.add('show');
+            submitBtn.disabled = false;
+            hideError();
+        }
+
+        // Drop zone events
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        // Remove file
+        removeFileBtn.addEventListener('click', () => {
+            selectedFile = null;
+            fileInput.value = '';
+            fileSelected.classList.remove('show');
+            submitBtn.disabled = true;
+        });
+
+        // Show/Hide error
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedFile) {
+                showError('Please select a file first.');
+                return;
+            }
+
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            hideError();
+            resultsSection.classList.remove('show');
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('format', document.querySelector('input[name="format"]:checked').value);
+
+            try {
+                const response = await fetch('/ai/extract-tables', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Extraction failed');
+                }
+
+                extractedData = data;
+                displayResults(data);
+
+            } catch (error) {
+                showError(error.message || 'An error occurred. Please try again.');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Display results
+        function displayResults(data) {
+            const tablePreview = document.getElementById('table-preview');
+            const tableCount = document.getElementById('table-count');
+            const noTables = document.getElementById('no-tables');
+            const downloadSection = document.getElementById('download-section');
+
+            if (!data.tables_found || data.table_count === 0) {
+                tablePreview.innerHTML = '';
+                tableCount.textContent = '0 tables found';
+                noTables.style.display = 'block';
+                downloadSection.style.display = 'none';
+            } else {
+                noTables.style.display = 'none';
+                downloadSection.style.display = 'flex';
+                tableCount.textContent = data.table_count + ' table(s) found';
+
+                let html = '';
+                data.tables.forEach((table, index) => {
+                    html += `
+                        <div class="table-item">
+                            <div class="table-header">
+                                <h4><span>📊</span> Table ${index + 1}</h4>
+                                <span class="table-meta">${table.row_count} rows × ${table.column_count} columns</span>
+                            </div>
+                            <div class="table-content">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            ${table.headers.map(h => `<th>${h || '-'}</th>`).join('')}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${table.rows.slice(0, 10).map(row => `
+                                            <tr>
+                                                ${row.map(cell => `<td>${cell || '-'}</td>`).join('')}
+                                            </tr>
+                                        `).join('')}
+                                        ${table.rows.length > 10 ? `
+                                            <tr>
+                                                <td colspan="${table.column_count}" style="text-align: center; color: var(--text-secondary); font-style: italic;">
+                                                    ... and ${table.rows.length - 10} more rows
+                                                </td>
+                                            </tr>
+                                        ` : ''}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                });
+                tablePreview.innerHTML = html;
+            }
+
+            resultsSection.classList.add('show');
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Download
+        document.getElementById('download-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!extractedData || !extractedData.formatted_data) return;
+
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const extension = format === 'json' ? 'json' : 'csv';
+            const mimeType = format === 'json' ? 'application/json' : 'text/csv';
+
+            const blob = new Blob([extractedData.formatted_data], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `extracted-tables.${extension}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Copy to clipboard
+        document.getElementById('copy-data-btn').addEventListener('click', () => {
+            if (!extractedData || !extractedData.formatted_data) return;
+
+            navigator.clipboard.writeText(extractedData.formatted_data).then(() => {
+                const btn = document.getElementById('copy-data-btn');
+                btn.innerHTML = '<span>✓</span> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = '<span>📋</span> Copy to Clipboard';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>

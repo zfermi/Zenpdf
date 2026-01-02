@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-48KRBHY1X8');
+    </script>
+
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-3652846271676047">
+
+    <!-- Primary Meta Tags -->
+    <title>AI Document Tools - Summarize, Extract & Analyze PDFs | Best PDF Converter</title>
+    <meta name="title" content="AI Document Tools - Summarize, Extract & Analyze PDFs">
+    <meta name="description"
+        content="Use AI to summarize PDF documents, extract tables to Excel, and ask questions about your files. Powered by advanced AI for intelligent document processing.">
+    <meta name="keywords"
+        content="AI PDF tools, document summarizer, PDF to Excel, extract tables, document AI, PDF analyzer, intelligent document processing">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bestpdfconverter.online/ai-tools">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bestpdfconverter.online/ai-tools">
+    <meta property="og:title" content="AI Document Tools - Intelligent PDF Processing">
+    <meta property="og:description"
+        content="Use AI to summarize documents, extract data, and get answers from your PDFs instantly.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --ai-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --card-bg-hover: #1a2030;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --ai-blue: #00d2ff;
+            --ai-purple: #764ba2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--ai-blue);
+            margin-bottom: 1.5rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(0, 210, 255, 0.4);
+            }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: var(--ai-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* AI Tools Grid */
+        .tools-section {
+            padding: 60px 0 100px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-card.summarize::before {
+            background: var(--ai-gradient);
+        }
+
+        .tool-card.extract::before {
+            background: var(--success-gradient);
+        }
+
+        .tool-card.qa::before {
+            background: var(--warning-gradient);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 210, 255, 0.15);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .tool-card.summarize .tool-icon {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.15) 0%, rgba(58, 123, 213, 0.15) 100%);
+        }
+
+        .tool-card.extract .tool-icon {
+            background: linear-gradient(135deg, rgba(17, 153, 142, 0.15) 0%, rgba(56, 239, 125, 0.15) 100%);
+        }
+
+        .tool-card.qa .tool-icon {
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.15) 0%, rgba(245, 87, 108, 0.15) 100%);
+        }
+
+        .tool-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            padding: 0.35rem 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .tool-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: gap 0.3s ease;
+        }
+
+        .tool-card.summarize .tool-cta {
+            color: #00d2ff;
+        }
+
+        .tool-card.extract .tool-cta {
+            color: #38ef7d;
+        }
+
+        .tool-card.qa .tool-cta {
+            color: #f5576c;
+        }
+
+        .tool-card:hover .tool-cta {
+            gap: 1rem;
+        }
+
+        /* Premium Badge */
+        .premium-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.35rem 0.85rem;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Why AI Section */
+        .why-ai {
+            padding: 80px 0;
+            background: var(--darker-bg);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--ai-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        .footer a {
+            color: var(--ai-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <a href="{{ url_for('home') }}" style="text-decoration: none;">
+                        <h1>Best PDF Converter</h1>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('ai_tools') }}" style="color: var(--ai-blue);">AI Tools</a>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="ai-badge">
+                    <span>🤖</span>
+                    <span>Powered by Advanced AI</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient-text">AI Document Intelligence</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Transform how you work with PDFs. Summarize documents instantly, extract data to Excel,
+                    and get answers from your files using cutting-edge AI technology.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">10x</div>
+            <div class="stat-label">Faster Processing</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Accuracy Rate</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Languages Supported</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Use Cases</div>
+        </div>
+    </div>
+
+    <!-- AI Tools Grid -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your AI Tool</h2>
+                <p style="color: var(--text-secondary);">Select a tool to get started with intelligent document
+                    processing</p>
+            </div>
+
+            <div class="tools-grid">
+                <!-- Summarize Tool -->
+                <a href="{{ url_for('ai_summarize') }}" class="tool-card summarize">
+                    <span class="premium-badge">Premium</span>
+                    <div class="tool-icon">📝</div>
+                    <h3>PDF Summarizer</h3>
+                    <p>Generate intelligent summaries of any PDF document. Get key points, main topics, and executive
+                        summaries in seconds.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Executive Summary</span>
+                        <span class="feature-tag">Key Points</span>
+                        <span class="feature-tag">Bullet Format</span>
+                    </div>
+                    <div class="tool-cta">
+                        Get Started <span>→</span>
+                    </div>
+                </a>
+
+                <!-- Extract Tables Tool -->
+                <a href="{{ url_for('ai_extract_tables') }}" class="tool-card extract">
+                    <span class="premium-badge">Premium</span>
+                    <div class="tool-icon">📊</div>
+                    <h3>Table Extractor</h3>
+                    <p>Extract tables and data from PDFs to Excel or CSV. Perfect for invoices, reports, and data-heavy
+                        documents.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">PDF to Excel</span>
+                        <span class="feature-tag">Smart Detection</span>
+                        <span class="feature-tag">Batch Export</span>
+                    </div>
+                    <div class="tool-cta">
+                        Get Started <span>→</span>
+                    </div>
+                </a>
+
+                <!-- PDF Q&A Tool -->
+                <a href="{{ url_for('ai_qa') }}" class="tool-card qa">
+                    <span class="premium-badge">Premium</span>
+                    <div class="tool-icon">💬</div>
+                    <h3>PDF Q&A Chat</h3>
+                    <p>Ask questions about your PDF and get instant, accurate answers. Like having a personal research
+                        assistant.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Natural Language</span>
+                        <span class="feature-tag">Source Citations</span>
+                        <span class="feature-tag">Multi-Page Analysis</span>
+                    </div>
+                    <div class="tool-cta">
+                        Get Started <span>→</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why AI Section -->
+    <section class="why-ai">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Use <span class="gradient-text">AI-Powered</span> Document Tools?</h2>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h4>Save Hours of Time</h4>
+                    <p>What takes hours of reading and data entry now takes seconds with AI processing.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h4>High Accuracy</h4>
+                    <p>Advanced AI models deliver accurate results that improve with every document.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔒</div>
+                    <h4>Secure Processing</h4>
+                    <p>Your documents are processed securely and deleted automatically after use.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌐</div>
+                    <h4>Works Everywhere</h4>
+                    <p>Access from any device, any browser. No software installation needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Best PDF Converter. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="{{ url_for('home') }}">Home</a> ·
+                <a href="{{ url_for('pricing') }}">Pricing</a> ·
+                <a href="{{ url_for('blog') }}">Blog</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
