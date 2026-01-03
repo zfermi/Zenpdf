@@ -280,8 +280,8 @@
         /* Hero Section - Redesigned */
         .hero {
             position: relative;
-            padding: 140px 0 80px;
-            min-height: 100vh;
+            padding: 120px 0 40px;
+            min-height: auto;
             display: flex;
             align-items: center;
         }
@@ -347,7 +347,7 @@
         .hero-content {
             position: relative;
             text-align: center;
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -371,30 +371,29 @@
             margin-bottom: 2.5rem;
         }
 
-        /* Upload Zone - Competitor Style */
+        /* Upload Zone - Wide Style with Theme Colors */
         .upload-zone-wrapper {
             background: #ffffff;
-            border: 2px dashed #e85a4f;
+            border: 2px dashed #667eea;
             border-radius: 20px;
-            padding: 3rem 2rem;
+            padding: 2.5rem 2rem;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 100%;
+            width: 100%;
         }
 
         .upload-zone-wrapper:hover {
-            border-color: #d64a3f;
-            box-shadow: 0 10px 40px rgba(232, 90, 79, 0.15);
+            border-color: #764ba2;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
         }
 
         .upload-zone-wrapper.drag-over {
-            border-color: #d64a3f;
-            background: #fff5f5;
+            border-color: #764ba2;
+            background: #f8f5ff;
             transform: scale(1.01);
         }
 
@@ -409,7 +408,7 @@
         .upload-zone-logo {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #e85a4f 0%, #d64a3f 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -436,7 +435,7 @@
         }
 
         .upload-btn {
-            background: linear-gradient(135deg, #e85a4f 0%, #d64a3f 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 1rem 0;
             border-radius: 30px;
@@ -456,7 +455,7 @@
 
         .upload-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(232, 90, 79, 0.4);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
 
         .upload-btn .plus-icon {
@@ -493,8 +492,8 @@
         }
 
         .upload-option:hover {
-            background: #fff5f5;
-            border-color: #e85a4f;
+            background: #f8f5ff;
+            border-color: #667eea;
             transform: translateY(-2px);
         }
 
