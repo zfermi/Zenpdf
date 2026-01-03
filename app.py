@@ -114,6 +114,17 @@ def create_app(config_name=None):
     if analytics:
         setup_analytics_middleware(app, analytics)
 
+    # Context processor to inject Google Drive config into templates
+    @app.context_processor
+    def inject_google_config():
+        return {
+            'google_config': {
+                'api_key': os.environ.get('GOOGLE_PICKER_API_KEY', ''),
+                'client_id': os.environ.get('GOOGLE_DRIVE_CLIENT_ID', ''),
+                'app_id': os.environ.get('GOOGLE_APP_ID', '')
+            }
+        }
+
     # ========== HELPER FUNCTIONS ==========
 
     def cleanup_old_files(folder, max_age_hours=1):

@@ -3,10 +3,16 @@
  * Allows users to select PDF files from their Google Drive
  */
 
-// Configuration - these will be injected from server
-const GOOGLE_API_KEY = 'AIzaSyDmel8WVno1fm4UzNCf4PlToI1CcAS7Qso';
-const GOOGLE_CLIENT_ID = '934576760552-3fr03nm0mjijhj48ig0sokpmc71sp8qe.apps.googleusercontent.com';
-const GOOGLE_APP_ID = '934576760552';
+// Configuration - injected from server via window.GOOGLE_CONFIG
+// Set in HTML template: window.GOOGLE_CONFIG = { apiKey: '...', clientId: '...', appId: '...' }
+const getConfig = () => {
+    if (!window.GOOGLE_CONFIG) {
+        console.error('Google Drive config not found. Set window.GOOGLE_CONFIG in your template.');
+        return null;
+    }
+    return window.GOOGLE_CONFIG;
+};
+
 const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
 
 let pickerApiLoaded = false;
@@ -22,7 +28,7 @@ function loadGoogleApi() {
             resolve();
             return;
         }
-        
+
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/api.js';
         script.onload = () => {
@@ -48,7 +54,7 @@ function loadGoogleIdentity() {
             resolve();
             return;
         }
-        
+
         const script = document.createElement('script');
         script.src = 'https://accounts.google.com/gsi/client';
         script.onload = resolve;
@@ -61,11 +67,14 @@ function loadGoogleIdentity() {
  * Authenticate with Google
  */
 async function authenticateGoogle() {
+    const config = getConfig();
+    if (!config) return;
+
     await loadGoogleIdentity();
-    
+
     return new Promise((resolve, reject) => {
         const tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: GOOGLE_CLIENT_ID,
+            client_id: config.clientId,
             scope: SCOPES,
             callback: (response) => {
                 if (response.error) {
@@ -84,19 +93,22 @@ async function authenticateGoogle() {
  * Create and show the Google Drive Picker
  */
 function createPicker(callback) {
+    const config = getConfig();
+    if (!config) return;
+
     googleDriveCallback = callback;
-    
+
     const picker = new google.picker.PickerBuilder()
         .addView(new google.picker.DocsView()
             .setMimeTypes('application/pdf')
             .setMode(google.picker.DocsViewMode.LIST))
         .setOAuthToken(oauthToken)
-        .setDeveloperKey(GOOGLE_API_KEY)
-        .setAppId(GOOGLE_APP_ID)
+        .setDeveloperKey(config.apiKey)
+        .setAppId(config.appId)
         .setCallback(pickerCallback)
         .setTitle('Select a PDF from Google Drive')
         .build();
-    
+
     picker.setVisible(true);
 }
 
@@ -109,13 +121,13 @@ async function pickerCallback(data) {
         const fileId = doc[google.picker.Document.ID];
         const fileName = doc[google.picker.Document.NAME];
         const fileSize = doc[google.picker.Document.SIZE_BYTES] || 0;
-        
+
         console.log('Selected file:', fileName, fileId);
-        
+
         // Download the file content
         try {
             showLoadingState(`Downloading ${fileName} from Google Drive...`);
-            
+
             const response = await fetch(
                 `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
                 {
@@ -124,16 +136,16 @@ async function pickerCallback(data) {
                     }
                 }
             );
-            
+
             if (!response.ok) {
                 throw new Error('Failed to download file from Google Drive');
             }
-            
+
             const blob = await response.blob();
             const file = new File([blob], fileName, { type: 'application/pdf' });
-            
+
             hideLoadingState();
-            
+
             if (googleDriveCallback) {
                 googleDriveCallback(file);
             }
@@ -151,16 +163,16 @@ async function pickerCallback(data) {
 async function openGoogleDrivePicker(callback) {
     try {
         showLoadingState('Connecting to Google Drive...');
-        
+
         await loadGoogleApi();
-        
+
         if (!oauthToken) {
             await authenticateGoogle();
         }
-        
+
         hideLoadingState();
         createPicker(callback);
-        
+
     } catch (error) {
         console.error('Google Drive error:', error);
         hideLoadingState();
@@ -234,12 +246,12 @@ function hideLoadingState() {
 function setFileFromGoogleDrive(file, fileInputId, uploadLabelId) {
     const fileInput = document.getElementById(fileInputId);
     const uploadLabel = document.getElementById(uploadLabelId);
-    
+
     // Create a DataTransfer to set the file
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
     fileInput.files = dataTransfer.files;
-    
+
     // Update UI
     if (uploadLabel) {
         const fileName = file.name;
@@ -249,7 +261,7 @@ function setFileFromGoogleDrive(file, fileInputId, uploadLabelId) {
         if (textSpan) textSpan.textContent = fileName;
         if (hintSpan) hintSpan.textContent = `${fileSize} MB (from Google Drive)`;
     }
-    
+
     // Trigger change event
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 }

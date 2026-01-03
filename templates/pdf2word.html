@@ -749,6 +749,13 @@
     </script>
 
     <!-- Google Drive Picker Integration -->
+    <script>
+        window.GOOGLE_CONFIG = {
+            apiKey: '{{ google_config.api_key }}',
+            clientId: '{{ google_config.client_id }}',
+            appId: '{{ google_config.app_id }}'
+        };
+    </script>
     <script src="{{ url_for('static', filename='js/google-drive-picker.js') }}"></script>
     <script>
         function openGoogleDrive() {
