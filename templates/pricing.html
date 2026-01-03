@@ -541,7 +541,7 @@
                         <div class="price">
                             <span class="currency">$</span>
                             <span class="amount">0</span>
-                            <span class="period">/month</span>
+                            <span class="period">forever</span>
                         </div>
                     </div>
                     <ul class="pricing-features">
@@ -550,7 +550,7 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            5 conversions per day
+                            <strong>Unlimited</strong> PDF conversions
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -564,18 +564,32 @@
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Basic PDF tools
+                            Split, Merge, Compress, Rotate
                         </li>
                         <li>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            Secure processing
+                            PDF to Word + OCR
+                        </li>
+                        <li style="color: #00d2ff;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#00d2ff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            🤖 3 AI credits/month
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="#4ade80" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            No registration required
                         </li>
                     </ul>
                     {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline">Get Started Free</a>
+                    <a href="{{ url_for('split_pdf') }}" class="btn btn-outline">Start Free Now</a>
                     {% elif current_user.subscription_tier == 'free' %}
                     <button class="btn btn-outline" style="opacity: 0.5; cursor: not-allowed;" disabled>Current
                         Plan</button>

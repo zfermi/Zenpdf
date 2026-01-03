@@ -31,6 +31,10 @@ class User(UserMixin, db.Model):
     subscription_start = db.Column(db.DateTime)
     subscription_end = db.Column(db.DateTime)
     stripe_customer_id = db.Column(db.String(100), unique=True)
+    
+    # AI Credits tracking
+    ai_credits_used = db.Column(db.Integer, default=0, nullable=False)
+    ai_credits_reset_date = db.Column(db.DateTime)
 
     # Relationships
     usage_records = db.relationship('UsageRecord', backref='user', lazy='dynamic', cascade='all, delete-orphan')
@@ -55,6 +59,49 @@ class User(UserMixin, db.Model):
         if self.subscription_end and self.subscription_end > datetime.utcnow():
             return True
         return False
+    
+    @property
+    def is_business(self):
+        """Check if user has business tier subscription"""
+        return self.subscription_tier == 'enterprise' and self.is_premium
+    
+    def get_ai_credits_limit(self):
+        """Get AI credits limit based on subscription tier"""
+        if self.subscription_tier == 'enterprise':
+            return 999999  # Unlimited for Business tier
+        elif self.subscription_tier == 'premium':
+            return 20  # Pro tier: 20 AI credits/month
+        else:
+            return 3  # Free tier: 3 AI credits/month
+    
+    def get_ai_credits_remaining(self):
+        """Get remaining AI credits for this month"""
+        self._reset_ai_credits_if_needed()
+        limit = self.get_ai_credits_limit()
+        return max(0, limit - self.ai_credits_used)
+    
+    def _reset_ai_credits_if_needed(self):
+        """Reset AI credits at the start of each month"""
+        now = datetime.utcnow()
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        
+        if self.ai_credits_reset_date is None or self.ai_credits_reset_date < month_start:
+            self.ai_credits_used = 0
+            self.ai_credits_reset_date = month_start
+            db.session.commit()
+    
+    def can_use_ai_feature(self):
+        """Check if user can use AI features (has remaining credits)"""
+        return self.get_ai_credits_remaining() > 0
+    
+    def use_ai_credit(self):
+        """Consume one AI credit. Returns True if successful, False if no credits left."""
+        self._reset_ai_credits_if_needed()
+        if self.get_ai_credits_remaining() > 0:
+            self.ai_credits_used += 1
+            db.session.commit()
+            return True
+        return False
 
     def get_daily_usage_count(self, operation_type=None):
         """Get count of operations performed today"""
@@ -73,13 +120,9 @@ class User(UserMixin, db.Model):
         return query.count()
 
     def can_perform_operation(self):
-        """Check if user can perform an operation based on their tier limits"""
-        if self.is_premium:
-            return True  # Unlimited for premium users
-
-        # Free tier: 5 operations per day
-        daily_count = self.get_daily_usage_count()
-        return daily_count < 5
+        """Check if user can perform a basic PDF operation - UNLIMITED FOR ALL USERS"""
+        # Basic PDF operations (split, merge, compress, rotate, pdf2word, ocr) are FREE and UNLIMITED
+        return True
 
 
 class UsageRecord(db.Model):
