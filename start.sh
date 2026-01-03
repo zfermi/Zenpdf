@@ -28,7 +28,13 @@ echo ""
 echo "📦 Ensuring database is initialized..."
 python init_db.py || echo "⚠️  Database initialization had warnings (this may be normal)"
 
+# Run AI credits migration
+echo ""
+echo "🔄 Running AI credits migration..."
+python migrate_ai_credits.py || echo "⚠️  AI credits migration had warnings (columns may already exist)"
+
 # Start gunicorn with production settings
 echo ""
 echo "🌐 Starting Gunicorn on port $PORT..."
 exec gunicorn -c gunicorn.conf.py "app:create_app('production')"
+
