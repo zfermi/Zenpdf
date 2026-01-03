@@ -1098,23 +1098,14 @@ def create_app(config_name=None):
                     'error': 'AI service not configured. Please contact administrator.'
                 }), 503
             
-            # Check user authentication for premium features
-            if not current_user.is_authenticated:
+            # Check AI credits
+            can_use_ai, ai_msg = check_ai_usage_limit()
+            if not can_use_ai:
                 return jsonify({
                     'success': False,
-                    'error': 'Please log in to use AI features.'
-                }), 401
-            
-            if not current_user.is_premium:
-                return jsonify({
-                    'success': False,
-                    'error': 'AI features require a premium subscription.'
+                    'error': ai_msg,
+                    'upgrade_required': True
                 }), 403
-            
-            # Check usage limit
-            can_proceed, error_msg = check_usage_limit()
-            if not can_proceed:
-                return jsonify({'success': False, 'error': error_msg}), 429
             
             # Get file and options
             file = request.files.get('file')
@@ -1167,8 +1158,10 @@ def create_app(config_name=None):
                         'error': summary_result.get('error', 'Summarization failed')
                     }), 500
                 
-                # Record usage
+                # Record usage and consume AI credit
                 record_usage('ai_summarize', file_size=file_size, pages_processed=pdf_data['page_count'])
+                if current_user.is_authenticated:
+                    current_user.use_ai_credit()
                 
                 # Return results
                 return jsonify({
@@ -1214,17 +1207,14 @@ def create_app(config_name=None):
             from document_intelligence import extract_tables_to_format, process_pdf_for_ai
             from ai_services import get_ai_service, detect_tables_in_text
             
-            # Check user authentication
-            if not current_user.is_authenticated:
-                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
-            
-            if not current_user.is_premium:
-                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
-            
-            # Check usage limit
-            can_proceed, error_msg = check_usage_limit()
-            if not can_proceed:
-                return jsonify({'success': False, 'error': error_msg}), 429
+            # Check AI credits
+            can_use_ai, ai_msg = check_ai_usage_limit()
+            if not can_use_ai:
+                return jsonify({
+                    'success': False,
+                    'error': ai_msg,
+                    'upgrade_required': True
+                }), 403
             
             # Get file and format
             file = request.files.get('file')
@@ -1269,8 +1259,10 @@ def create_app(config_name=None):
                                     'detection_method': 'ai'
                                 }
                 
-                # Record usage
+                # Record usage and consume AI credit
                 record_usage('ai_extract_tables', file_size=file_size)
+                if current_user.is_authenticated:
+                    current_user.use_ai_credit()
                 
                 return jsonify(table_result)
                 
@@ -1299,12 +1291,14 @@ def create_app(config_name=None):
         try:
             from document_intelligence import process_pdf_for_ai
             
-            # Check user authentication
-            if not current_user.is_authenticated:
-                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
-            
-            if not current_user.is_premium:
-                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
+            # Check AI credits
+            can_use_ai, ai_msg = check_ai_usage_limit()
+            if not can_use_ai:
+                return jsonify({
+                    'success': False,
+                    'error': ai_msg,
+                    'upgrade_required': True
+                }), 403
             
             file = request.files.get('file')
             if not file or not file.filename:
@@ -1373,17 +1367,14 @@ def create_app(config_name=None):
                     'error': 'AI service not configured.'
                 }), 503
             
-            # Check user authentication
-            if not current_user.is_authenticated:
-                return jsonify({'success': False, 'error': 'Please log in to use AI features.'}), 401
-            
-            if not current_user.is_premium:
-                return jsonify({'success': False, 'error': 'AI features require a premium subscription.'}), 403
-            
-            # Check usage limit
-            can_proceed, error_msg = check_usage_limit()
-            if not can_proceed:
-                return jsonify({'success': False, 'error': error_msg}), 429
+            # Check AI credits
+            can_use_ai, ai_msg = check_ai_usage_limit()
+            if not can_use_ai:
+                return jsonify({
+                    'success': False,
+                    'error': ai_msg,
+                    'upgrade_required': True
+                }), 403
             
             # Get question and text from request
             data = request.get_json()
@@ -1408,8 +1399,10 @@ def create_app(config_name=None):
                     'error': qa_result.get('error', 'Failed to answer question')
                 }), 500
             
-            # Record usage
+            # Record usage and consume AI credit
             record_usage('ai_qa')
+            if current_user.is_authenticated:
+                current_user.use_ai_credit()
             
             return jsonify({
                 'success': True,
