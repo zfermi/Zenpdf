@@ -100,6 +100,7 @@ class Config:
             # Google Drive Picker APIs
             "https://apis.google.com",
             "https://accounts.google.com",
+            "https://*.google.com",
         ],
         'style-src': [
             "'self'", 
@@ -122,6 +123,8 @@ class Config:
             "https://accounts.google.com",
             "https://docs.google.com",
             "https://drive.google.com",
+            "https://*.google.com",
+            "https://*.doubleclick.net",
         ],
         'connect-src': [
             "'self'", 
@@ -133,6 +136,8 @@ class Config:
             # Google Drive API
             "https://www.googleapis.com",
             "https://accounts.google.com",
+            "https://*.google.com",
+            "https://*.googleapis.com",
         ],
     }
 

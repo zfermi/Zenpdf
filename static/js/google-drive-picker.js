@@ -6,8 +6,9 @@
 // Configuration - injected from server via window.GOOGLE_CONFIG
 // Set in HTML template: window.GOOGLE_CONFIG = { apiKey: '...', clientId: '...', appId: '...' }
 const getConfig = () => {
-    if (!window.GOOGLE_CONFIG) {
-        console.error('Google Drive config not found. Set window.GOOGLE_CONFIG in your template.');
+    if (!window.GOOGLE_CONFIG || !window.GOOGLE_CONFIG.apiKey || !window.GOOGLE_CONFIG.clientId) {
+        console.error('Google Drive config not found. Environment variables GOOGLE_PICKER_API_KEY and GOOGLE_DRIVE_CLIENT_ID must be set.');
+        alert('Google Drive integration is not configured. Please contact support.');
         return null;
     }
     return window.GOOGLE_CONFIG;
