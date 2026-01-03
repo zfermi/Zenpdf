@@ -84,16 +84,6 @@
         }
     }
     </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Best PDF Converter",
-        "url": "https://bestpdfconverter.online",
-        "logo": "https://bestpdfconverter.online/static/logo.png",
-        "sameAs": []
-    }
-    </script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
@@ -178,7 +168,6 @@
             color: var(--text-primary);
         }
 
-        /* Tools Dropdown */
         .nav-dropdown {
             position: relative;
         }
@@ -246,7 +235,6 @@
             gap: 1rem;
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -289,10 +277,10 @@
             font-size: 1.1rem;
         }
 
-        /* Hero Section */
+        /* Hero Section - Redesigned */
         .hero {
             position: relative;
-            padding: 120px 0 80px;
+            padding: 140px 0 80px;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -358,17 +346,16 @@
 
         .hero-content {
             position: relative;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
             line-height: 1.2;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .gradient-text {
@@ -381,36 +368,288 @@
         .hero-subtitle {
             font-size: 1.2rem;
             color: var(--text-secondary);
-            margin-bottom: 2rem;
-            line-height: 1.8;
+            margin-bottom: 2.5rem;
         }
 
-        .hero-buttons {
+        /* Upload Zone */
+        .upload-zone {
+            background: var(--card-bg);
+            border: 2px dashed rgba(102, 126, 234, 0.5);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone.drag-over {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .upload-zone h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .upload-options {
             display: flex;
+            justify-content: center;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-top: 1.5rem;
         }
 
-        .hero-features {
+        .upload-option {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
             display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
             flex-wrap: wrap;
-            gap: 1rem;
         }
 
-        .feature-pill {
+        .trust-badge {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            font-size: 0.9rem;
             color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        .feature-pill svg {
+        .trust-badge svg {
             color: #4ade80;
+        }
+
+        /* Tool Selection Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .file-preview {
+            padding: 1rem 2rem;
+            background: rgba(102, 126, 234, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-preview-icon {
+            font-size: 2rem;
+        }
+
+        .file-preview-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .file-preview-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .tool-category {
+            margin-bottom: 2rem;
+        }
+
+        .tool-category h3 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .tool-card:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .tool-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .tool-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .tool-card.ai-tool {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(58, 123, 213, 0.08) 100%);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .tool-card.ai-tool:hover {
+            border-color: #00d2ff;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
 
         /* Features Section */
@@ -435,39 +674,45 @@
             color: var(--text-secondary);
         }
 
-        .features-grid {
+        /* Quick Tools Grid */
+        .quick-tools {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
         }
 
-        .feature-card {
+        .quick-tool-card {
             background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 20px;
             border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .feature-card:hover {
+        .quick-tool-card:hover {
             transform: translateY(-5px);
             border-color: #667eea;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
         }
 
-        .feature-icon {
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.4rem;
+        .quick-tool-icon {
+            font-size: 3rem;
             margin-bottom: 1rem;
-            font-weight: 600;
+            display: block;
         }
 
-        .feature-card p {
+        .quick-tool-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-tool-card p {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            line-height: 1.7;
         }
 
         /* Stats Section */
@@ -496,46 +741,6 @@
         .stat-label {
             font-size: 1.1rem;
             color: var(--text-secondary);
-        }
-
-        /* CTA Section */
-        .cta {
-            padding: 100px 0;
-            background: var(--dark-bg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .cta-content {
-            text-align: center;
-            position: relative;
-        }
-
-        .cta-content h2 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .cta-content p {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         /* Footer */
@@ -590,7 +795,6 @@
             color: var(--text-secondary);
         }
 
-        /* Mobile Navigation Toggle */
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -609,21 +813,38 @@
                 display: block;
             }
 
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .stats-grid {
+            .quick-tools {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .trust-badges {
+                gap: 1rem;
+            }
+
+            .upload-options {
+                flex-wrap: wrap;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
             }
         }
     </style>
@@ -673,61 +894,145 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Upload Zone -->
     <section class="hero">
         <div class="hero-background">
             <div class="gradient-overlay"></div>
         </div>
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="hero-title">
-                        Work with PDFs <span class="gradient-text">Anywhere</span>,
-                        <span class="gradient-text">Anytime</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                        Experience premium PDF tools with unlimited features. Split, merge, compress, rotate, and
-                        convert your documents with ease.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="#features" class="btn btn-primary btn-lg">
-                            Start Free Trial
-                        </a>
-                        <a href="#features" class="btn btn-secondary btn-lg">
-                            Learn More
-                        </a>
-                    </div>
-                    <div class="hero-features">
-                        <div class="feature-pill">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span>No Registration Required</span>
-                        </div>
-                        <div class="feature-pill">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span>Multi-Device Support</span>
-                        </div>
-                        <div class="feature-pill">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span>Premium Quality</span>
-                        </div>
+                <h1 class="hero-title">
+                    All-in-One <span class="gradient-text">PDF Tools</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Upload your PDF once, then choose what you want to do with it.
+                    Split, merge, compress, convert, and more.
+                </p>
+
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <span class="upload-icon">📄</span>
+                    <h3>Drop your PDF here</h3>
+                    <p>or click to browse files</p>
+                    <button class="upload-btn">
+                        <span>+</span> Choose File
+                    </button>
+                    <input type="file" class="file-input" id="fileInput" accept=".pdf" multiple>
+                    <div class="upload-options">
+                        <div class="upload-option" title="Google Drive">☁️</div>
+                        <div class="upload-option" title="Dropbox">📦</div>
+                        <div class="upload-option" title="URL">🔗</div>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <div style="text-align: center; font-size: 10rem; animation: float 6s ease-in-out infinite;">📄
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>100% Free</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>No Registration</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Secure & Private</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Tool Selection Modal -->
+    <div class="modal-overlay" id="toolModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select what to do:</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="file-preview" id="filePreview">
+                <span class="file-preview-icon">📄</span>
+                <div class="file-preview-info">
+                    <h4 id="fileName">document.pdf</h4>
+                    <p id="fileSize">2.4 MB</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="tool-category">
+                    <h3>Convert</h3>
+                    <div class="tools-grid">
+                        <a href="#" class="tool-card" data-tool="pdf2word">
+                            <span class="tool-card-icon">📝</span>
+                            <h4>To Word</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="pdf2excel">
+                            <span class="tool-card-icon">📊</span>
+                            <h4>To Excel</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="pdf2ppt">
+                            <span class="tool-card-icon">📽️</span>
+                            <h4>To PowerPoint</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="pdf2jpg">
+                            <span class="tool-card-icon">🖼️</span>
+                            <h4>To JPG</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="tool-category">
+                    <h3>Organize</h3>
+                    <div class="tools-grid">
+                        <a href="#" class="tool-card" data-tool="split">
+                            <span class="tool-card-icon">✂️</span>
+                            <h4>Split PDF</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="merge">
+                            <span class="tool-card-icon">📑</span>
+                            <h4>Merge PDF</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="rotate">
+                            <span class="tool-card-icon">🔄</span>
+                            <h4>Rotate</h4>
+                        </a>
+                        <a href="#" class="tool-card" data-tool="compress">
+                            <span class="tool-card-icon">🗜️</span>
+                            <h4>Compress</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="tool-category">
+                    <h3>AI Tools ✨</h3>
+                    <div class="tools-grid">
+                        <a href="#" class="tool-card ai-tool" data-tool="ai-summarize">
+                            <span class="tool-card-icon">📋</span>
+                            <h4>Summarize</h4>
+                            <span class="ai-badge">AI</span>
+                        </a>
+                        <a href="#" class="tool-card ai-tool" data-tool="ai-extract">
+                            <span class="tool-card-icon">📊</span>
+                            <h4>Extract Tables</h4>
+                            <span class="ai-badge">AI</span>
+                        </a>
+                        <a href="#" class="tool-card ai-tool" data-tool="ai-qa">
+                            <span class="tool-card-icon">❓</span>
+                            <h4>Ask Questions</h4>
+                            <span class="ai-badge">AI</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Flash Messages -->
     <div class="container" style="padding-top: 2rem;">
@@ -743,78 +1048,52 @@
         {% endwith %}
     </div>
 
-    <!-- Features Section -->
+    <!-- Quick Access Tools Section -->
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2>Why Choose Best PDF Converter?</h2>
-                <p>Everything you need for the ultimate PDF processing experience</p>
+                <h2>Or jump directly to a tool</h2>
+                <p>Click any tool below to get started immediately</p>
             </div>
-            <div class="features-grid">
-                <a href="{{ url_for('split_pdf') }}" class="feature-card"
-                    style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">📄</div>
-                    </div>
+            <div class="quick-tools">
+                <a href="{{ url_for('split_pdf') }}" class="quick-tool-card">
+                    <span class="quick-tool-icon">✂️</span>
                     <h3>Split PDF</h3>
-                    <p>Extract pages from your PDF. Split by range, specific pages, or odd/even pages with precision.
-                    </p>
+                    <p>Extract pages from PDF</p>
                 </a>
-
-                <a href="{{ url_for('merge_pdf') }}" class="feature-card"
-                    style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">📚</div>
-                    </div>
+                <a href="{{ url_for('merge_pdf') }}" class="quick-tool-card">
+                    <span class="quick-tool-icon">📑</span>
                     <h3>Merge PDF</h3>
-                    <p>Combine multiple PDF files into one document. Drag and drop to reorder seamlessly.</p>
+                    <p>Combine multiple PDFs</p>
                 </a>
-
-                <a href="{{ url_for('compress_pdf') }}" class="feature-card"
-                    style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">🗜️</div>
-                    </div>
+                <a href="{{ url_for('compress_pdf') }}" class="quick-tool-card">
+                    <span class="quick-tool-icon">🗜️</span>
                     <h3>Compress PDF</h3>
-                    <p>Reduce file size while maintaining quality. Perfect for sharing and storage optimization.</p>
+                    <p>Reduce file size</p>
                 </a>
-
-                <a href="{{ url_for('rotate_pdf') }}" class="feature-card"
-                    style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">🔄</div>
-                    </div>
+                <a href="{{ url_for('rotate_pdf') }}" class="quick-tool-card">
+                    <span class="quick-tool-icon">🔄</span>
                     <h3>Rotate PDF</h3>
-                    <p>Rotate pages 90°, 180°, or 270°. Fix orientation issues with a single click.</p>
+                    <p>Fix orientation</p>
                 </a>
-
-                <a href="{{ url_for('pdf2word') }}" class="feature-card" style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">📝</div>
-                    </div>
+                <a href="{{ url_for('pdf2word') }}" class="quick-tool-card">
+                    <span class="quick-tool-icon">📝</span>
                     <h3>PDF to Word</h3>
-                    <p>Convert PDF files to editable Word documents while preserving all formatting.</p>
+                    <p>Convert to DOCX</p>
                 </a>
-
-                <a href="{{ url_for('ai_tools') }}" class="feature-card"
-                    style="text-decoration: none; color: inherit; background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(58, 123, 213, 0.08) 100%); border: 1px solid rgba(0, 210, 255, 0.3);">
-                    <div class="feature-icon">
-                        <div style="font-size: 3rem;">🤖</div>
-                    </div>
-                    <h3>AI Document Tools</h3>
-                    <p>Summarize PDFs, extract tables to Excel, and ask questions about your documents using AI.</p>
-                    <span
-                        style="display: inline-block; background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); color: white; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-top: 1rem;">New
-                        ✨</span>
+                <a href="{{ url_for('ai_tools') }}" class="quick-tool-card"
+                    style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(58, 123, 213, 0.08) 100%); border: 1px solid rgba(0, 210, 255, 0.3);">
+                    <span class="quick-tool-icon">🤖</span>
+                    <h3>AI Tools</h3>
+                    <p>Summarize, Extract, Q&A</p>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Stats Section with Live Activity Counter -->
+    <!-- Stats Section -->
     <section class="stats">
         <div class="container">
-            <!-- Live Activity Banner -->
             <div style="text-align: center; margin-bottom: 3rem;">
                 <div
                     style="display: inline-flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(52, 211, 153, 0.1) 100%); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 50px; padding: 0.75rem 2rem;">
@@ -825,37 +1104,6 @@
                     </span>
                 </div>
             </div>
-            <style>
-                @keyframes pulse {
-
-                    0%,
-                    100% {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
-
-                    50% {
-                        opacity: 0.5;
-                        transform: scale(1.2);
-                    }
-                }
-
-                @keyframes countUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .stat-number {
-                    animation: countUp 0.5s ease-out;
-                }
-            </style>
             <div class="stats-grid">
                 <div>
                     <h3 class="stat-number" id="total-users">150+</h3>
@@ -874,52 +1122,23 @@
                     <p class="stat-label">Uptime</p>
                 </div>
             </div>
-
-            <!-- Trust Signals -->
-            <div
-                style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
-                <h3 style="font-size: 1.3rem; margin-bottom: 1rem;">🔒 100% Free. No Hidden Fees.</h3>
-                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
-                    Split, merge, compress, rotate, and convert PDFs with <strong>no daily limits</strong>.
-                    No registration required. Your files are processed securely and automatically deleted after 1 hour.
-                </p>
-            </div>
         </div>
     </section>
 
-    <script>
-        // Fetch and update live stats
-        async function updateLiveStats() {
-            try {
-                const response = await fetch('/api/live-stats');
-                const data = await response.json();
-
-                document.getElementById('today-count').textContent = data.today_operations.toLocaleString();
-                document.getElementById('total-users').textContent = data.total_users.toLocaleString() + '+';
-                document.getElementById('total-files').textContent = data.total_operations.toLocaleString() + '+';
-            } catch (error) {
-                console.log('Stats update skipped');
-            }
-        }
-
-        // Update stats on page load and every 30 seconds
-        updateLiveStats();
-        setInterval(updateLiveStats, 30000);
-    </script>
-
     <!-- CTA Section -->
     {% if not current_user.is_authenticated %}
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Start Processing?</h2>
-                <p>Join thousands of users and unlock unlimited access to all our premium PDF tools.</p>
-                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
-                        Start Free Trial
-                    </a>
-                    <a href="{{ url_for('pricing') }}" class="btn btn-secondary btn-lg">View Pricing</a>
-                </div>
+    <section style="padding: 100px 0; background: var(--dark-bg); position: relative; overflow: hidden;">
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%); pointer-events: none;">
+        </div>
+        <div class="container" style="text-align: center; position: relative;">
+            <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;">Ready to Start?</h2>
+            <p
+                style="font-size: 1.3rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Join thousands of users and unlock unlimited access to all our premium PDF tools.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Free Trial</a>
+                <a href="{{ url_for('pricing') }}" class="btn btn-secondary btn-lg">View Pricing</a>
             </div>
         </div>
     </section>
@@ -931,7 +1150,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Best PDF Converter</h3>
-                    <p>Work with PDFs Anywhere, Anytime</p>
+                    <p>All-in-One PDF Tools</p>
                 </div>
                 <div class="footer-section">
                     <h4>Product</h4>
@@ -960,22 +1179,134 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
-                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Secure payments powered by PayPal</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Smooth scroll for anchor links
+        // Upload Zone Functionality
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const toolModal = document.getElementById('toolModal');
+        const modalClose = document.getElementById('modalClose');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+
+        let uploadedFiles = [];
+
+        // Click to upload
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFiles(e.target.files);
+            }
+        });
+
+        // Drag and drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        function handleFiles(files) {
+            uploadedFiles = Array.from(files);
+            const file = files[0];
+
+            // Update modal with file info
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+
+            // Show modal
+            toolModal.classList.add('active');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            toolModal.classList.remove('active');
+            fileInput.value = '';
+            uploadedFiles = [];
+        });
+
+        toolModal.addEventListener('click', (e) => {
+            if (e.target === toolModal) {
+                toolModal.classList.remove('active');
+                fileInput.value = '';
+                uploadedFiles = [];
+            }
+        });
+
+        // Tool selection - redirect to tool page with file
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tool = card.dataset.tool;
+
+                // Map tool to URL
+                const toolUrls = {
+                    'split': '{{ url_for("split_pdf") }}',
+                    'merge': '{{ url_for("merge_pdf") }}',
+                    'compress': '{{ url_for("compress_pdf") }}',
+                    'rotate': '{{ url_for("rotate_pdf") }}',
+                    'pdf2word': '{{ url_for("pdf2word") }}',
+                    'ai-summarize': '{{ url_for("ai_tools") }}',
+                    'ai-extract': '{{ url_for("ai_tools") }}',
+                    'ai-qa': '{{ url_for("ai_qa") }}'
+                };
+
+                const url = toolUrls[tool];
+                if (url) {
+                    // Store file in sessionStorage for the tool page to use
+                    // For now, redirect to the tool page
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Live stats
+        async function updateLiveStats() {
+            try {
+                const response = await fetch('/api/live-stats');
+                const data = await response.json();
+                document.getElementById('today-count').textContent = data.today_operations.toLocaleString();
+                document.getElementById('total-users').textContent = data.total_users.toLocaleString() + '+';
+                document.getElementById('total-files').textContent = data.total_operations.toLocaleString() + '+';
+            } catch (error) {
+                console.log('Stats update skipped');
+            }
+        }
+
+        updateLiveStats();
+        setInterval(updateLiveStats, 30000);
+
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
