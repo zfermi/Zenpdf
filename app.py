@@ -314,6 +314,16 @@ def create_app(config_name=None):
         """Pricing page"""
         return render_template('pricing.html')
 
+    @app.route('/privacy')
+    def privacy_policy():
+        """Privacy Policy page"""
+        return render_template('privacy.html')
+
+    @app.route('/terms')
+    def terms_of_service():
+        """Terms of Service page"""
+        return render_template('terms.html')
+
     # ========== BLOG ==========
 
     @app.route('/blog')
