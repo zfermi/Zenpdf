@@ -1331,7 +1331,7 @@
 
         // Tool selection - redirect to tool page with file
         document.querySelectorAll('.tool-card').forEach(card => {
-            card.addEventListener('click', (e) => {
+            card.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const tool = card.dataset.tool;
 
@@ -1348,9 +1348,24 @@
                 };
 
                 const url = toolUrls[tool];
-                if (url) {
-                    // Store file in sessionStorage for the tool page to use
-                    // For now, redirect to the tool page
+                if (url && uploadedFiles.length > 0) {
+                    // Store file info in sessionStorage
+                    const file = uploadedFiles[0];
+
+                    // Convert file to base64 for storage
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const fileData = {
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                            data: e.target.result
+                        };
+                        sessionStorage.setItem('pendingPdfFile', JSON.stringify(fileData));
+                        window.location.href = url;
+                    };
+                    reader.readAsDataURL(file);
+                } else if (url) {
                     window.location.href = url;
                 }
             });
