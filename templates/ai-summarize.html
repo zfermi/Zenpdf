@@ -547,16 +547,20 @@
                     <h1>Best PDF Converter</h1>
                 </a>
             </div>
-            <div class="nav-links">
-                <a href="{{ url_for('home') }}">Home</a>
-                <a href="{{ url_for('ai_tools') }}" class="active">AI Tools</a>
-                <a href="{{ url_for('pricing') }}">Pricing</a>
-                {% if current_user.is_authenticated %}
-                <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                {% else %}
-                <a href="{{ url_for('auth.login') }}">Login</a>
-                {% endif %}
-            </div>
+                            <div class="nav-links">
+                    <a href="{{ url_for('split_pdf') }}"> Split</a>
+                    <a href="{{ url_for('merge_pdf') }}"> Merge</a>
+                    <a href="{{ url_for('compress_pdf') }}"> Compress</a>
+                    <a href="{{ url_for('pdf2word') }}"> To Word</a>
+                    <a href="{{ url_for('ai_tools') }}" style="color: var(--ai-blue);"> AI Tools</a>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
         </div>
     </nav>
 
