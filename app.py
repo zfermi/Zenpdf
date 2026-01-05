@@ -242,8 +242,13 @@ def create_app(config_name=None):
     def internal_error(e):
         app.logger.error(f'Internal error: {e}')
         db.session.rollback()
-        flash('An error occurred. Please try again.', 'error')
-        return redirect(url_for('home')), 500
+        # Return static HTML to avoid template errors causing infinite loops
+        return '''<!DOCTYPE html>
+<html><head><title>Error - Best PDF Converter</title>
+<style>body{font-family:sans-serif;text-align:center;padding:50px;background:#0A0E1A;color:#fff;}
+h1{font-size:2rem;}a{color:#667eea;}</style></head>
+<body><h1>Something went wrong</h1><p>An error occurred. Please try again.</p>
+<a href="/">← Back to Home</a></body></html>''', 500
 
     @app.errorhandler(404)
     def not_found(e):
