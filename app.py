@@ -18,9 +18,12 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from dotenv import load_dotenv
 
-# Optional PDF2Word conversion support
+# Optional PDF2Word conversion support using PyMuPDF and python-docx
 try:
-    from pdf2docx import Converter
+    import fitz  # PyMuPDF
+    from docx import Document
+    from docx.shared import Inches, Pt
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
     PDF2WORD_AVAILABLE = True
 except ImportError:
     PDF2WORD_AVAILABLE = False
@@ -1742,16 +1745,35 @@ def create_app(config_name=None):
         return rotated_file_path
 
     def convert_pdf_to_word(pdf_path, output_dir):
-        """Convert PDF to Word document using pdf2docx"""
+        """Convert PDF to Word document using PyMuPDF and python-docx"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         word_file_path = os.path.join(output_dir, f"converted_{timestamp}.docx")
 
-        # Create converter instance
-        cv = Converter(pdf_path)
-
-        # Convert PDF to DOCX
-        cv.convert(word_file_path, start=0, end=None)
-        cv.close()
+        # Open PDF with PyMuPDF
+        pdf_document = fitz.open(pdf_path)
+        
+        # Create Word document
+        doc = Document()
+        
+        for page_num in range(len(pdf_document)):
+            page = pdf_document[page_num]
+            
+            # Extract text blocks with formatting info
+            blocks = page.get_text("blocks")
+            
+            for block in blocks:
+                if block[6] == 0:  # Text block (not image)
+                    text = block[4].strip()
+                    if text:
+                        para = doc.add_paragraph(text)
+                        para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            
+            # Add page break between pages (except last)
+            if page_num < len(pdf_document) - 1:
+                doc.add_page_break()
+        
+        pdf_document.close()
+        doc.save(word_file_path)
 
         return word_file_path
 
