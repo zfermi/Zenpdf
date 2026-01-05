@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies including OCR
+# Install system dependencies including OCR and pdf2docx requirements
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -15,7 +15,12 @@ RUN apt-get update && \
     tesseract-ocr-spa \
     tesseract-ocr-fra \
     tesseract-ocr-deu \
-    poppler-utils && \
+    poppler-utils \
+    libfontconfig1 \
+    libfreetype6 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    zlib1g && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
