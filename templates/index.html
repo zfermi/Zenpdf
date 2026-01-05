@@ -1149,44 +1149,8 @@
     </section>
     {% endif %}
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Best PDF Converter</h3>
-                    <p>All-in-One PDF Tools</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
-                        {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
-                        <li><a href="{{ url_for('terms_of_service') }}">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    {% include 'components/footer.html' %}
+
 
     <script>
         // Upload Zone Functionality

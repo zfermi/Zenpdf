@@ -705,11 +705,7 @@
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
-        </div>
-    </footer>
+    {% include 'components/footer.html' %}
 
     <!-- Pending file handler from homepage -->
     <script src="{{ url_for('static', filename='js/pending-file-handler.js') }}"></script>

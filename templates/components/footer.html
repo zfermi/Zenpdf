@@ -1,0 +1,133 @@
+<!-- Shared Footer Component -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Best PDF Converter</h3>
+                <p>All-in-One PDF Tools</p>
+            </div>
+            <div class="footer-section">
+                <h4>Tools</h4>
+                <ul>
+                    <li><a href="{{ url_for('split_pdf') }}">Split PDF</a></li>
+                    <li><a href="{{ url_for('merge_pdf') }}">Merge PDF</a></li>
+                    <li><a href="{{ url_for('compress_pdf') }}">Compress PDF</a></li>
+                    <li><a href="{{ url_for('pdf2word') }}">PDF to Word</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>More Tools</h4>
+                <ul>
+                    <li><a href="{{ url_for('rotate_pdf') }}">Rotate PDF</a></li>
+                    <li><a href="{{ url_for('pdf2excel') }}">PDF to Excel</a></li>
+                    <li><a href="{{ url_for('ocr_page') }}">OCR</a></li>
+                    <li><a href="{{ url_for('ai_tools') }}">AI Tools</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
+                    <li><a href="{{ url_for('blog') }}">Blog</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
+                    <li><a href="{{ url_for('terms_of_service') }}">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        background: var(--darker-bg, #070A13);
+        border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+        padding: 4rem 0 2rem;
+        margin-top: 4rem;
+    }
+
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: var(--primary-gradient, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-section h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary, #ffffff);
+        margin-bottom: 1rem;
+    }
+
+    .footer-section p {
+        color: var(--text-secondary, #a0aec0);
+        font-size: 0.9rem;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+        color: var(--text-secondary, #a0aec0);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+        color: var(--text-primary, #ffffff);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+        padding-top: 1.5rem;
+        text-align: center;
+    }
+
+    .footer-bottom p {
+        color: var(--text-secondary, #a0aec0);
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .footer-content {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+    }
+</style>
