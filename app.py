@@ -1745,7 +1745,7 @@ def create_app(config_name=None):
         return rotated_file_path
 
     def convert_pdf_to_word(pdf_path, output_dir):
-        """Convert PDF to Word document using PyMuPDF and python-docx"""
+        """Convert PDF to Word document with tables, images and formatting"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         word_file_path = os.path.join(output_dir, f"converted_{timestamp}.docx")
 
@@ -1758,15 +1758,88 @@ def create_app(config_name=None):
         for page_num in range(len(pdf_document)):
             page = pdf_document[page_num]
             
-            # Extract text blocks with formatting info
-            blocks = page.get_text("blocks")
+            # Try to extract tables first
+            try:
+                tables = page.find_tables()
+                table_rects = [t.bbox for t in tables] if tables else []
+            except:
+                tables = None
+                table_rects = []
             
-            for block in blocks:
-                if block[6] == 0:  # Text block (not image)
-                    text = block[4].strip()
-                    if text:
-                        para = doc.add_paragraph(text)
-                        para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            # Extract images
+            image_list = page.get_images()
+            for img_index, img in enumerate(image_list):
+                try:
+                    xref = img[0]
+                    base_image = pdf_document.extract_image(xref)
+                    image_bytes = base_image["image"]
+                    
+                    # Save image temporarily
+                    img_path = os.path.join(output_dir, f"temp_img_{page_num}_{img_index}.png")
+                    with open(img_path, "wb") as img_file:
+                        img_file.write(image_bytes)
+                    
+                    # Add to document
+                    try:
+                        doc.add_picture(img_path, width=Inches(5))
+                    except:
+                        pass
+                    
+                    # Clean up temp image
+                    try:
+                        os.remove(img_path)
+                    except:
+                        pass
+                except:
+                    continue
+            
+            # Add tables
+            if tables:
+                for table in tables:
+                    try:
+                        table_data = table.extract()
+                        if table_data and len(table_data) > 0:
+                            rows = len(table_data)
+                            cols = max(len(row) for row in table_data) if table_data else 0
+                            if rows > 0 and cols > 0:
+                                word_table = doc.add_table(rows=rows, cols=cols)
+                                word_table.style = 'Table Grid'
+                                for i, row in enumerate(table_data):
+                                    for j, cell in enumerate(row):
+                                        if j < cols:
+                                            word_table.rows[i].cells[j].text = str(cell) if cell else ""
+                                doc.add_paragraph("")  # Space after table
+                    except:
+                        continue
+            
+            # Extract text with formatting using dict mode
+            text_dict = page.get_text("dict")
+            
+            for block in text_dict.get("blocks", []):
+                if block.get("type") == 0:  # Text block
+                    # Skip if this block is inside a table
+                    block_rect = fitz.Rect(block.get("bbox", (0, 0, 0, 0)))
+                    in_table = any(fitz.Rect(tr).intersects(block_rect) for tr in table_rects)
+                    if in_table:
+                        continue
+                    
+                    for line in block.get("lines", []):
+                        para = doc.add_paragraph()
+                        for span in line.get("spans", []):
+                            text = span.get("text", "")
+                            if text.strip():
+                                run = para.add_run(text)
+                                # Apply font size
+                                font_size = span.get("size", 11)
+                                run.font.size = Pt(min(font_size, 72))  # Cap at 72pt
+                                # Apply bold/italic based on font flags
+                                flags = span.get("flags", 0)
+                                if flags & 2 ** 0:  # Superscript
+                                    run.font.superscript = True
+                                if flags & 2 ** 1:  # Italic
+                                    run.font.italic = True
+                                if flags & 2 ** 4:  # Bold
+                                    run.font.bold = True
             
             # Add page break between pages (except last)
             if page_num < len(pdf_document) - 1:
