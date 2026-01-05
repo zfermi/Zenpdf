@@ -504,7 +504,47 @@
         }
 
         .error-message.show {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .error-message .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .error-message .btn-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .error-message .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-message .btn-auth-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .error-message .btn-auth-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
         }
 
         /* Responsive */
@@ -769,8 +809,23 @@
         });
 
         // Show/Hide error
-        function showError(message) {
-            errorMessage.textContent = message;
+        function showError(message, showAuthButtons = false) {
+            // Check if this is an auth-related error
+            const isAuthError = message.toLowerCase().includes('sign up') ||
+                message.toLowerCase().includes('log in') ||
+                message.toLowerCase().includes('login');
+
+            if (isAuthError || showAuthButtons) {
+                errorMessage.innerHTML = `
+                    <span>${message}</span>
+                    <div class="auth-buttons">
+                        <a href="{{ url_for('auth.register') }}" class="btn-auth">🚀 Sign Up Free</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn-auth btn-auth-secondary">Log In</a>
+                    </div>
+                `;
+            } else {
+                errorMessage.innerHTML = `<span>${message}</span>`;
+            }
             errorMessage.classList.add('show');
         }
 

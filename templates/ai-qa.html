@@ -541,7 +541,39 @@
         }
 
         .error-message.show {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .error-message .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .error-message .btn-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .error-message .btn-auth:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message .btn-auth-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         /* Responsive */
@@ -879,7 +911,21 @@
 
         // Error handling
         function showError(msg) {
-            errorMessage.textContent = msg;
+            const isAuthError = msg.toLowerCase().includes('sign up') ||
+                msg.toLowerCase().includes('log in') ||
+                msg.toLowerCase().includes('login');
+
+            if (isAuthError) {
+                errorMessage.innerHTML = `
+                    <span>${msg}</span>
+                    <div class="auth-buttons">
+                        <a href="{{ url_for('auth.register') }}" class="btn-auth">🚀 Sign Up Free</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn-auth btn-auth-secondary">Log In</a>
+                    </div>
+                `;
+            } else {
+                errorMessage.innerHTML = `<span>${msg}</span>`;
+            }
             errorMessage.classList.add('show');
         }
 
