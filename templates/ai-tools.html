@@ -469,10 +469,12 @@
             <div class="nav-content">
                 <div class="logo">
                     <a href="{{ url_for('home') }}" style="text-decoration: none;">
-                        <h1>Best PDF Converter</h1>
+                        <a href="{{ url_for('home') }}">
+                            <h1>Best PDF Converter</h1>
+                        </a>
                     </a>
                 </div>
-                                <div class="nav-links">
+                <div class="nav-links">
                     <a href="{{ url_for('split_pdf') }}"> Split</a>
                     <a href="{{ url_for('merge_pdf') }}"> Merge</a>
                     <a href="{{ url_for('compress_pdf') }}"> Compress</a>
