@@ -377,12 +377,12 @@
             margin-bottom: 2.5rem;
         }
 
-        /* Upload Zone - Wide Style with Theme Colors */
+        /* Upload Zone - Dark Theme matching Split Page */
         .upload-zone-wrapper {
-            background: #ffffff;
-            border: 2px dashed #667eea;
+            background: var(--card-bg);
+            border: 2px dashed var(--border-color);
             border-radius: 20px;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -390,17 +390,20 @@
             overflow: hidden;
             max-width: 100%;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .upload-zone-wrapper:hover {
-            border-color: #764ba2;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
         }
 
         .upload-zone-wrapper.drag-over {
-            border-color: #764ba2;
-            background: #f8f5ff;
-            transform: scale(1.01);
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
         }
 
         .upload-zone-header {
@@ -412,39 +415,27 @@
         }
 
         .upload-zone-logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .upload-zone-logo svg {
-            width: 24px;
-            height: 24px;
-            color: white;
+            font-size: 4rem;
         }
 
         .upload-zone-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1a1a2e;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
         .upload-zone-subtitle {
-            color: #666;
-            font-size: 1rem;
-            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0;
             text-align: center;
         }
 
         .upload-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 1rem 0;
-            border-radius: 30px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 1.1rem;
             border: none;
@@ -455,8 +446,8 @@
             justify-content: center;
             gap: 0.75rem;
             width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin-top: 1.5rem;
         }
 
         .upload-btn:hover {
@@ -465,42 +456,15 @@
         }
 
         .upload-btn .plus-icon {
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            display: none;
         }
 
         .upload-options {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+            display: none;
         }
 
         .upload-option {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #666;
-        }
-
-        .upload-option:hover {
-            background: #f8f5ff;
-            border-color: #667eea;
-            transform: translateY(-2px);
+            display: none;
         }
 
         .file-input {
@@ -954,47 +918,14 @@
 
                 <!-- Upload Zone -->
                 <div class="upload-zone-wrapper" id="uploadZone">
-                    <div class="upload-zone-header">
-                        <div class="upload-zone-logo">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                                <polyline points="10 9 9 9 8 9" />
-                            </svg>
-                        </div>
-                        <span class="upload-zone-title">Online PDF Converter</span>
-                    </div>
-                    <p class="upload-zone-subtitle">Easily convert to and from PDF in seconds.</p>
+                    <span class="upload-zone-logo">&#128196;</span>
+                    <span class="upload-zone-title">Choose PDF file or drag it here</span>
+                    <p class="upload-zone-subtitle">Max size: 10MB</p>
 
                     <button class="upload-btn">
-                        <span class="plus-icon">+</span>
-                        <span>Choose file</span>
+                        Upload and Select Tool
                     </button>
                     <input type="file" class="file-input" id="fileInput" accept=".pdf" multiple>
-
-                    <div class="upload-options">
-                        <div class="upload-option" title="Google Drive">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm6.369 14.648c-.063.109-.168.199-.293.252l-5.9 2.516a.492.492 0 01-.352 0l-5.9-2.516a.494.494 0 01-.293-.252.496.496 0 01.117-.567l5.9-5.9a.5.5 0 01.704 0l5.9 5.9a.496.496 0 01.117.567z" />
-                            </svg>
-                        </div>
-                        <div class="upload-option" title="Dropbox">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 6.134L6 9.804l6 3.67 6-3.67-6-3.67zM6 13.804l6 3.67 6-3.67-6-3.67-6 3.67z" />
-                            </svg>
-                        </div>
-                        <div class="upload-option" title="URL">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                            </svg>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Trust Badges -->
