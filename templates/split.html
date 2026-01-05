@@ -739,14 +739,24 @@
                                         Extract pages by range or add multiple ranges</p>
                                     <div id="ranges-container" style="margin-top: 0.75rem;">
                                         <div class="range-row"
-                                            style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                            <input type="number" class="range-start" min="1" max="{{ page_count }}"
-                                                placeholder="From" style="width: 80px;">
-                                            <span style="color: var(--text-secondary);">to</span>
-                                            <input type="number" class="range-end" min="1" max="{{ page_count }}"
-                                                placeholder="To" style="width: 80px;">
-                                            <button type="button" class="remove-range-btn"
-                                                style="display: none; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                                            style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--border-color);">
+                                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <input type="number" class="range-start" min="1"
+                                                        max="{{ page_count }}" placeholder="From" style="width: 70px;">
+                                                    <span style="color: var(--text-secondary);">to</span>
+                                                    <input type="number" class="range-end" min="1"
+                                                        max="{{ page_count }}" placeholder="To" style="width: 70px;">
+                                                    <button type="button" class="remove-range-btn"
+                                                        style="display: none; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                                                </div>
+                                                <div class="range-info"
+                                                    style="font-size: 0.75rem; color: var(--text-secondary);"></div>
+                                            </div>
+                                            <div class="preview-container"
+                                                style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 400px;">
+                                                <!-- Thumbnails will be inserted here -->
+                                            </div>
                                         </div>
                                     </div>
                                     <button type="button" id="add-range-btn"
@@ -754,6 +764,7 @@
                                         <span style="font-size: 1.1rem;">+</span> Add Range
                                     </button>
                                     <input type="hidden" name="page_ranges" id="page_ranges_hidden">
+                                    <input type="hidden" id="pdf_filename" value="{{ file_name }}">
                                 </div>
                             </label>
                         </div>
@@ -911,18 +922,22 @@
             });
         });
 
-        // Page Ranges - Add/Remove functionality
+        // Page Ranges - Add/Remove functionality with previews
         const rangesContainer = document.getElementById('ranges-container');
         const addRangeBtn = document.getElementById('add-range-btn');
         const pageRangesHidden = document.getElementById('page_ranges_hidden');
         const splitForm = document.getElementById('split-form');
+        const pdfFilename = document.getElementById('pdf_filename')?.value;
+        const maxPreviewPages = 5; // Limit previews to avoid too many requests
 
         function updateRemoveButtons() {
+            if (!rangesContainer) return;
             const rows = rangesContainer.querySelectorAll('.range-row');
-            rows.forEach((row, index) => {
+            rows.forEach((row) => {
                 const removeBtn = row.querySelector('.remove-range-btn');
-                // Show remove button only if there's more than one row
-                removeBtn.style.display = rows.length > 1 ? 'block' : 'none';
+                if (removeBtn) {
+                    removeBtn.style.display = rows.length > 1 ? 'block' : 'none';
+                }
             });
         }
 
@@ -931,24 +946,146 @@
             updateRemoveButtons();
         }
 
+        function loadPreviews(row) {
+            if (!pdfFilename) return;
+
+            const startInput = row.querySelector('.range-start');
+            const endInput = row.querySelector('.range-end');
+            const previewContainer = row.querySelector('.preview-container');
+            const rangeInfo = row.querySelector('.range-info');
+
+            if (!previewContainer) return;
+
+            const start = parseInt(startInput?.value) || 0;
+            const end = parseInt(endInput?.value) || 0;
+
+            // Clear existing previews
+            previewContainer.innerHTML = '';
+
+            if (start <= 0 && end <= 0) {
+                if (rangeInfo) rangeInfo.textContent = '';
+                return;
+            }
+
+            // Calculate page count
+            if (start > 0 && end > 0 && start <= end) {
+                const pageCount = end - start + 1;
+                if (rangeInfo) rangeInfo.textContent = `${pageCount} page${pageCount > 1 ? 's' : ''} selected`;
+
+                // Determine which pages to show previews for
+                let pagesToShow = [];
+                if (pageCount <= maxPreviewPages) {
+                    // Show all pages
+                    for (let i = start; i <= end; i++) {
+                        pagesToShow.push(i);
+                    }
+                } else {
+                    // Show first page, last page, and indicate more
+                    pagesToShow = [start, end];
+                    if (rangeInfo) rangeInfo.textContent = `${pageCount} pages (${start} to ${end})`;
+                }
+
+                // Load preview images
+                pagesToShow.forEach((pageNum, idx) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.style.cssText = 'position: relative; text-align: center;';
+
+                    const img = document.createElement('img');
+                    img.src = `/api/pdf-preview/${pdfFilename}/${pageNum}`;
+                    img.alt = `Page ${pageNum}`;
+                    img.style.cssText = 'width: 60px; height: auto; border-radius: 4px; border: 1px solid var(--border-color); background: #1a1a2e;';
+                    img.onerror = function () {
+                        this.style.display = 'none';
+                    };
+
+                    const label = document.createElement('div');
+                    label.textContent = pageNum;
+                    label.style.cssText = 'font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px;';
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(label);
+
+                    // Add ellipsis between first and last if showing abbreviated
+                    if (pageCount > maxPreviewPages && idx === 0) {
+                        previewContainer.appendChild(wrapper);
+                        const ellipsis = document.createElement('div');
+                        ellipsis.textContent = '...';
+                        ellipsis.style.cssText = 'color: var(--text-secondary); padding: 0 0.25rem; align-self: center;';
+                        previewContainer.appendChild(ellipsis);
+                    } else {
+                        previewContainer.appendChild(wrapper);
+                    }
+                });
+            } else if (start > 0) {
+                if (rangeInfo) rangeInfo.textContent = 'Enter end page';
+                // Show just the start page preview
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = 'position: relative; text-align: center;';
+
+                const img = document.createElement('img');
+                img.src = `/api/pdf-preview/${pdfFilename}/${start}`;
+                img.alt = `Page ${start}`;
+                img.style.cssText = 'width: 60px; height: auto; border-radius: 4px; border: 1px solid var(--border-color); background: #1a1a2e;';
+                img.onerror = function () { this.style.display = 'none'; };
+
+                const label = document.createElement('div');
+                label.textContent = start;
+                label.style.cssText = 'font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px;';
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(label);
+                previewContainer.appendChild(wrapper);
+            }
+        }
+
+        function attachPreviewListeners(row) {
+            const startInput = row.querySelector('.range-start');
+            const endInput = row.querySelector('.range-end');
+
+            let debounceTimer;
+            const debouncedLoadPreviews = () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => loadPreviews(row), 300);
+            };
+
+            if (startInput) startInput.addEventListener('input', debouncedLoadPreviews);
+            if (endInput) endInput.addEventListener('input', debouncedLoadPreviews);
+        }
+
+        // Attach listeners to initial row
+        if (rangesContainer) {
+            const initialRow = rangesContainer.querySelector('.range-row');
+            if (initialRow) {
+                attachPreviewListeners(initialRow);
+            }
+        }
+
         if (addRangeBtn) {
             addRangeBtn.addEventListener('click', function () {
                 const newRow = document.createElement('div');
                 newRow.className = 'range-row';
-                newRow.style.cssText = 'display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;';
+                newRow.style.cssText = 'display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--border-color);';
                 newRow.innerHTML = `
-                    <input type="number" class="range-start" min="1" placeholder="From" style="width: 80px;">
-                    <span style="color: var(--text-secondary);">to</span>
-                    <input type="number" class="range-end" min="1" placeholder="To" style="width: 80px;">
-                    <button type="button" class="remove-range-btn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="number" class="range-start" min="1" placeholder="From" style="width: 70px;">
+                            <span style="color: var(--text-secondary);">to</span>
+                            <input type="number" class="range-end" min="1" placeholder="To" style="width: 70px;">
+                            <button type="button" class="remove-range-btn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                        </div>
+                        <div class="range-info" style="font-size: 0.75rem; color: var(--text-secondary);"></div>
+                    </div>
+                    <div class="preview-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 400px;"></div>
                 `;
                 rangesContainer.appendChild(newRow);
 
-                // Add click handler to the new remove button
+                // Add click handler to the remove button
                 newRow.querySelector('.remove-range-btn').addEventListener('click', function () {
                     removeRange(this);
                 });
 
+                // Attach preview listeners
+                attachPreviewListeners(newRow);
                 updateRemoveButtons();
             });
         }

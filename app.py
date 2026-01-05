@@ -25,6 +25,14 @@ try:
 except ImportError:
     PDF2WORD_AVAILABLE = False
 
+# Optional PDF page preview support
+try:
+    from pdf2image import convert_from_path
+    from io import BytesIO
+    PDF_PREVIEW_AVAILABLE = True
+except ImportError:
+    PDF_PREVIEW_AVAILABLE = False
+
 # Load environment variables
 load_dotenv()
 
@@ -498,6 +506,52 @@ def create_app(config_name=None):
 
         flash('File not found or has expired.', 'error')
         return redirect(url_for('home'))
+
+    # ========== PDF PAGE PREVIEW ==========
+
+    @app.route('/api/pdf-preview/<filename>/<int:page_num>')
+    def pdf_page_preview(filename, page_num):
+        """Generate a thumbnail preview of a specific PDF page"""
+        if not PDF_PREVIEW_AVAILABLE:
+            return jsonify({'error': 'Preview not available'}), 503
+        
+        # Find the file
+        file_path = None
+        for folder in [app.config['UPLOAD_FOLDER'], app.config['MERGED_FOLDER']]:
+            potential_path = os.path.join(folder, filename)
+            if os.path.exists(potential_path):
+                file_path = potential_path
+                break
+        
+        if not file_path:
+            return jsonify({'error': 'File not found'}), 404
+        
+        try:
+            # Convert specific page to image (page_num is 1-indexed)
+            images = convert_from_path(
+                file_path,
+                first_page=page_num,
+                last_page=page_num,
+                size=(150, None),  # 150px width, maintain aspect ratio
+                fmt='jpeg'
+            )
+            
+            if not images:
+                return jsonify({'error': 'Could not generate preview'}), 500
+            
+            # Convert to bytes
+            img_byte_arr = BytesIO()
+            images[0].save(img_byte_arr, format='JPEG', quality=70)
+            img_byte_arr.seek(0)
+            
+            return send_file(
+                img_byte_arr,
+                mimetype='image/jpeg',
+                as_attachment=False
+            )
+        except Exception as e:
+            app.logger.error(f'Preview generation error: {e}')
+            return jsonify({'error': str(e)}), 500
 
     # ========== PDF OPERATIONS ==========
 
