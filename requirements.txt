@@ -33,6 +33,12 @@ gunicorn==21.2.0
 PyMuPDF>=1.23.0
 python-docx>=1.1.0
 
+# PDF to Excel Conversion
+openpyxl>=3.1.0
+
+# PDF to PowerPoint Conversion
+python-pptx>=0.6.21
+
 # Pesapal Payment Integration
 requests==2.31.0
 

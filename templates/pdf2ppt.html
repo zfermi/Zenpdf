@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48KRBHY1X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-48KRBHY1X8');
+    </script>
+
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-3652846271676047">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3652846271676047"
+        crossorigin="anonymous"></script>
+
+    <!-- Primary Meta Tags -->
+    <title>PDF to PowerPoint Converter Online Free - Convert PDF to DOCX | Best PDF Converter</title>
+    <meta name="title" content="PDF to PowerPoint Converter Online Free - Convert PDF to DOCX | Best PDF Converter">
+    <meta name="description"
+        content="Convert PDF to PowerPoint documents online for free. Transform PDF files to editable DOCX format while preserving formatting. No registration required. Fast and secure.">
+    <meta name="keyPowerPoints"
+        content="PDF to PowerPoint, convert PDF to DOCX, PDF to PowerPoint converter, PDF converter, free PDF to PowerPoint, online PDF converter, editable PowerPoint Presentation, PDF to DOC">
+    <meta name="author" content="Best PDF Converter">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bestpdfconverter.online/pdf2ppt">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bestpdfconverter.online/pdf2ppt">
+    <meta property="og:title" content="PDF to PowerPoint Converter Online Free - Convert PDF to DOCX">
+    <meta property="og:description"
+        content="Convert PDF to PowerPoint documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
+    <meta property="og:image" content="https://bestpdfconverter.online/static/og-pdf2ppt.png">
+    <meta property="og:site_name" content="Best PDF Converter">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://bestpdfconverter.online/pdf2ppt">
+    <meta name="twitter:title" content="PDF to PowerPoint Converter Online Free - Convert PDF to DOCX">
+    <meta name="twitter:description"
+        content="Convert PDF to PowerPoint documents online for free. Transform PDF files to editable DOCX format while preserving formatting.">
+    <meta name="twitter:image" content="https://bestpdfconverter.online/static/og-pdf2ppt.png">
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#667eea">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PDF to PowerPoint Converter - Best PDF Converter",
+        "url": "https://bestpdfconverter.online/pdf2ppt",
+        "description": "Convert PDF to PowerPoint documents online for free. Transform PDF files to editable DOCX format.",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert PDF to PowerPoint",
+        "description": "Learn how to convert PDF files to editable PowerPoint Presentations",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Upload PDF",
+                "text": "Upload your PDF file by clicking the upload area or dragging and dropping"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Convert",
+                "text": "Click Convert to PowerPoint to start the conversion process"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Download",
+                "text": "Download your editable PowerPoint Presentation (.pptx)"
+            }
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-bg: #0A0E1A;
+            --darker-bg: #070A13;
+            --card-bg: #141824;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Tools Dropdown */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: 0.6rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-dropdown-menu .tool-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        .page-content {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header .description {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+        }
+
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 350px;
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            color: #4ade80;
+            font-size: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .cloud-storage {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .cloud-storage p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .cloud-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .cloud-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.6;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .cloud-btn-active {
+            cursor: pointer;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .cloud-btn-active:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            color: #fff;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>Best PDF Converter</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <div class="nav-dropdown">
+                        <a class="nav-dropdown-toggle">Tools</a>
+                        <div class="nav-dropdown-menu">
+                            <a href="{{ url_for('split_pdf') }}"><span class="tool-icon">✂️</span> Split PDF</a>
+                            <a href="{{ url_for('merge_pdf') }}"><span class="tool-icon">📑</span> Merge PDF</a>
+                            <a href="{{ url_for('compress_pdf') }}"><span class="tool-icon">🗜️</span> Compress PDF</a>
+                            <a href="{{ url_for('rotate_pdf') }}"><span class="tool-icon">🔄</span> Rotate PDF</a>
+                            <a href="{{ url_for('pdf2ppt') }}"><span class="tool-icon">📝</span> PDF to PowerPoint</a>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('pricing') }}">Pricing</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    {% if current_user.is_admin %}<a href="{{ url_for('admin_panel') }}">Admin</a>{% endif %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
+                <div class="nav-cta">
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                    {% endif %}
+                </div>
+                <button class="mobile-menu-btn" id="nav-toggle">&#9776;</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>PDF to PowerPoint Converter</h1>
+                <p class="breadcrumb"><a href="{{ url_for('home') }}">Home</a> / PDF to PowerPoint</p>
+                <p class="description">Convert your PDF files to editable PowerPoint Presentations (.pptx) while preserving
+                    formatting and layout.</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="card">
+                <form action="{{ url_for('pdf2ppt') }}" method="post" enctype="multipart/form-data" id="pdf2ppt-form">
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="file" id="file" name="file" accept=".pdf" required class="hidden">
+                        <label for="file" class="upload-area" id="upload-label">
+                            <span class="upload-icon">&#128196;&#10145;&#128221;</span>
+                            <span class="upload-text">Choose PDF file or drag it here</span>
+                            <span class="upload-hint">Max size: 10MB (Free) / 100MB (Premium)</span>
+                        </label>
+                    </div>
+
+                    <div id="progress-container" class="progress-container hidden">
+                        <div style="margin-bottom: 0.5rem;"><span style="font-weight: 500;">Converting PDF to
+                                PowerPoint...</span></div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="progress-percent">0%</span>
+                            <span id="progress-status">Processing...</span>
+                        </div>
+                    </div>
+
+                    <!-- AI Enhancement Option -->
+                    <div id="ai-option-card"
+                        style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                            <input type="checkbox" name="ai_enhanced" id="ai_enhanced"
+                                style="width: 18px; height: 18px; accent-color: #667eea;">
+                            <div style="flex: 1;">
+                                <span
+                                    style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #fff;">
+                                    ✨ High Quality Conversion
+                                    <span
+                                        style="background: var(--primary-gradient); padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">PREMIUM</span>
+                                </span>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem;">
+                                    All features preserved - tables, images, formatting
+                                </p>
+                            </div>
+                        </label>
+                        {% if not current_user.is_authenticated %}
+                        <div id="login-prompt"
+                            style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-primary"
+                                style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                🔐 Login to use Premium Features
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Convert to PowerPoint Presentation</button>
+
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">&#10003;</span>
+                            <div>
+                                <h3>Preserve Formatting</h3>
+                                <p>Maintains text, images, and layout structure</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">&#10003;</span>
+                            <div>
+                                <h3>Editable Output</h3>
+                                <p>Get fully editable .pptx files</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">&#10003;</span>
+                            <div>
+                                <h3>Fast Conversion</h3>
+                                <p>Quick processing for most PDF files</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">&#10003;</span>
+                            <div>
+                                <h3>Secure & Private</h3>
+                                <p>Files are automatically deleted after conversion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cloud-storage">
+                        <p>Or select from cloud storage:</p>
+                        <div class="cloud-buttons">
+                            <span class="cloud-btn" title="Coming soon">Google Drive</span>
+                            <span class="cloud-btn" title="Coming soon">Dropbox</span>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 0.75rem; color: var(--text-secondary);">Cloud storage
+                            coming soon</p>
+                    </div>
+                </form>
+            </div>
+
+            <a href="{{ url_for('home') }}" class="back-btn">&larr; Back to Home</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Best PDF Converter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Pending file handler from homepage -->
+    <script src="{{ url_for('static', filename='js/pending-file-handler.js') }}"></script>
+
+    <script>
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle) {
+            navToggle.addEventListener('click', function () {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        const fileInput = document.getElementById('file');
+        const uploadLabel = document.getElementById('upload-label');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressStatus = document.getElementById('progress-status');
+
+        if (fileInput && uploadLabel) {
+            fileInput.addEventListener('change', function (e) {
+                if (e.target.files.length > 0) {
+                    const fileName = e.target.files[0].name;
+                    const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(2);
+                    uploadLabel.querySelector('.upload-text').textContent = fileName;
+                    uploadLabel.querySelector('.upload-hint').textContent = `${fileSize} MB`;
+                }
+            });
+
+            uploadLabel.addEventListener('dragover', function (e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.add('dragover');
+            });
+
+            uploadLabel.addEventListener('dragleave', function (e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.remove('dragover');
+            });
+
+            uploadLabel.addEventListener('drop', function (e) {
+                e.preventDefault(); e.stopPropagation();
+                uploadLabel.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type === 'application/pdf') {
+                    fileInput.files = files;
+                    fileInput.dispatchEvent(new Event('change'));
+                }
+            });
+
+            const form = document.getElementById('pdf2ppt-form');
+            form.addEventListener('submit', function (e) {
+                if (fileInput.files.length > 0) {
+                    progressContainer.classList.remove('hidden');
+                    const uploadDuration = 3000;
+                    const startTime = Date.now();
+
+                    const progressInterval = setInterval(() => {
+                        const elapsed = Date.now() - startTime;
+                        const percent = Math.min((elapsed / uploadDuration) * 100, 100);
+                        progressBar.style.width = percent + '%';
+                        progressPercent.textContent = Math.round(percent) + '%';
+
+                        if (percent < 30) {
+                            progressStatus.textContent = 'Uploading PDF...';
+                        } else if (percent < 70) {
+                            progressStatus.textContent = 'Analyzing document...';
+                        } else if (percent < 100) {
+                            progressStatus.textContent = 'Converting to PowerPoint...';
+                        } else {
+                            progressStatus.textContent = 'Finalizing...';
+                            clearInterval(progressInterval);
+                        }
+                    }, 100);
+                }
+            });
+        }
+
+        // Show login prompt when AI checkbox is checked (for non-logged users)
+        const aiCheckbox = document.getElementById('ai_enhanced');
+        const loginPrompt = document.getElementById('login-prompt');
+        if (aiCheckbox && loginPrompt) {
+            aiCheckbox.addEventListener('change', function () {
+                loginPrompt.style.display = this.checked ? 'block' : 'none';
+            });
+        }
+    </script>
+
+    <!-- Google Drive Picker Integration -->
+    <script>
+        window.GOOGLE_CONFIG = {
+            apiKey: '{{ google_config.api_key }}',
+            clientId: '{{ google_config.client_id }}',
+            appId: '{{ google_config.app_id }}'
+        };
+    </script>
+    <script src="{{ url_for('static', filename='js/google-drive-picker.js') }}"></script>
+    <script>
+        function openGoogleDrive() {
+            GoogleDrivePicker.open(function (file) {
+                GoogleDrivePicker.setFile(file, 'file', 'upload-label');
+            });
+        }
+    </script>
+</body>
+
+</html>

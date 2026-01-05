@@ -1111,6 +1111,141 @@ def create_app(config_name=None):
 
         return render_template('pdf2word.html')
 
+    # ========== PDF to JPG ==========
+
+    @app.route('/pdf2jpg', methods=['GET', 'POST'])
+    @limiter.limit("30 per hour")
+    def pdf2jpg():
+        """Convert PDF to JPG images"""
+        if request.method == 'POST':
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('pdf2jpg.html')
+
+            file = request.files.get('file')
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+
+                    # Convert PDF to images
+                    output_path = convert_pdf_to_images(file_path, app.config['SPLIT_FOLDER'])
+                    record_usage('pdf2jpg', file_size=file_size)
+
+                    # Clean up
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+
+                    return send_file(output_path, as_attachment=True,
+                                   download_name=f"images_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                                   mimetype='application/zip')
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    record_usage('pdf2jpg', success=False, error_message=str(e))
+                    flash(f'Error converting PDF: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        return render_template('pdf2jpg.html')
+
+    # ========== PDF to Excel ==========
+
+    @app.route('/pdf2excel', methods=['GET', 'POST'])
+    @limiter.limit("30 per hour")
+    def pdf2excel():
+        """Convert PDF tables to Excel"""
+        if request.method == 'POST':
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('pdf2excel.html')
+
+            file = request.files.get('file')
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+
+                    # Convert PDF to Excel
+                    output_path = convert_pdf_to_excel(file_path, app.config['SPLIT_FOLDER'])
+                    record_usage('pdf2excel', file_size=file_size)
+
+                    # Clean up
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+
+                    return send_file(output_path, as_attachment=True,
+                                   download_name=f"tables_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                                   mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    record_usage('pdf2excel', success=False, error_message=str(e))
+                    flash(f'Error converting PDF: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        return render_template('pdf2excel.html')
+
+    # ========== PDF to PowerPoint ==========
+
+    @app.route('/pdf2ppt', methods=['GET', 'POST'])
+    @limiter.limit("30 per hour")
+    def pdf2ppt():
+        """Convert PDF to PowerPoint"""
+        if request.method == 'POST':
+            can_proceed, error_msg = check_usage_limit()
+            if not can_proceed:
+                flash(error_msg, 'error')
+                return render_template('pdf2ppt.html')
+
+            file = request.files.get('file')
+            if file and file.filename and allowed_file(file.filename):
+                try:
+                    file_size = validate_file_size(file)
+                    safe_filename = sanitize_filename(file.filename)
+                    unique_filename = f"{secrets.token_hex(8)}_{safe_filename}"
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+
+                    # Convert PDF to PowerPoint
+                    output_path = convert_pdf_to_ppt(file_path, app.config['SPLIT_FOLDER'])
+                    record_usage('pdf2ppt', file_size=file_size)
+
+                    # Clean up
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+
+                    return send_file(output_path, as_attachment=True,
+                                   download_name=f"presentation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pptx",
+                                   mimetype='application/vnd.openxmlformats-officedocument.presentationml.presentation')
+
+                except ValueError as e:
+                    flash(str(e), 'error')
+                except Exception as e:
+                    record_usage('pdf2ppt', success=False, error_message=str(e))
+                    flash(f'Error converting PDF: {str(e)}', 'error')
+            else:
+                flash('Please select a valid PDF file.', 'error')
+
+        return render_template('pdf2ppt.html')
+
     # ========== OCR (Premium Feature) ==========
 
     @app.route('/ocr', methods=['GET', 'POST'])
@@ -2011,6 +2146,158 @@ def create_app(config_name=None):
         
         doc.save(word_file_path)
         return word_file_path
+
+    def convert_pdf_to_images(pdf_path, output_dir):
+        """Convert PDF pages to JPG images and return as ZIP"""
+        import zipfile
+        from PIL import Image
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        zip_path = os.path.join(output_dir, f"images_{timestamp}.zip")
+        
+        pdf_document = fitz.open(pdf_path)
+        
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for page_num in range(len(pdf_document)):
+                page = pdf_document[page_num]
+                # Render at 2x resolution for quality
+                mat = fitz.Matrix(2, 2)
+                pix = page.get_pixmap(matrix=mat)
+                
+                img_path = os.path.join(output_dir, f"page_{page_num + 1}.jpg")
+                pix.save(img_path)
+                
+                zipf.write(img_path, f"page_{page_num + 1}.jpg")
+                
+                # Clean up temp image
+                try:
+                    os.remove(img_path)
+                except:
+                    pass
+        
+        pdf_document.close()
+        return zip_path
+
+    def convert_pdf_to_excel(pdf_path, output_dir):
+        """Extract tables from PDF and save as Excel"""
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Border, Side
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        excel_path = os.path.join(output_dir, f"tables_{timestamp}.xlsx")
+        
+        pdf_document = fitz.open(pdf_path)
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Extracted Tables"
+        
+        # Header style
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = PatternFill(start_color="667EEA", end_color="667EEA", fill_type="solid")
+        thin_border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        
+        current_row = 1
+        table_count = 0
+        
+        for page_num in range(len(pdf_document)):
+            page = pdf_document[page_num]
+            
+            try:
+                tables = page.find_tables()
+                if tables:
+                    for table in tables:
+                        table_data = table.extract()
+                        if table_data:
+                            table_count += 1
+                            
+                            # Add table header
+                            ws.cell(row=current_row, column=1, value=f"Table {table_count} (Page {page_num + 1})")
+                            ws.cell(row=current_row, column=1).font = Font(bold=True, size=12)
+                            current_row += 1
+                            
+                            for i, row in enumerate(table_data):
+                                for j, cell in enumerate(row):
+                                    cell_obj = ws.cell(row=current_row, column=j + 1, value=str(cell) if cell else "")
+                                    cell_obj.border = thin_border
+                                    
+                                    # Style first row as header
+                                    if i == 0:
+                                        cell_obj.font = header_font
+                                        cell_obj.fill = header_fill
+                                current_row += 1
+                            
+                            current_row += 1  # Space between tables
+            except:
+                continue
+        
+        pdf_document.close()
+        
+        if table_count == 0:
+            # If no tables found, extract all text
+            ws.cell(row=1, column=1, value="No tables found in PDF. Here is the extracted text:")
+            ws.cell(row=1, column=1).font = Font(bold=True)
+            
+            pdf_document = fitz.open(pdf_path)
+            current_row = 3
+            for page_num in range(len(pdf_document)):
+                page = pdf_document[page_num]
+                text = page.get_text()
+                for line in text.split('\n'):
+                    if line.strip():
+                        ws.cell(row=current_row, column=1, value=line.strip())
+                        current_row += 1
+            pdf_document.close()
+        
+        wb.save(excel_path)
+        return excel_path
+
+    def convert_pdf_to_ppt(pdf_path, output_dir):
+        """Convert PDF pages to PowerPoint slides"""
+        from pptx import Presentation
+        from pptx.util import Inches
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        ppt_path = os.path.join(output_dir, f"presentation_{timestamp}.pptx")
+        
+        pdf_document = fitz.open(pdf_path)
+        prs = Presentation()
+        
+        # Set slide dimensions to match PDF page (approximately)
+        prs.slide_width = Inches(10)
+        prs.slide_height = Inches(7.5)
+        
+        for page_num in range(len(pdf_document)):
+            page = pdf_document[page_num]
+            
+            # Render page as image at high resolution
+            mat = fitz.Matrix(2, 2)
+            pix = page.get_pixmap(matrix=mat)
+            
+            img_path = os.path.join(output_dir, f"slide_{page_num + 1}.png")
+            pix.save(img_path)
+            
+            # Add blank slide and insert image
+            blank_slide_layout = prs.slide_layouts[6]  # Blank layout
+            slide = prs.slides.add_slide(blank_slide_layout)
+            
+            # Add image to cover the entire slide
+            slide.shapes.add_picture(img_path, Inches(0), Inches(0), 
+                                     width=prs.slide_width, height=prs.slide_height)
+            
+            # Clean up temp image
+            try:
+                os.remove(img_path)
+            except:
+                pass
+        
+        pdf_document.close()
+        prs.save(ppt_path)
+        return ppt_path
 
     return app
 
