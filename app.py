@@ -2179,9 +2179,10 @@ def create_app(config_name=None):
         return zip_path
 
     def convert_pdf_to_excel(pdf_path, output_dir):
-        """Extract tables from PDF and save as Excel"""
+        """Extract tables from PDF and save as Excel with enhanced formatting"""
         from openpyxl import Workbook
-        from openpyxl.styles import Font, PatternFill, Border, Side
+        from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+        from openpyxl.utils import get_column_letter
         
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         excel_path = os.path.join(output_dir, f"tables_{timestamp}.xlsx")
@@ -2189,11 +2190,13 @@ def create_app(config_name=None):
         pdf_document = fitz.open(pdf_path)
         wb = Workbook()
         ws = wb.active
-        ws.title = "Extracted Tables"
+        ws.title = "Extracted Data"
         
-        # Header style
-        header_font = Font(bold=True, color="FFFFFF")
-        header_fill = PatternFill(start_color="667EEA", end_color="667EEA", fill_type="solid")
+        # Styles
+        header_font = Font(bold=True, size=11, name='Arial')
+        title_font = Font(bold=True, size=14, name='Arial')
+        normal_font = Font(size=10, name='Arial')
+        
         thin_border = Border(
             left=Side(style='thin'),
             right=Side(style='thin'),
@@ -2201,57 +2204,137 @@ def create_app(config_name=None):
             bottom=Side(style='thin')
         )
         
+        header_fill = PatternFill(start_color="E6E6E6", end_color="E6E6E6", fill_type="solid")
+        center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        left_align = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        
         current_row = 1
         table_count = 0
+        column_widths = {}
         
         for page_num in range(len(pdf_document)):
             page = pdf_document[page_num]
             
+            # First extract any title text above tables
+            blocks = page.get_text("dict")["blocks"]
+            for block in blocks:
+                if "lines" in block:
+                    for line in block["lines"]:
+                        for span in line["spans"]:
+                            text = span["text"].strip()
+                            font_size = span.get("size", 10)
+                            flags = span.get("flags", 0)
+                            is_bold = flags & 2 ** 4
+                            
+                            # Large or bold text before first table = title
+                            if text and (font_size > 12 or is_bold) and table_count == 0:
+                                cell = ws.cell(row=current_row, column=1, value=text)
+                                if font_size > 14 or is_bold:
+                                    cell.font = title_font
+                                else:
+                                    cell.font = header_font
+                                cell.alignment = center_align
+                                # Merge cells for title
+                                ws.merge_cells(start_row=current_row, start_column=1, 
+                                             end_row=current_row, end_column=5)
+                                current_row += 1
+            
+            # Extract tables
             try:
                 tables = page.find_tables()
                 if tables:
                     for table in tables:
                         table_data = table.extract()
-                        if table_data:
+                        if table_data and len(table_data) > 0:
                             table_count += 1
                             
-                            # Add table header
-                            ws.cell(row=current_row, column=1, value=f"Table {table_count} (Page {page_num + 1})")
-                            ws.cell(row=current_row, column=1).font = Font(bold=True, size=12)
-                            current_row += 1
+                            # Determine number of columns
+                            max_cols = max(len(row) for row in table_data) if table_data else 0
                             
-                            for i, row in enumerate(table_data):
-                                for j, cell in enumerate(row):
-                                    cell_obj = ws.cell(row=current_row, column=j + 1, value=str(cell) if cell else "")
-                                    cell_obj.border = thin_border
+                            # Process each row
+                            for row_idx, row in enumerate(table_data):
+                                for col_idx, cell_value in enumerate(row):
+                                    cell_text = str(cell_value).strip() if cell_value else ""
+                                    cell = ws.cell(row=current_row, column=col_idx + 1, value=cell_text)
+                                    cell.border = thin_border
+                                    cell.font = normal_font
                                     
-                                    # Style first row as header
-                                    if i == 0:
-                                        cell_obj.font = header_font
-                                        cell_obj.fill = header_fill
+                                    # First row styling (header)
+                                    if row_idx == 0:
+                                        cell.font = header_font
+                                        cell.fill = header_fill
+                                        cell.alignment = center_align
+                                    else:
+                                        # Numbers right-aligned, text left-aligned
+                                        try:
+                                            float(cell_text.replace(',', '').replace(' ', ''))
+                                            cell.alignment = Alignment(horizontal='right', vertical='center')
+                                        except:
+                                            cell.alignment = left_align
+                                    
+                                    # Track column widths
+                                    col_letter = get_column_letter(col_idx + 1)
+                                    text_len = len(cell_text) + 2
+                                    if col_letter not in column_widths or text_len > column_widths[col_letter]:
+                                        column_widths[col_letter] = min(text_len, 50)  # Cap at 50
+                                
                                 current_row += 1
                             
-                            current_row += 1  # Space between tables
-            except:
+                            current_row += 2  # Space between tables
+            except Exception as e:
                 continue
         
         pdf_document.close()
         
+        # If no tables found, extract text with structure
         if table_count == 0:
-            # If no tables found, extract all text
-            ws.cell(row=1, column=1, value="No tables found in PDF. Here is the extracted text:")
-            ws.cell(row=1, column=1).font = Font(bold=True)
+            ws.cell(row=1, column=1, value="Extracted Content from PDF")
+            ws.cell(row=1, column=1).font = title_font
+            ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=4)
             
             pdf_document = fitz.open(pdf_path)
             current_row = 3
+            
             for page_num in range(len(pdf_document)):
                 page = pdf_document[page_num]
-                text = page.get_text()
-                for line in text.split('\n'):
-                    if line.strip():
-                        ws.cell(row=current_row, column=1, value=line.strip())
-                        current_row += 1
+                
+                # Page header
+                ws.cell(row=current_row, column=1, value=f"--- Page {page_num + 1} ---")
+                ws.cell(row=current_row, column=1).font = header_font
+                current_row += 1
+                
+                # Extract text blocks with formatting
+                blocks = page.get_text("dict")["blocks"]
+                for block in blocks:
+                    if "lines" in block:
+                        for line in block["lines"]:
+                            line_text = ""
+                            is_bold = False
+                            for span in line["spans"]:
+                                line_text += span["text"]
+                                if span.get("flags", 0) & 2 ** 4:
+                                    is_bold = True
+                            
+                            if line_text.strip():
+                                cell = ws.cell(row=current_row, column=1, value=line_text.strip())
+                                if is_bold:
+                                    cell.font = header_font
+                                else:
+                                    cell.font = normal_font
+                                current_row += 1
+                
+                current_row += 1  # Space between pages
+            
             pdf_document.close()
+            column_widths['A'] = 60
+        
+        # Apply column widths
+        for col_letter, width in column_widths.items():
+            ws.column_dimensions[col_letter].width = max(width, 10)
+        
+        # Set row height for better readability
+        for row in range(1, current_row):
+            ws.row_dimensions[row].height = 18
         
         wb.save(excel_path)
         return excel_path
