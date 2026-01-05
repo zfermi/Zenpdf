@@ -734,9 +734,9 @@
                             <label style="align-items: flex-start;">
                                 <input type="radio" name="split_type" value="range" checked style="margin-top: 0.3rem;">
                                 <div style="flex-grow: 1;">
-                                    <strong>Page Ranges</strong>
+                                    <strong>Extract as Documents</strong>
                                     <p style="margin-top: 0.25rem; color: var(--text-secondary); font-size: 0.9rem;">
-                                        Extract pages by range or add multiple ranges</p>
+                                        Each range becomes one PDF document (e.g., pages 1-5 → one 5-page PDF)</p>
                                     <div id="ranges-container" style="margin-top: 0.75rem;">
                                         <div class="range-row"
                                             style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--border-color);">
@@ -773,14 +773,15 @@
                             <label>
                                 <input type="radio" name="split_type" value="specific">
                                 <div style="flex-grow: 1;">
-                                    <strong>Specific Pages</strong>
-                                    <p style="margin-top: 0.25rem;">Extract individual pages or mixed selections</p>
+                                    <strong>Extract as Single Pages</strong>
+                                    <p style="margin-top: 0.25rem; color: var(--text-secondary); font-size: 0.9rem;">
+                                        Each page becomes a separate 1-page PDF file</p>
                                     <div style="margin-top: 0.75rem;">
-                                        <input type="text" name="specific_pages" placeholder="e.g., 1, 3, 5-7, 12"
-                                            style="width: 100%;">
+                                        <input type="text" name="specific_pages"
+                                            placeholder="e.g., 1-23 or 1, 3, 5-7, 12" style="width: 100%;">
                                         <small
                                             style="color: var(--text-secondary); font-size: 0.75rem; display: block; margin-top: 0.5rem;">Enter
-                                            individual pages, ranges, or mix both (e.g., 1, 3, 5-7, 12)</small>
+                                            pages or ranges - each page will be saved as a separate file</small>
                                     </div>
                                 </div>
                             </label>
