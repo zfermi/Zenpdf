@@ -1059,6 +1059,12 @@ def create_app(config_name=None):
                         flash(f'Invalid PDF file: {str(e)}', 'error')
                         return render_template('pdf2word.html')
 
+                    # Check if PDF2Word conversion is available
+                    if not PDF2WORD_AVAILABLE:
+                        os.remove(file_path)
+                        flash('PDF to Word conversion is not available. Please contact support.', 'error')
+                        return render_template('pdf2word.html')
+
                     # Convert PDF to Word
                     word_file_path = convert_pdf_to_word(file_path, app.config['SPLIT_FOLDER'])
 
