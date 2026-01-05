@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 try:
     import fitz  # PyMuPDF
     from docx import Document
-    from docx.shared import Inches, Pt
+    from docx.shared import Inches, Pt, RGBColor
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     PDF2WORD_AVAILABLE = True
 except ImportError:
@@ -1829,15 +1829,40 @@ def create_app(config_name=None):
                             text = span.get("text", "")
                             if text.strip():
                                 run = para.add_run(text)
+                                
                                 # Apply font size
                                 font_size = span.get("size", 11)
                                 run.font.size = Pt(min(font_size, 72))  # Cap at 72pt
-                                # Apply bold/italic based on font flags
+                                
+                                # Apply font name
+                                font_name = span.get("font", "")
+                                if font_name:
+                                    # Clean up font name (remove subset prefix like ABCDEF+)
+                                    if "+" in font_name:
+                                        font_name = font_name.split("+")[-1]
+                                    run.font.name = font_name
+                                
+                                # Apply text color
+                                color = span.get("color", 0)
+                                if color and color != 0:
+                                    # Color is stored as integer, convert to RGB
+                                    r = (color >> 16) & 0xFF
+                                    g = (color >> 8) & 0xFF
+                                    b = color & 0xFF
+                                    # Only apply non-black colors
+                                    if not (r == 0 and g == 0 and b == 0):
+                                        run.font.color.rgb = RGBColor(r, g, b)
+                                
+                                # Apply bold/italic/etc based on font flags
                                 flags = span.get("flags", 0)
                                 if flags & 2 ** 0:  # Superscript
                                     run.font.superscript = True
                                 if flags & 2 ** 1:  # Italic
                                     run.font.italic = True
+                                if flags & 2 ** 2:  # Serifed (skip)
+                                    pass
+                                if flags & 2 ** 3:  # Monospace
+                                    run.font.name = "Courier New"
                                 if flags & 2 ** 4:  # Bold
                                     run.font.bold = True
             
