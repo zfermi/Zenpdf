@@ -546,3 +546,144 @@ If no tables are found, return {{"tables_found": false, "table_count": 0, "table
             'success': False,
             'error': str(e)
         }
+
+
+def enhance_document_for_word(text: str, tables_data: List[Dict] = None, 
+                               metadata: Dict = None) -> Dict[str, Any]:
+    """
+    Use AI to intelligently restructure PDF content for optimal Word document conversion.
+    
+    This premium feature analyzes the raw text and creates a well-structured document
+    with proper headings, paragraphs, and formatting instructions.
+    
+    Args:
+        text: Raw text extracted from PDF
+        tables_data: Any tables already extracted from the PDF
+        metadata: Additional info like page count, title, etc.
+        
+    Returns:
+        Dict with structured document content ready for Word conversion
+    """
+    ai = get_ai_service()
+    
+    system_prompt = """You are a professional document formatter specializing in converting 
+raw PDF text into beautifully structured Word documents. Your goal is to:
+
+1. Identify and mark headings (H1, H2, H3) based on context and formatting cues
+2. Organize paragraphs logically
+3. Detect and structure any lists (bulleted or numbered)
+4. Identify important text that should be bold or italic
+5. Recognize table-like data and format it properly
+6. Maintain the original meaning while improving readability
+7. Add appropriate spacing and breaks between sections
+
+You produce output in a special structured format that can be parsed to create Word documents."""
+    
+    # Truncate if too long (Claude context limit)
+    max_text_length = 80000
+    truncated_text = text[:max_text_length]
+    
+    tables_info = ""
+    if tables_data:
+        tables_info = f"\n\nTables detected in document: {len(tables_data)} tables"
+    
+    prompt = f"""Analyze this raw PDF text and restructure it into a well-formatted document.
+
+Raw PDF Text:
+---
+{truncated_text}
+---
+{tables_info}
+
+Please structure this content and respond with a JSON object in this exact format:
+{{
+    "title": "Document title if detected, otherwise null",
+    "document_type": "report/article/letter/contract/invoice/manual/other",
+    "sections": [
+        {{
+            "type": "heading",
+            "level": 1,
+            "content": "Main Title Here"
+        }},
+        {{
+            "type": "paragraph",
+            "content": "Regular paragraph text here...",
+            "style": "normal"
+        }},
+        {{
+            "type": "heading",
+            "level": 2,
+            "content": "Section Title"
+        }},
+        {{
+            "type": "paragraph",
+            "content": "More text with **bold** and *italic* markers...",
+            "style": "normal"
+        }},
+        {{
+            "type": "list",
+            "style": "bullet",
+            "items": ["First item", "Second item", "Third item"]
+        }},
+        {{
+            "type": "list",
+            "style": "numbered",
+            "items": ["Step 1", "Step 2", "Step 3"]
+        }},
+        {{
+            "type": "table",
+            "headers": ["Column 1", "Column 2", "Column 3"],
+            "rows": [
+                ["Data 1", "Data 2", "Data 3"],
+                ["Data 4", "Data 5", "Data 6"]
+            ]
+        }},
+        {{
+            "type": "quote",
+            "content": "Important quoted text"
+        }},
+        {{
+            "type": "page_break"
+        }}
+    ],
+    "formatting_notes": "Any special formatting instructions",
+    "confidence": "high/medium/low"
+}}
+
+Rules:
+- Mark **bold text** with double asterisks
+- Mark *italic text* with single asterisks
+- Use heading levels 1-3 appropriately (1 for main title, 2 for sections, 3 for subsections)
+- Preserve ALL important content from the original
+- Group related paragraphs logically
+- If you detect table data, format it as a table object
+- Add page breaks at logical document breaks"""
+
+    try:
+        response = ai.generate(prompt, system_prompt, max_tokens=8000)
+        
+        # Parse JSON from response
+        json_match = re.search(r'\{[\s\S]*\}', response)
+        if json_match:
+            result = json.loads(json_match.group())
+            return {
+                'success': True,
+                'structured_content': result,
+                'original_length': len(text),
+                'truncated': len(text) > max_text_length,
+                'timestamp': datetime.utcnow().isoformat()
+            }
+        else:
+            # If JSON parsing fails, return the raw response
+            return {
+                'success': False,
+                'error': 'Could not parse AI response as structured content',
+                'raw_response': response[:2000]
+            }
+            
+    except Exception as e:
+        logger.error(f"AI document enhancement failed: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }

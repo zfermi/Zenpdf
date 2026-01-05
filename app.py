@@ -1040,6 +1040,8 @@ def create_app(config_name=None):
                 return render_template('pdf2word.html')
 
             file = request.files.get('file')
+            ai_enhanced = request.form.get('ai_enhanced') == 'on'
+            
             if file and file.filename and allowed_file(file.filename):
                 try:
                     file_size = validate_file_size(file)
@@ -1068,11 +1070,26 @@ def create_app(config_name=None):
                         flash('PDF to Word conversion is not available. Please contact support.', 'error')
                         return render_template('pdf2word.html')
 
-                    # Convert PDF to Word
-                    word_file_path = convert_pdf_to_word(file_path, app.config['SPLIT_FOLDER'])
-
-                    # Record usage
-                    record_usage('pdf2word', file_size=file_size, pages_processed=page_count)
+                    # AI-Enhanced conversion (Premium)
+                    if ai_enhanced:
+                        # Check if user has AI credits
+                        can_use_ai, ai_error = check_ai_usage_limit()
+                        if not can_use_ai:
+                            flash(f'AI conversion requires premium access: {ai_error}', 'error')
+                            return render_template('pdf2word.html')
+                        
+                        # Use AI-enhanced conversion
+                        word_file_path = convert_pdf_to_word_ai_enhanced(file_path, app.config['SPLIT_FOLDER'])
+                        record_usage('pdf2word_ai', file_size=file_size, pages_processed=page_count)
+                        
+                        # Deduct AI credit
+                        if current_user.is_authenticated:
+                            current_user.ai_credits = max(0, (current_user.ai_credits or 0) - 1)
+                            db.session.commit()
+                    else:
+                        # Standard conversion
+                        word_file_path = convert_pdf_to_word(file_path, app.config['SPLIT_FOLDER'])
+                        record_usage('pdf2word', file_size=file_size, pages_processed=page_count)
 
                     # Clean up uploaded PDF
                     try:
@@ -1873,6 +1890,126 @@ def create_app(config_name=None):
         pdf_document.close()
         doc.save(word_file_path)
 
+        return word_file_path
+
+    def convert_pdf_to_word_ai_enhanced(pdf_path, output_dir):
+        """Convert PDF to Word using AI for intelligent document restructuring"""
+        from ai_services import enhance_document_for_word
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        word_file_path = os.path.join(output_dir, f"ai_converted_{timestamp}.docx")
+
+        # Open PDF with PyMuPDF
+        pdf_document = fitz.open(pdf_path)
+        
+        # Extract all text from PDF
+        full_text = ""
+        tables_data = []
+        
+        for page_num in range(len(pdf_document)):
+            page = pdf_document[page_num]
+            full_text += page.get_text() + "\n\n--- Page Break ---\n\n"
+            
+            # Extract tables if available
+            try:
+                tables = page.find_tables()
+                if tables:
+                    for table in tables:
+                        tables_data.append(table.extract())
+            except:
+                pass
+        
+        pdf_document.close()
+        
+        # Send to AI for intelligent restructuring
+        ai_result = enhance_document_for_word(full_text, tables_data)
+        
+        if not ai_result.get('success'):
+            # Fallback to standard conversion
+            return convert_pdf_to_word(pdf_path, output_dir)
+        
+        structured_content = ai_result.get('structured_content', {})
+        sections = structured_content.get('sections', [])
+        
+        # Create Word document from AI-structured content
+        doc = Document()
+        
+        # Set document title if available
+        title = structured_content.get('title')
+        if title:
+            heading = doc.add_heading(title, level=0)
+            heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        
+        # Process each section
+        for section in sections:
+            section_type = section.get('type', 'paragraph')
+            
+            if section_type == 'heading':
+                level = min(section.get('level', 1), 9)
+                doc.add_heading(section.get('content', ''), level=level)
+                
+            elif section_type == 'paragraph':
+                content = section.get('content', '')
+                para = doc.add_paragraph()
+                
+                # Parse bold and italic markers
+                import re
+                parts = re.split(r'(\*\*[^*]+\*\*|\*[^*]+\*)', content)
+                for part in parts:
+                    if part.startswith('**') and part.endswith('**'):
+                        run = para.add_run(part[2:-2])
+                        run.bold = True
+                    elif part.startswith('*') and part.endswith('*'):
+                        run = para.add_run(part[1:-1])
+                        run.italic = True
+                    else:
+                        para.add_run(part)
+                        
+            elif section_type == 'list':
+                style = section.get('style', 'bullet')
+                items = section.get('items', [])
+                for i, item in enumerate(items):
+                    if style == 'numbered':
+                        para = doc.add_paragraph(f"{i+1}. {item}")
+                    else:
+                        para = doc.add_paragraph(item, style='List Bullet')
+                        
+            elif section_type == 'table':
+                headers = section.get('headers', [])
+                rows = section.get('rows', [])
+                if headers or rows:
+                    num_cols = len(headers) if headers else (len(rows[0]) if rows else 0)
+                    num_rows = (1 if headers else 0) + len(rows)
+                    if num_cols > 0 and num_rows > 0:
+                        table = doc.add_table(rows=num_rows, cols=num_cols)
+                        table.style = 'Table Grid'
+                        
+                        row_idx = 0
+                        if headers:
+                            for j, header in enumerate(headers):
+                                cell = table.rows[0].cells[j]
+                                cell.text = str(header)
+                                # Bold headers
+                                for paragraph in cell.paragraphs:
+                                    for run in paragraph.runs:
+                                        run.bold = True
+                            row_idx = 1
+                        
+                        for row_data in rows:
+                            for j, cell_data in enumerate(row_data):
+                                if j < num_cols:
+                                    table.rows[row_idx].cells[j].text = str(cell_data) if cell_data else ""
+                            row_idx += 1
+                    doc.add_paragraph("")  # Space after table
+                    
+            elif section_type == 'quote':
+                para = doc.add_paragraph(section.get('content', ''))
+                para.style = 'Quote'
+                
+            elif section_type == 'page_break':
+                doc.add_page_break()
+        
+        doc.save(word_file_path)
         return word_file_path
 
     return app
