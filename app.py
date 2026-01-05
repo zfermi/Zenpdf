@@ -627,7 +627,8 @@ def create_app(config_name=None):
                                 return render_template('split.html', file_uploaded=True,
                                                      page_count=total_pages, file_name=file_name)
                             
-                            page_set = set()
+                            # Parse ranges - keep them as separate ranges, don't flatten
+                            ranges_list = []  # List of (start, end) tuples (0-indexed)
                             for part in page_ranges.split(','):
                                 part = part.strip()
                                 if '-' in part:
@@ -636,23 +637,47 @@ def create_app(config_name=None):
                                         flash(f'Invalid range: {start}-{end}. Start must be less than or equal to end.', 'error')
                                         return render_template('split.html', file_uploaded=True,
                                                              page_count=total_pages, file_name=file_name)
-                                    page_set.update(range(start, end + 1))
+                                    if start < 1 or end > total_pages:
+                                        flash(f'Invalid range: {start}-{end}. Pages must be between 1 and {total_pages}.', 'error')
+                                        return render_template('split.html', file_uploaded=True,
+                                                             page_count=total_pages, file_name=file_name)
+                                    ranges_list.append((start - 1, end - 1))  # Convert to 0-indexed
                                 else:
-                                    page_set.add(int(part))
+                                    page = int(part)
+                                    if page < 1 or page > total_pages:
+                                        flash(f'Invalid page: {page}. Pages must be between 1 and {total_pages}.', 'error')
+                                        return render_template('split.html', file_uploaded=True,
+                                                             page_count=total_pages, file_name=file_name)
+                                    ranges_list.append((page - 1, page - 1))  # Single page as range
                             
-                            # Validate all pages are within bounds
-                            invalid_pages = [p for p in page_set if p < 1 or p > total_pages]
-                            if invalid_pages:
-                                flash(f'Invalid pages: {invalid_pages}. Pages must be between 1 and {total_pages}.', 'error')
+                            if not ranges_list:
+                                flash('No valid ranges specified.', 'error')
                                 return render_template('split.html', file_uploaded=True,
                                                      page_count=total_pages, file_name=file_name)
                             
-                            pages_to_split = sorted([p - 1 for p in page_set])
+                            # Use the new range-based split function
+                            zip_file_path = split_pdf_by_ranges(file_path, ranges_list, app.config['SPLIT_FOLDER'])
+                            zip_filename = os.path.basename(zip_file_path)
                             
-                            if not pages_to_split:
-                                flash('No valid pages specified.', 'error')
-                                return render_template('split.html', file_uploaded=True,
-                                                     page_count=total_pages, file_name=file_name)
+                            # Count total pages for stats
+                            total_pages_extracted = sum(end - start + 1 for start, end in ranges_list)
+                            
+                            # Record usage
+                            file_size = os.path.getsize(file_path)
+                            record_usage('split', file_size=file_size, pages_processed=total_pages_extracted)
+
+                            # Clean up uploaded file
+                            try:
+                                os.remove(file_path)
+                                session.pop('split_file', None)
+                            except:
+                                pass
+
+                            # Return success page with download button
+                            return render_template('success.html',
+                                                 operation='Split',
+                                                 filename=zip_filename,
+                                                 pages_count=total_pages_extracted)
                         except ValueError:
                             flash('Invalid page range format. Use ranges like 1-5, 10-15.', 'error')
                             return render_template('split.html', file_uploaded=True,
@@ -1543,6 +1568,50 @@ def create_app(config_name=None):
 
                 zip_file.write(split_file_path, split_filename)
 
+                try:
+                    os.remove(split_file_path)
+                except:
+                    pass
+
+        return zip_file_path
+
+    def split_pdf_by_ranges(pdf_path, ranges_list, output_dir):
+        """Split PDF by ranges - each range becomes one PDF document with multiple pages.
+        
+        Args:
+            pdf_path: Path to the source PDF
+            ranges_list: List of (start, end) tuples (0-indexed)
+            output_dir: Directory to save the output files
+            
+        Returns:
+            Path to the ZIP file containing all split PDFs
+        """
+        reader = PdfReader(pdf_path)
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        zip_file_path = os.path.join(output_dir, f"split_ranges_{timestamp}.zip")
+
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            for idx, (start, end) in enumerate(ranges_list):
+                writer = PdfWriter()
+                
+                # Add all pages in the range to this PDF
+                for page_num in range(start, end + 1):
+                    if page_num < len(reader.pages):
+                        writer.add_page(reader.pages[page_num])
+                
+                # Create filename based on range (convert back to 1-indexed for filename)
+                if start == end:
+                    split_filename = f"page_{start + 1}.pdf"
+                else:
+                    split_filename = f"pages_{start + 1}-{end + 1}.pdf"
+                
+                split_file_path = os.path.join(output_dir, split_filename)
+                
+                with open(split_file_path, "wb") as output_pdf:
+                    writer.write(output_pdf)
+                
+                zip_file.write(split_file_path, split_filename)
+                
                 try:
                     os.remove(split_file_path)
                 except:
