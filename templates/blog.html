@@ -344,9 +344,11 @@
                 </a>
             </div>
             <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/#tools">Tools</a>
-                <a href="/pricing">Pricing</a>
+                <a href="{{ url_for('split_pdf') }}">✂️ Split</a>
+                <a href="{{ url_for('merge_pdf') }}">📑 Merge</a>
+                <a href="{{ url_for('compress_pdf') }}">🗜️ Compress</a>
+                <a href="{{ url_for('pdf2word') }}">📝 To Word</a>
+                <a href="{{ url_for('pricing') }}">Pricing</a>
                 <a href="/blog" class="active">Blog</a>
             </div>
         </div>
