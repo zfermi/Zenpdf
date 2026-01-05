@@ -626,15 +626,20 @@
                     <h1>Best PDF Converter</h1>
                 </div>
                 <div class="nav-links">
-                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('split_pdf') }}">✂️ Split</a>
+                    <a href="{{ url_for('merge_pdf') }}">📑 Merge</a>
+                    <a href="{{ url_for('compress_pdf') }}">🗜️ Compress</a>
+                    <a href="{{ url_for('pdf2word') }}">📝 To Word</a>
                     <div class="nav-dropdown">
-                        <a class="nav-dropdown-toggle">Tools</a>
+                        <a class="nav-dropdown-toggle">More ▾</a>
                         <div class="nav-dropdown-menu">
-                            <a href="{{ url_for('split_pdf') }}"><span class="tool-icon">✂️</span> Split PDF</a>
-                            <a href="{{ url_for('merge_pdf') }}"><span class="tool-icon">📑</span> Merge PDF</a>
-                            <a href="{{ url_for('compress_pdf') }}"><span class="tool-icon">🗜️</span> Compress PDF</a>
                             <a href="{{ url_for('rotate_pdf') }}"><span class="tool-icon">🔄</span> Rotate PDF</a>
-                            <a href="{{ url_for('pdf2word') }}"><span class="tool-icon">📝</span> PDF to Word</a>
+                            <a href="{{ url_for('pdf2excel') }}"><span class="tool-icon">📊</span> PDF to Excel</a>
+                            <a href="{{ url_for('pdf2ppt') }}"><span class="tool-icon">📽️</span> PDF to PowerPoint</a>
+                            <a href="{{ url_for('pdf2jpg') }}"><span class="tool-icon">🖼️</span> PDF to JPG</a>
+                            <a href="{{ url_for('ai_tools') }}"
+                                style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);"><span
+                                    class="tool-icon">🤖</span> AI Tools ✨</a>
                         </div>
                     </div>
                     <a href="{{ url_for('pricing') }}">Pricing</a>
