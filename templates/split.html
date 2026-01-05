@@ -731,17 +731,29 @@
                         <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Choose Split Method:</h3>
 
                         <div class="option-card selected" id="option-range">
-                            <label>
-                                <input type="radio" name="split_type" value="range" checked>
-                                <div>
-                                    <strong>Range (From - To)</strong>
-                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;">
-                                        <input type="number" name="start_page" min="1" max="{{ page_count }}"
-                                            placeholder="Start page">
-                                        <span style="color: var(--text-secondary);">to</span>
-                                        <input type="number" name="end_page" min="1" max="{{ page_count }}"
-                                            placeholder="End page">
+                            <label style="align-items: flex-start;">
+                                <input type="radio" name="split_type" value="range" checked style="margin-top: 0.3rem;">
+                                <div style="flex-grow: 1;">
+                                    <strong>Page Ranges</strong>
+                                    <p style="margin-top: 0.25rem; color: var(--text-secondary); font-size: 0.9rem;">
+                                        Extract pages by range or add multiple ranges</p>
+                                    <div id="ranges-container" style="margin-top: 0.75rem;">
+                                        <div class="range-row"
+                                            style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                            <input type="number" class="range-start" min="1" max="{{ page_count }}"
+                                                placeholder="From" style="width: 80px;">
+                                            <span style="color: var(--text-secondary);">to</span>
+                                            <input type="number" class="range-end" min="1" max="{{ page_count }}"
+                                                placeholder="To" style="width: 80px;">
+                                            <button type="button" class="remove-range-btn"
+                                                style="display: none; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                                        </div>
                                     </div>
+                                    <button type="button" id="add-range-btn"
+                                        style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: rgba(102, 126, 234, 0.2); border: 1px solid rgba(102, 126, 234, 0.5); color: #667eea; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                        <span style="font-size: 1.1rem;">+</span> Add Range
+                                    </button>
+                                    <input type="hidden" name="page_ranges" id="page_ranges_hidden">
                                 </div>
                             </label>
                         </div>
@@ -751,12 +763,13 @@
                                 <input type="radio" name="split_type" value="specific">
                                 <div style="flex-grow: 1;">
                                     <strong>Specific Pages</strong>
+                                    <p style="margin-top: 0.25rem;">Extract individual pages or mixed selections</p>
                                     <div style="margin-top: 0.75rem;">
-                                        <input type="text" name="specific_pages" placeholder="e.g., 1,3,5-7"
+                                        <input type="text" name="specific_pages" placeholder="e.g., 1, 3, 5-7, 12"
                                             style="width: 100%;">
                                         <small
                                             style="color: var(--text-secondary); font-size: 0.75rem; display: block; margin-top: 0.5rem;">Enter
-                                            page numbers separated by commas or use ranges (e.g., 1-5,7,9-12)</small>
+                                            individual pages, ranges, or mix both (e.g., 1, 3, 5-7, 12)</small>
                                     </div>
                                 </div>
                             </label>
@@ -897,6 +910,69 @@
                 }
             });
         });
+
+        // Page Ranges - Add/Remove functionality
+        const rangesContainer = document.getElementById('ranges-container');
+        const addRangeBtn = document.getElementById('add-range-btn');
+        const pageRangesHidden = document.getElementById('page_ranges_hidden');
+        const splitForm = document.getElementById('split-form');
+
+        function updateRemoveButtons() {
+            const rows = rangesContainer.querySelectorAll('.range-row');
+            rows.forEach((row, index) => {
+                const removeBtn = row.querySelector('.remove-range-btn');
+                // Show remove button only if there's more than one row
+                removeBtn.style.display = rows.length > 1 ? 'block' : 'none';
+            });
+        }
+
+        function removeRange(btn) {
+            btn.closest('.range-row').remove();
+            updateRemoveButtons();
+        }
+
+        if (addRangeBtn) {
+            addRangeBtn.addEventListener('click', function () {
+                const newRow = document.createElement('div');
+                newRow.className = 'range-row';
+                newRow.style.cssText = 'display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;';
+                newRow.innerHTML = `
+                    <input type="number" class="range-start" min="1" placeholder="From" style="width: 80px;">
+                    <span style="color: var(--text-secondary);">to</span>
+                    <input type="number" class="range-end" min="1" placeholder="To" style="width: 80px;">
+                    <button type="button" class="remove-range-btn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 1rem;">×</button>
+                `;
+                rangesContainer.appendChild(newRow);
+
+                // Add click handler to the new remove button
+                newRow.querySelector('.remove-range-btn').addEventListener('click', function () {
+                    removeRange(this);
+                });
+
+                updateRemoveButtons();
+            });
+        }
+
+        // Build page_ranges value on form submit
+        if (splitForm && pageRangesHidden) {
+            splitForm.addEventListener('submit', function (e) {
+                const splitType = document.querySelector('input[name="split_type"]:checked');
+                if (splitType && splitType.value === 'range') {
+                    const ranges = [];
+                    const rows = rangesContainer.querySelectorAll('.range-row');
+                    rows.forEach(row => {
+                        const start = row.querySelector('.range-start').value;
+                        const end = row.querySelector('.range-end').value;
+                        if (start && end) {
+                            ranges.push(`${start}-${end}`);
+                        } else if (start) {
+                            ranges.push(start);
+                        }
+                    });
+                    pageRangesHidden.value = ranges.join(', ');
+                }
+            });
+        }
     </script>
 
     <!-- Google Drive Picker Integration -->

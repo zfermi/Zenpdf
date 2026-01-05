@@ -567,17 +567,40 @@ def create_app(config_name=None):
 
                     if split_type == 'range':
                         try:
-                            start_page = int(request.form.get('start_page', 1))
-                            end_page = int(request.form.get('end_page', total_pages))
-
-                            if start_page < 1 or end_page > total_pages or start_page > end_page:
-                                flash(f'Invalid page range. Please enter pages between 1 and {total_pages}.', 'error')
+                            page_ranges = request.form.get('page_ranges', '').strip()
+                            if not page_ranges:
+                                flash('Please enter page ranges.', 'error')
                                 return render_template('split.html', file_uploaded=True,
                                                      page_count=total_pages, file_name=file_name)
-
-                            pages_to_split = list(range(start_page - 1, end_page))
+                            
+                            page_set = set()
+                            for part in page_ranges.split(','):
+                                part = part.strip()
+                                if '-' in part:
+                                    start, end = map(int, part.split('-'))
+                                    if start > end:
+                                        flash(f'Invalid range: {start}-{end}. Start must be less than or equal to end.', 'error')
+                                        return render_template('split.html', file_uploaded=True,
+                                                             page_count=total_pages, file_name=file_name)
+                                    page_set.update(range(start, end + 1))
+                                else:
+                                    page_set.add(int(part))
+                            
+                            # Validate all pages are within bounds
+                            invalid_pages = [p for p in page_set if p < 1 or p > total_pages]
+                            if invalid_pages:
+                                flash(f'Invalid pages: {invalid_pages}. Pages must be between 1 and {total_pages}.', 'error')
+                                return render_template('split.html', file_uploaded=True,
+                                                     page_count=total_pages, file_name=file_name)
+                            
+                            pages_to_split = sorted([p - 1 for p in page_set])
+                            
+                            if not pages_to_split:
+                                flash('No valid pages specified.', 'error')
+                                return render_template('split.html', file_uploaded=True,
+                                                     page_count=total_pages, file_name=file_name)
                         except ValueError:
-                            flash('Please enter valid page numbers.', 'error')
+                            flash('Invalid page range format. Use ranges like 1-5, 10-15.', 'error')
                             return render_template('split.html', file_uploaded=True,
                                                  page_count=total_pages, file_name=file_name)
 
