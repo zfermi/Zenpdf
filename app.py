@@ -1547,9 +1547,30 @@ def create_app(config_name=None):
     # ========== PDF PROCESSING FUNCTIONS ==========
 
     def split_pdf_pages(pdf_path, pages_to_split, output_dir):
-        """Split PDF pages and create ZIP file"""
+        """Split PDF pages - each page becomes a separate PDF file.
+        
+        Returns:
+            Path to the output file (PDF if single page, ZIP if multiple pages)
+        """
         reader = PdfReader(pdf_path)
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # If only one page, return a single PDF directly (no ZIP)
+        if len(pages_to_split) == 1:
+            page_num = pages_to_split[0]
+            if page_num < len(reader.pages):
+                writer = PdfWriter()
+                writer.add_page(reader.pages[page_num])
+                
+                output_filename = f"page_{page_num + 1}_{timestamp}.pdf"
+                output_path = os.path.join(output_dir, output_filename)
+                
+                with open(output_path, "wb") as output_pdf:
+                    writer.write(output_pdf)
+                
+                return output_path
+        
+        # Multiple pages - create a ZIP file
         zip_file_path = os.path.join(output_dir, f"split_pages_{timestamp}.zip")
 
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
@@ -1584,10 +1605,34 @@ def create_app(config_name=None):
             output_dir: Directory to save the output files
             
         Returns:
-            Path to the ZIP file containing all split PDFs
+            Path to the output file (PDF if single range, ZIP if multiple ranges)
         """
         reader = PdfReader(pdf_path)
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # If only one range, return a single PDF directly (no ZIP)
+        if len(ranges_list) == 1:
+            start, end = ranges_list[0]
+            writer = PdfWriter()
+            
+            # Add all pages in the range
+            for page_num in range(start, end + 1):
+                if page_num < len(reader.pages):
+                    writer.add_page(reader.pages[page_num])
+            
+            # Create filename based on range
+            if start == end:
+                output_filename = f"page_{start + 1}_{timestamp}.pdf"
+            else:
+                output_filename = f"pages_{start + 1}-{end + 1}_{timestamp}.pdf"
+            
+            output_path = os.path.join(output_dir, output_filename)
+            with open(output_path, "wb") as output_pdf:
+                writer.write(output_pdf)
+            
+            return output_path
+        
+        # Multiple ranges - create a ZIP file
         zip_file_path = os.path.join(output_dir, f"split_ranges_{timestamp}.zip")
 
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
