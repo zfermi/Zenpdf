@@ -772,6 +772,11 @@
                 showError('Please select a PDF file.');
                 return;
             }
+            // Check authentication immediately on file upload
+            if (!{{ 'true' if current_user.is_authenticated else 'false' }}) {
+                showError('Please sign up or log in to use AI features. Get 3 free AI credits every month!');
+                return;
+            }
 
             selectedFile = file;
             fileName.textContent = file.name;
